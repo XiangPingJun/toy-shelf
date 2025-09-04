@@ -2,36 +2,45 @@
   import { onMount } from "svelte";
   import * as THREE from "three";
   import { SplatMesh } from "@sparkjsdev/spark";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-  let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera;
-  let renderer: THREE.WebGLRenderer;
-  let butterfly: SplatMesh;
+  let container: HTMLDivElement;
 
   onMount(() => {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(
-      60,
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      50,
       window.innerWidth / window.innerHeight,
       0.1,
       1000,
     );
-    renderer = new THREE.WebGLRenderer();
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setClearColor(new THREE.Color(0), 0);
+
+    // 將 renderer.domElement 附加到 container
+    if (container) {
+      container.appendChild(renderer.domElement);
+    }
 
     const splatURL = "/ggun.zip";
-    butterfly = new SplatMesh({ url: splatURL });
-    butterfly.quaternion.set(1, 0, 0, 0);
-    butterfly.position.set(0, 0, -3);
+    const butterfly = new SplatMesh({ url: splatURL });
     scene.add(butterfly);
 
-    let lastTime = 0;
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0, 0);
+    controls.minDistance = 0.3;
+    controls.maxDistance = 20;
+    controls.update();
+
     renderer.setAnimationLoop(function animate(time) {
-      const deltaTime = time - (lastTime || time);
-      lastTime = time;
+      controls.update();
       renderer.render(scene, camera);
-      butterfly.rotation.y += deltaTime / 2500;
     });
   });
 </script>
+
+<!-- 綁定 container -->
+<div bind:this={container}></div>

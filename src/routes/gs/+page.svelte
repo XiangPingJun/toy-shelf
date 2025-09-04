@@ -25,7 +25,7 @@
       container.appendChild(renderer.domElement);
     }
 
-    const splatURL = "/ggun.zip";
+    const splatURL = "/a.spz";
     const butterfly = new SplatMesh({ url: splatURL });
     scene.add(butterfly);
 

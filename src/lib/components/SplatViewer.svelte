@@ -118,7 +118,7 @@
 
         function animate(time: number) {
           // 更新動畫時間
-          baseTime += 1 / 60;
+          baseTime += 1 / 30;
           animateT.value = baseTime;
 
           // 更新 Splat 渲染

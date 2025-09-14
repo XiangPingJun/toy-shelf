@@ -18,7 +18,7 @@
         const d = new dyno.Dyno({
           inTypes: { gsplat: dyno.Gsplat, t: "float" },
           outTypes: { gsplat: dyno.Gsplat },
-          // GLSL 工具函數
+          // GLSL 工具
           globals: () => [
             dyno.unindent(`
               // 2D 旋轉矩陣

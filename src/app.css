@@ -8,3 +8,13 @@ body {
   width: 100%;
   overflow: hidden;
 }
+
+/* 自定義滾動條隱藏工具類別 */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

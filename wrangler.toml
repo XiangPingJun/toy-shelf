@@ -10,5 +10,5 @@ cwd = "."
 # KV 命名空間配置
 [[kv_namespaces]]
 binding = "TOY_SHELF_KV"
-id = "your-kv-namespace-id"
-preview_id = "your-preview-kv-namespace-id"
+id = "eafaae6a858e4c8aa82db347dcd594cf"
+preview_id = "eafaae6a858e4c8aa82db347dcd594cf"

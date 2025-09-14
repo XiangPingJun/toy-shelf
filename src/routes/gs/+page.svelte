@@ -1,12 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import * as THREE from "three";
-  import { SplatMesh } from "@sparkjsdev/spark";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   let container: HTMLDivElement;
 
-  onMount(() => {
+  onMount(async () => {
+    // 動態導入 SplatMesh 以避免 SSR 問題
+    const { SplatMesh, SparkRenderer } = await import("@sparkjsdev/spark");
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       50,
@@ -19,15 +21,22 @@
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(new THREE.Color(0), 0);
+    const spark = new SparkRenderer({ renderer });
+    spark.preBlurAmount = 0;
+    spark.blurAmount = 0;
 
     // 將 renderer.domElement 附加到 container
     if (container) {
       container.appendChild(renderer.domElement);
     }
 
-    const splatURL = "/a.spz";
+    const frame = new THREE.Group();
+    frame.quaternion.set(1, 0, 0, 0);
+
+    const splatURL = "/just.zip";
     const butterfly = new SplatMesh({ url: splatURL });
-    scene.add(butterfly);
+    frame.add(butterfly);
+    scene.add(frame);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);

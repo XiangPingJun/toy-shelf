@@ -7,13 +7,7 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter({
-			// Cloudflare Pages configuration
-			routes: {
-				include: ['/*'],
-				exclude: ['<build>']
-			}
-		})
+		adapter: adapter()
 	}
 };
 

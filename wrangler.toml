@@ -2,10 +2,7 @@ name = "toy-shelf"
 compatibility_date = "2024-09-13"
 compatibility_flags = ["nodejs_compat"]
 
+# Cloudflare Pages 配置
 [build]
 command = "npm run build"
 cwd = "."
-
-[[routes]]
-pattern = "/*"
-method = "*"

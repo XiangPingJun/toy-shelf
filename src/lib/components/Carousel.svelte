@@ -6,21 +6,13 @@
 	let startX = 0;
 	let scrollLeft = 0;
 
-	const thumbnails = [
+	export let thumbnails: string[] = [
 		"/01.jpg",
 		"/02.jpg",
 		"/03.jpg",
+		"/01.jpg",
 		"/02.jpg",
-		"/01.jpg",
-		"/01.jpg",
-		"/01.jpg",
 		"/03.jpg",
-		"/02.jpg",
-		"/01.jpg",
-		"/01.jpg",
-		"/01.jpg",
-		"/03.jpg",
-		"/02.jpg",
 	];
 
 	function setActive(index: number) {

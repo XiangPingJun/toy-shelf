@@ -3,5 +3,5 @@
   import Carousel from "$lib/components/Carousel.svelte";
 </script>
 
-<SplatViewer splatURL="/ggun.zip" />
+<!-- <SplatViewer splatURL="/ggun.zip" /> -->
 <Carousel />

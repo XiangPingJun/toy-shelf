@@ -31,13 +31,6 @@
 		}
 	}
 
-	function handleKeyDown(event: KeyboardEvent, index: number) {
-		if (event.key === "Enter" || event.key === " ") {
-			event.preventDefault();
-			setActive(index);
-		}
-	}
-
 	function handleMouseDown(e: MouseEvent) {
 		if (!carouselContainer) return;
 		isDragging = true;
@@ -90,9 +83,16 @@
 				role="button"
 				tabindex="0"
 				on:click={() => setActive(index)}
-				on:keydown={(event) => handleKeyDown(event, index)}
+				on:keydown={() => {}}
 			>
-				<img class="object-cover max-w-none" {src} draggable="false" alt="" />
+				<img
+					class="object-cover max-w-none"
+					{src}
+					draggable="false"
+					alt=""
+					on:load={() => console.log(2)}
+					{@attach () => {}}
+				/>
 			</div>
 		{/each}
 	</div>

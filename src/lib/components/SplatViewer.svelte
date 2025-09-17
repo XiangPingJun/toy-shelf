@@ -5,7 +5,7 @@
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   // Component props
-  export let splatURL: string;
+  let { splatURL } = $props();
 
   let container: HTMLDivElement;
 

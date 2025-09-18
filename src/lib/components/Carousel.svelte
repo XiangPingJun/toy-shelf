@@ -1,24 +1,34 @@
 <script lang="ts">
-	let active = 0;
-	let thumbnailElements: HTMLDivElement[] = [];
+	import LoadingAltLoop from "../icons/LoadingAltLoop.svelte";
+	let thumbnailElements = $state<HTMLDivElement[]>([]);
 	let carouselContainer: HTMLDivElement | undefined;
 	let isDragging = false;
 	let startX = 0;
 	let scrollLeft = 0;
 
-	export let thumbnails: string[] = [
-		"/01.jpg",
-		"/02.jpg",
-		"/03.jpg",
-		"/01.jpg",
-		"/02.jpg",
-		"/03.jpg",
-	];
+	let {
+		thumbnails = [
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
+		],
+		activeThumbnailIndex = $bindable(0),
+		thumbnailOnLoadIndex = $bindable<number | undefined>(0),
+	} = $props();
 
 	function setActive(index: number) {
-		// 只有在沒有拖動時才設置 active
+		// 只有在沒有拖動時才設置 activeThumbnailIndex
 		if (!isDragging) {
-			active = index;
+			activeThumbnailIndex = index;
 
 			// 捲動到選中的圖片，使其在畫面中央
 			if (thumbnailElements[index]) {
@@ -66,33 +76,38 @@
 	bind:this={carouselContainer}
 	class="flex fixed bottom-3 w-screen overflow-x-auto justify-start select-none scrollbar-none"
 	style="cursor: grab;"
-	on:mousedown={handleMouseDown}
-	on:mousemove={handleMouseMove}
-	on:mouseup={handleMouseUp}
-	on:mouseleave={handleMouseLeave}
+	onmousedown={handleMouseDown}
+	onmousemove={handleMouseMove}
+	onmouseup={handleMouseUp}
+	onmouseleave={handleMouseLeave}
 	role="presentation"
 >
-	<div class="flex gap-2 mx-2">
-		{#each thumbnails as src, index}
+	<div class="flex gap-2 mx-2 pb-0.5">
+		{#each thumbnails as src, i}
 			<div
-				bind:this={thumbnailElements[index]}
-				class="cursor-pointer transition-opacity duration-300 border-2"
-				class:border-gray-300={active === index}
-				class:border-transparent={active !== index}
-				style="opacity: {active === index ? 1 : 0.3}"
+				bind:this={thumbnailElements[i]}
+				class="cursor-pointer transition-opacity duration-300 border-2 relative {(() => {
+					if (thumbnailOnLoadIndex === i) {
+						return 'opacity-60';
+					} else if (activeThumbnailIndex === i) {
+						return 'opacity-100';
+					} else {
+						return 'opacity-30';
+					}
+				})()}"
+				class:border-gray-300={activeThumbnailIndex === i}
+				class:border-transparent={activeThumbnailIndex !== i}
 				role="button"
 				tabindex="0"
-				on:click={() => setActive(index)}
-				on:keydown={() => {}}
+				onclick={() => setActive(i)}
+				onkeydown={() => {}}
+				style:width="100px"
+				style:height="60px"
 			>
-				<img
-					class="object-cover max-w-none"
-					{src}
-					draggable="false"
-					alt=""
-					on:load={() => console.log(2)}
-					{@attach () => {}}
-				/>
+				<img {src} alt="" draggable="false" />
+				{#if thumbnailOnLoadIndex === i}
+					<LoadingAltLoop class="w-full h-full absolute top-0 left-0" />
+				{/if}
 			</div>
 		{/each}
 	</div>

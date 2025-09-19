@@ -5,7 +5,7 @@
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   // Component props
-  let { splatURL } = $props();
+  let { splatURL, cameraState } = $props();
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
@@ -126,7 +126,6 @@
           y: controls.target.y,
           z: controls.target.z,
         },
-        timestamp: Date.now(),
       };
 
       await fetch("/api/kv", {
@@ -140,7 +139,7 @@
         }),
       });
 
-      console.log("Camera state saved:", cameraState);
+      console.log(JSON.stringify(cameraState));
     } catch (error) {
       console.error("Failed to save camera state:", error);
     }
@@ -273,7 +272,7 @@
     controls.maxDistance = 20;
     controls.update();
 
-    function animate(time: number) {
+    function animate() {
       baseTime += 1 / 30;
       animateT.value = baseTime;
 

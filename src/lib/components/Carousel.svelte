@@ -20,24 +20,27 @@
 			"/01.jpg",
 			"/02.jpg",
 			"/03.jpg",
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
+			"/01.jpg",
+			"/02.jpg",
+			"/03.jpg",
 		],
-		activeThumbnailIndex = $bindable(0),
-		thumbnailOnLoadIndex = $bindable<number | undefined>(0),
+		activeThumbnail = $bindable("/01.jpg"),
+		thumbnailOnLoad = $bindable(""),
 	} = $props();
 
-	function setActive(index: number) {
-		// 只有在沒有拖動時才設置 activeThumbnailIndex
+	function setActive(thumbnail: string, i: number) {
+		// 只有在沒有拖動時才設置 activeThumbnail
 		if (!isDragging) {
-			activeThumbnailIndex = index;
+			activeThumbnail = thumbnail;
 
-			// 捲動到選中的圖片，使其在畫面中央
-			if (thumbnailElements[index]) {
-				thumbnailElements[index].scrollIntoView({
-					behavior: "smooth",
-					block: "nearest",
-					inline: "center",
-				});
-			}
+			thumbnailElements[i].scrollIntoView({
+				behavior: "smooth",
+				block: "nearest",
+				inline: "start",
+			});
 		}
 	}
 
@@ -74,39 +77,37 @@
 
 <div
 	bind:this={carouselContainer}
-	class="flex fixed bottom-3 w-screen overflow-x-auto justify-start select-none scrollbar-none"
-	style="cursor: grab;"
+	class="flex fixed bottom-0 w-screen overflow-x-auto justify-start select-none scrollbar-none bg-neutral-800 pb-3 cursor-grab pt-0.5"
+	style="box-shadow: var(--color-neutral-800) 0 calc(-2 * var(--spacing)) calc(2 * var(--spacing));"
 	onmousedown={handleMouseDown}
 	onmousemove={handleMouseMove}
 	onmouseup={handleMouseUp}
 	onmouseleave={handleMouseLeave}
 	role="presentation"
 >
-	<div class="flex gap-2 mx-2 pb-0.5">
-		{#each thumbnails as src, i}
+	<div class="flex gap-1 mx-2">
+		{#each thumbnails as thumbnail, i}
 			<div
 				bind:this={thumbnailElements[i]}
-				class="cursor-pointer transition-opacity duration-300 border-2 relative {(() => {
-					if (thumbnailOnLoadIndex === i) {
+				class="cursor-pointer transition-opacity duration-300 border-2 relative w-[60px] h-[80px] scroll-ml-4 {(() => {
+					if (thumbnailOnLoad === thumbnail) {
 						return 'opacity-60';
-					} else if (activeThumbnailIndex === i) {
+					} else if (activeThumbnail === thumbnail) {
 						return 'opacity-100';
 					} else {
 						return 'opacity-30';
 					}
 				})()}"
-				class:border-gray-300={activeThumbnailIndex === i}
-				class:border-transparent={activeThumbnailIndex !== i}
+				class:border-gray-300={activeThumbnail === thumbnail}
+				class:border-transparent={activeThumbnail !== thumbnail}
 				role="button"
 				tabindex="0"
-				onclick={() => setActive(i)}
+				onclick={() => setActive(thumbnail, i)}
 				onkeydown={() => {}}
-				style:width="100px"
-				style:height="60px"
 			>
-				<img {src} alt="" draggable="false" />
-				{#if thumbnailOnLoadIndex === i}
-					<LoadingAltLoop class="w-full h-full absolute top-0 left-0" />
+				<img src={thumbnail} alt="" draggable="false" />
+				{#if thumbnailOnLoad === thumbnail}
+					<LoadingAltLoop class="w-[90%] h-[90%] absolute top-0 left-0" />
 				{/if}
 			</div>
 		{/each}

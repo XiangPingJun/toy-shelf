@@ -25,7 +25,7 @@
 	bind:this={carouselContainer}
 	class="flex fixed bottom-0 w-screen overflow-x-auto justify-start select-none scrollbar-none pb-3 pt-0.5"
 >
-	<div class="flex gap-1 mx-2">
+	<div class="flex gap-2 mx-2">
 		{#each thumbnails as thumbnail, i}
 			<div
 				bind:this={thumbnailElements[i]}

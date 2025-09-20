@@ -3,7 +3,7 @@
   import SplatViewer from "$lib/components/SplatViewer.svelte";
   import Carousel from "$lib/components/Carousel.svelte";
 
-  let splatURL = "/ggun.zip";
+  let splatURL = "/just.zip";
 
   onMount(() => {
     console.log("Page: Initial splatURL:", splatURL);

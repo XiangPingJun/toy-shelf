@@ -3,6 +3,7 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { splatLoading } from "../stores/store";
 
   // Component props
   let { splatURL, cameraState } = $props();
@@ -146,52 +147,32 @@
   }
 
   // 從 KV 載入相機狀態
-  async function loadCameraState() {
+  $effect(() => {
     if (!camera || !controls || !browser) return;
-
-    try {
-      const response = await fetch("/api/kv?key=camera-state");
-      const data = await response.json();
-
-      if (data.found && data.value) {
-        const cameraState = data.value;
-
-        // 恢復相機位置
-        camera.position.set(
-          cameraState.position.x,
-          cameraState.position.y,
-          cameraState.position.z,
-        );
-
-        // 恢復控制器目標
-        controls.target.set(
-          cameraState.target.x,
-          cameraState.target.y,
-          cameraState.target.z,
-        );
-
-        controls.update();
-
-        // 更新最後的相機狀態，避免立即觸發保存
-        lastCameraState = {
-          position: {
-            x: Math.round(cameraState.position.x * 1000) / 1000,
-            y: Math.round(cameraState.position.y * 1000) / 1000,
-            z: Math.round(cameraState.position.z * 1000) / 1000,
-          },
-          target: {
-            x: Math.round(cameraState.target.x * 1000) / 1000,
-            y: Math.round(cameraState.target.y * 1000) / 1000,
-            z: Math.round(cameraState.target.z * 1000) / 1000,
-          },
-        };
-
-        console.log("Camera state loaded:", cameraState);
-      }
-    } catch (error) {
-      console.error("Failed to load camera state:", error);
-    }
-  }
+    camera.position.set(
+      cameraState.position.x,
+      cameraState.position.y,
+      cameraState.position.z,
+    );
+    controls.target.set(
+      cameraState.target.x,
+      cameraState.target.y,
+      cameraState.target.z,
+    );
+    controls.update();
+    lastCameraState = {
+      position: {
+        x: Math.round(cameraState.position.x * 1000) / 1000,
+        y: Math.round(cameraState.position.y * 1000) / 1000,
+        z: Math.round(cameraState.position.z * 1000) / 1000,
+      },
+      target: {
+        x: Math.round(cameraState.target.x * 1000) / 1000,
+        y: Math.round(cameraState.target.y * 1000) / 1000,
+        z: Math.round(cameraState.target.z * 1000) / 1000,
+      },
+    };
+  });
 
   // 創建新的 Splat Mesh
   async function createSplatMesh(url: string) {
@@ -288,9 +269,6 @@
     // 初始化第一個 mesh
     await updateMesh();
 
-    // 載入之前保存的相機狀態
-    await loadCameraState();
-
     // 設置定時器檢查相機狀態變化（每500ms檢查一次）
     saveInterval = setInterval(saveCameraState, 500);
   });
@@ -299,13 +277,14 @@
   $effect(() => {
     // 確保在 effect 內部讀取 splatURL 來建立依賴
     const url = splatURL;
-    if (isInitialized && url) {
+    if (isInitialized) {
+      splatLoading.set(true);
       updateMesh();
+      splatLoading.set(false);
     }
   });
 
   onDestroy(() => {
-    // 清理定時器
     if (saveInterval) {
       clearInterval(saveInterval);
       saveInterval = null;
@@ -322,6 +301,12 @@
       }
       renderer.dispose();
     }
+
+    if (controls) {
+      controls.dispose();
+    }
+
+    splatLoading.set(false);
   });
 </script>
 

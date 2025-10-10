@@ -4,15 +4,12 @@
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import ArrowLeft from "@lucide/svelte/icons/arrow-left";
+  import SplatViewer from "$lib/components/SplatViewer.svelte";
 
-  let goal = $state(350);
-
-  function handleClick(adjustment: number) {
-    goal = Math.max(200, Math.min(400, goal + adjustment));
-  }
+  let splatURL = "/ggun.zip";
 </script>
 
-<Drawer.Root class="p-4">
+<!-- <Drawer.Root class="p-4">
   1234
   <Drawer.Trigger
     class={[buttonVariants({ variant: "outline" }), "fixed bottom-2 left-2"]}
@@ -22,4 +19,6 @@
   <Drawer.Content>
     <div class="mx-auto w-full p-2">123</div>
   </Drawer.Content>
-</Drawer.Root>
+</Drawer.Root> -->
+
+<SplatViewer {splatURL} />

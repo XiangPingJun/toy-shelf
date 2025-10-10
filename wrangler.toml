@@ -1,0 +1,14 @@
+name = "toy-shelf"
+compatibility_date = "2024-09-13"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Pages 配置
+[build]
+command = "npm run build"
+cwd = "."
+
+# KV 命名空間配置
+[[kv_namespaces]]
+binding = "TOY_SHELF_KV"
+id = "eafaae6a858e4c8aa82db347dcd594cf"
+preview_id = "eafaae6a858e4c8aa82db347dcd594cf"

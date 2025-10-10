@@ -1,12 +1,8 @@
 import type { Handle } from '@sveltejs/kit';
-import { paraglideMiddleware } from '$lib/paraglide/server';
 
-const handleParaglide: Handle = ({ event, resolve }) => paraglideMiddleware(event.request, ({ request, locale }) => {
-	event.request = request;
-
+// 簡化的 handle，移除 paraglide middleware 以避免 Node.js 依賴
+export const handle: Handle = async ({ event, resolve }) => {
 	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale)
+		transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', 'zh-tw')
 	});
-});
-
-export const handle: Handle = handleParaglide;
+};

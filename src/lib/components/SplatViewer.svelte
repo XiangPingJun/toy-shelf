@@ -311,13 +311,7 @@
 </script>
 
 <!-- 綁定 container -->
-<div bind:this={container}></div>
-
-<style>
-  div {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: -1;
-  }
-</style>
+<div
+  class="w-100vw h-100dvh fixed z--1 cursor-grab"
+  bind:this={container}
+></div>

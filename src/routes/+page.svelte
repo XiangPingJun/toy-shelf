@@ -1,7 +1,8 @@
 <script lang="ts">
-  import * as Drawer from "$lib/components/ui/drawer/index.js";
-  import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
   import ChevronLeft from "@lucide/svelte/icons/chevron-left";
+  import ChevronRight from "@lucide/svelte/icons/chevron-right";
+  import FolderClosed from "@lucide/svelte/icons/folder-closed";
   import SplatViewer from "$lib/components/SplatViewer.svelte";
   import * as Item from "$lib/components/ui/item/index.js";
   import * as ButtonGroup from "$lib/components/ui/button-group/index.js";
@@ -34,7 +35,10 @@
           <ChevronLeft />
         </Button>
         <Button variant="outline" size="icon" class="size-8">
-          <ChevronLeft />
+          <FolderClosed />
+        </Button>
+        <Button variant="outline" size="icon" class="size-8">
+          <ChevronRight />
         </Button>
       </ButtonGroup.Root>
     </Item.Actions>

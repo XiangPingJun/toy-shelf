@@ -1,46 +1,31 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button/index.js";
-  import ChevronUp from "@lucide/svelte/icons/chevron-up";
-  import ChevronDown from "@lucide/svelte/icons/chevron-down";
-  import FolderClosed from "@lucide/svelte/icons/folder-closed";
+  import Undo from "@lucide/svelte/icons/undo";
+  import BookImage from "@lucide/svelte/icons/book-image";
   import SplatContainer from "$lib/components/SplatContainer.svelte";
   import * as Item from "$lib/components/ui/item/index.js";
   import * as ButtonGroup from "$lib/components/ui/button-group/index.js";
-  let splatURL = "/justice.spz";
+  import { fade, fly } from "svelte/transition";
 </script>
-
-<!-- <Drawer.Root class="p-4">
-  1234
-  <Drawer.Trigger
-    class={[buttonVariants({ variant: "outline" }), "fixed bottom-2 left-2"]}
-  >
-    Open Drawer
-  </Drawer.Trigger>
-  <Drawer.Content>
-    <div class="mx-auto w-full p-2">123</div>
-  </Drawer.Content>
-</Drawer.Root> -->
 
 <SplatContainer />
 
-<div class="fixed bottom-2 flex justify-center w-full">
+<div
+  class="fixed bottom-2 flex justify-center w-full"
+  in:fly={{ duration: 400 }}
+>
   <div class="w-6xl p-2 mx-2 flex flex-col gap-2 items-end">
     <ButtonGroup.Root orientation="vertical">
       <Button variant="secondary" size="icon-sm">
-        <ChevronUp />
+        <Undo />
       </Button>
       <ButtonGroup.Separator />
       <Button variant="secondary" size="icon-sm">
-        <FolderClosed />
-      </Button>
-      <ButtonGroup.Separator />
-      <Button variant="secondary" size="icon-sm">
-        <ChevronDown />
+        <BookImage />
       </Button>
     </ButtonGroup.Root>
     <Item.Root
-      variant="muted"
-      class="w-full transition-all duration-200 border-border"
+      class="w-full transition-all duration-200 border-border bg-muted/50"
     >
       <Item.Content>A simple item with title and description.</Item.Content>
     </Item.Root>

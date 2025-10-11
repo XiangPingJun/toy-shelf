@@ -10,9 +10,9 @@
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
-  let controls: OrbitControls | null = $state(null);
+  let controls: OrbitControls | undefined = $state();
   let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera | null = $state(null);
+  let camera: THREE.PerspectiveCamera | undefined = $state();
   let currentSplatMesh: any = null;
   let animateT: any = null;
   let dyno: any = null;
@@ -262,8 +262,10 @@
 
       currentSplatMesh?.updateVersion();
 
-      controls.update();
-      renderer.render(scene, camera);
+      controls?.update();
+      if (camera) {
+        renderer.render(scene, camera);
+      }
     }
 
     renderer.setAnimationLoop(animate);

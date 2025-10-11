@@ -7,17 +7,14 @@
 
   $effect(() => {
     (async () => {
+      splatFile = null;
       const response = await fetch(splatUrl);
       splatFile = await response.arrayBuffer();
     })();
   });
 </script>
 
-{#if !splatFile}
-  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <Spinner class="size-10" />
-  </div>
-{:else}
+{#if splatFile}
   <SplatViewer
     {splatFile}
     cameraState={{
@@ -29,4 +26,8 @@
       target: { x: 0, y: 0, z: 0 },
     }}
   />
+{:else}
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <Spinner class="size-10" />
+  </div>
 {/if}

@@ -24,23 +24,20 @@
 <SplatViewer {splatURL} />
 
 <div class="fixed bottom-2 flex justify-center w-full">
-  <Item.Root
-    variant="muted"
-    class="w-6xl mx-2 transition-all duration-200 gap-0"
-  >
-    <Item.Content>A simple item with title and description.</Item.Content>
-    <Item.Actions>
-      <ButtonGroup.Root class="hidden sm:flex">
-        <Button variant="outline" size="icon" class="size-8">
-          <ChevronLeft />
-        </Button>
-        <Button variant="outline" size="icon" class="size-8">
-          <FolderClosed />
-        </Button>
-        <Button variant="outline" size="icon" class="size-8">
-          <ChevronRight />
-        </Button>
-      </ButtonGroup.Root>
-    </Item.Actions>
-  </Item.Root>
+  <div class="w-6xl p-2 mx-2 flex flex-col gap-1 items-end">
+    <ButtonGroup.Root>
+      <Button variant="outline" size="icon" class="size-8">
+        <ChevronLeft />
+      </Button>
+      <Button variant="outline" size="icon" class="size-8">
+        <FolderClosed />
+      </Button>
+      <Button variant="outline" size="icon" class="size-8">
+        <ChevronRight />
+      </Button>
+    </ButtonGroup.Root>
+    <Item.Root variant="muted" class="w-full transition-all duration-200">
+      <Item.Content>A simple item with title and description.</Item.Content>
+    </Item.Root>
+  </div>
 </div>

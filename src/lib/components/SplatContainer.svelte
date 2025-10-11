@@ -17,16 +17,16 @@
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
     <Spinner class="size-10" />
   </div>
+{:else}
+  <SplatViewer
+    {splatFile}
+    cameraState={{
+      position: {
+        x: 3.589601952942516,
+        y: 3.930501030576014,
+        z: -0.5083257790175351,
+      },
+      target: { x: 0, y: 0, z: 0 },
+    }}
+  />
 {/if}
-
-<SplatViewer
-  {splatFile}
-  cameraState={{
-    position: {
-      x: 3.589601952942516,
-      y: 3.930501030576014,
-      z: -0.5083257790175351,
-    },
-    target: { x: 0, y: 0, z: 0 },
-  }}
-/>

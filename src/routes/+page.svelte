@@ -3,10 +3,10 @@
   import ChevronUp from "@lucide/svelte/icons/chevron-up";
   import ChevronDown from "@lucide/svelte/icons/chevron-down";
   import FolderClosed from "@lucide/svelte/icons/folder-closed";
-  import SplatViewer from "$lib/components/SplatViewer.svelte";
+  import SplatContainer from "$lib/components/SplatContainer.svelte";
   import * as Item from "$lib/components/ui/item/index.js";
   import * as ButtonGroup from "$lib/components/ui/button-group/index.js";
-  let splatURL = "/ggun.zip";
+  let splatURL = "/justice.spz";
 </script>
 
 <!-- <Drawer.Root class="p-4">
@@ -21,7 +21,7 @@
   </Drawer.Content>
 </Drawer.Root> -->
 
-<SplatViewer {splatURL} />
+<SplatContainer />
 
 <div class="fixed bottom-2 flex justify-center w-full">
   <div class="w-6xl p-2 mx-2 flex flex-col gap-2 items-end">

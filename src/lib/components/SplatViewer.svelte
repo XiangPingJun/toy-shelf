@@ -3,16 +3,16 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { splatLoading } from "../stores/store";
+  import { Spinner } from "$lib/components/ui/spinner/index.js";
 
   // Component props
-  let { splatURL, cameraState } = $props();
+  let { splatFile, cameraState } = $props();
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
-  let controls: OrbitControls;
+  let controls: OrbitControls | null = $state(null);
   let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera;
+  let camera: THREE.PerspectiveCamera | null = $state(null);
   let currentSplatMesh: any = null;
   let animateT: any = null;
   let dyno: any = null;
@@ -116,7 +116,7 @@
     }
 
     try {
-      const cameraState = {
+      const cameraStateToSave = {
         position: {
           x: camera.position.x,
           y: camera.position.y,
@@ -135,12 +135,12 @@
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          key: "camera-state",
-          value: cameraState,
+          key: "splat-camera-state",
+          value: cameraStateToSave,
         }),
       });
 
-      console.log(JSON.stringify(cameraState));
+      console.log(JSON.stringify(cameraStateToSave));
     } catch (error) {
       console.error("Failed to save camera state:", error);
     }
@@ -175,12 +175,15 @@
   });
 
   // 創建新的 Splat Mesh
-  async function createSplatMesh(url: string) {
+  async function createSplatMesh() {
     if (!dyno) return null;
 
-    const { SplatMesh } = await import("@sparkjsdev/spark");
+    const { SplatMesh, SplatFileType } = await import("@sparkjsdev/spark");
 
-    const splatMesh = new SplatMesh({ url });
+    const splatMesh = new SplatMesh({
+      fileBytes: splatFile,
+      fileType: SplatFileType.SPZ, // 使用 SPZ 格式
+    });
     splatMesh.quaternion.set(1, 0, 0, 0);
     splatMesh.scale.set(1.5, 1.5, 1.5);
 
@@ -194,7 +197,7 @@
 
   // 更新 mesh
   async function updateMesh() {
-    if (!scene || !splatURL || !isInitialized) return;
+    if (!scene || !isInitialized) return;
 
     // 移除舊的 mesh
     if (currentSplatMesh) {
@@ -203,7 +206,7 @@
     }
 
     // 創建新的 mesh
-    const newMesh = await createSplatMesh(splatURL);
+    const newMesh = await createSplatMesh();
     if (newMesh) {
       currentSplatMesh = newMesh;
       scene.add(currentSplatMesh);
@@ -273,17 +276,6 @@
     saveInterval = setInterval(saveCameraState, 500);
   });
 
-  // 監聽 splatURL 變化
-  $effect(() => {
-    // 確保在 effect 內部讀取 splatURL 來建立依賴
-    const url = splatURL;
-    if (isInitialized) {
-      splatLoading.set(true);
-      updateMesh();
-      splatLoading.set(false);
-    }
-  });
-
   onDestroy(() => {
     if (saveInterval) {
       clearInterval(saveInterval);
@@ -305,8 +297,6 @@
     if (controls) {
       controls.dispose();
     }
-
-    splatLoading.set(false);
   });
 </script>
 

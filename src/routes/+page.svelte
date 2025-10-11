@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button/index.js";
-  import ChevronLeft from "@lucide/svelte/icons/chevron-left";
-  import ChevronRight from "@lucide/svelte/icons/chevron-right";
+  import ChevronUp from "@lucide/svelte/icons/chevron-up";
+  import ChevronDown from "@lucide/svelte/icons/chevron-down";
   import FolderClosed from "@lucide/svelte/icons/folder-closed";
   import SplatViewer from "$lib/components/SplatViewer.svelte";
   import * as Item from "$lib/components/ui/item/index.js";
@@ -24,19 +24,24 @@
 <SplatViewer {splatURL} />
 
 <div class="fixed bottom-2 flex justify-center w-full">
-  <div class="w-6xl p-2 mx-2 flex flex-col gap-1 items-end">
-    <ButtonGroup.Root>
-      <Button variant="outline" size="icon" class="size-8">
-        <ChevronLeft />
+  <div class="w-6xl p-2 mx-2 flex flex-col gap-2 items-end">
+    <ButtonGroup.Root orientation="vertical">
+      <Button variant="secondary" size="icon-sm">
+        <ChevronUp />
       </Button>
-      <Button variant="outline" size="icon" class="size-8">
+      <ButtonGroup.Separator />
+      <Button variant="secondary" size="icon-sm">
         <FolderClosed />
       </Button>
-      <Button variant="outline" size="icon" class="size-8">
-        <ChevronRight />
+      <ButtonGroup.Separator />
+      <Button variant="secondary" size="icon-sm">
+        <ChevronDown />
       </Button>
     </ButtonGroup.Root>
-    <Item.Root variant="muted" class="w-full transition-all duration-200">
+    <Item.Root
+      variant="muted"
+      class="w-full transition-all duration-200 border-border"
+    >
       <Item.Content>A simple item with title and description.</Item.Content>
     </Item.Root>
   </div>

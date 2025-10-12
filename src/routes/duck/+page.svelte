@@ -2,6 +2,7 @@
   import SplatContainer from "$lib/components/splat-container.svelte";
   import Context from "$lib/components/context.svelte";
   import Link from "$lib/components/link.svelte";
+  import { Badge } from "$lib/components/ui/badge/index.js";
 </script>
 
 {#snippet content()}
@@ -13,8 +14,10 @@
     我以為帶回的是爆米花，原來裝著的是那天的空氣。
   </blockquote>
   <p>
-    藍色水手帽與飽滿的<Link iconClass="las la-ribbon" a="1">大蝴蝶結</Link
-    >，海軍帽上繫著樸素的黑色飾帶；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。背帶上的剪影像他的吐槽，直白寫著
+    藍色水手帽與飽滿的
+    <!-- <Link iconClass="las la-ribbon">大蝴蝶結</Link> -->
+    <Badge variant="secondary">Secondary</Badge>
+    ，海軍帽上繫著樸素的黑色飾帶；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。背帶上的剪影像他的吐槽，直白寫著
     Disney Resort，兩側以那雙黃色腳丫做扣件，把歡笑牢牢扣住。
   </p>
   <blockquote class="border-l-4 pl-4 my-2 italic">

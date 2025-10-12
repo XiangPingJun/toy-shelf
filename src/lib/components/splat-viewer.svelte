@@ -3,11 +3,14 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { Spinner } from "$lib/components/ui/spinner/index.js";
 
   // Component props
-  let { splatFile, cameraState } = $props();
+  let { splatFile, cameraStateTarget } = $props();
 
+  let cameraState = $state({
+    position: { x: 0, y: 0, z: 0 },
+    target: { x: 0, y: 0, z: 0 },
+  });
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
   let controls: OrbitControls | undefined = $state();
@@ -33,27 +36,102 @@
           // GLSL 工具
           globals: () => [
             dyno.unindent(`
-              // 2D 旋轉矩陣
+              vec3 hash(vec3 p) {
+                return fract(sin(p*123.456)*123.456);
+              }
+
               mat2 rot(float a) {
-                float s=sin(a),c=cos(a);
-                return mat2(c,-s,s,c);
+                float s = sin(a), c = cos(a);
+                return mat2(c, -s, s, c);
+              }
+
+              vec3 headMovement(vec3 pos, float t) {
+                pos.xy *= rot(smoothstep(-1., -2., pos.y) * .2 * sin(t*2.));
+                return pos;
+              }
+
+              vec3 breathAnimation(vec3 pos, float t) {
+                float b = sin(t*1.5);
+                pos.yz *= rot(smoothstep(-1., -3., pos.y) * .15 * -b);
+                pos.z += .3;
+                pos.y += 1.2;
+                pos *= 1. + exp(-3. * length(pos)) * b;
+                pos.z -= .3;
+                pos.y -= 1.2;
+                return pos;
+              }
+
+              vec4 fractal1(vec3 pos, float t, float intensity) {
+                float m = 100.;
+                vec3 p = pos * .1;
+                p.y += .5;
+                for (int i = 0; i < 8; i++) {
+                  p = abs(p) / clamp(abs(p.x * p.y), 0.3, 3.) - 1.;
+                  p.xy *= rot(radians(90.));
+                  if (i > 1) m = min(m, length(p.xy) + step(.3, fract(p.z * .5 + t * .5 + float(i) * .2)));
+                }
+                m = step(m, 0.5) * 1.3 * intensity;
+                return vec4(-pos.y * .3, 0.5, 0.7, .3) * intensity + m;
+              }
+
+              vec4 fractal2(vec3 center, vec3 scales, vec4 rgba, float t, float intensity) {
+                vec3 pos = center;
+                float splatSize = length(scales);
+                float pattern = exp(-50. * splatSize);
+                vec3 p = pos * .65;
+                pos.y += 2.;
+                float c = 0.;
+                float l, l2 = length(p);
+                float m = 100.;
+                
+                for (int i = 0; i < 10; i++) {
+                  p.xyz = abs(p.xyz) / dot(p.xyz, p.xyz) - .8;
+                  l = length(p.xyz);
+                  c += exp(-1. * abs(l - l2) * (1. + sin(t * 1.5 + pos.y)));
+                  l2 = length(p.xyz);
+                  m = min(m, length(p.xyz));
+                }
+                
+                c = smoothstep(0.3, 0.5, m + sin(t * 1.5 + pos.y * .5)) + c * .1;              
+                return vec4(vec3(length(rgba.rgb)) * vec3(c, c*c, c*c*c) * intensity, 
+                          rgba.a * exp(-20. * splatSize) * m * intensity);
+              }
+
+              vec4 sin3D(vec3 p, float t) {
+                float m = exp(-2. * length(sin(p * 5. + t * 3.))) * 5.;
+                return vec4(m) + .3;
+              }
+
+              vec4 disintegrate(vec3 pos, float t, float intensity) {
+                vec3 p = pos + (hash(pos) * 2. - 1.) * intensity;
+                float tt = smoothstep(-1., 0.5, -sin(t + -pos.y * .5));  
+                p.xz *= rot(tt * 2. + p.y * 2. * tt);
+                return vec4(mix(p, pos, tt), tt);
+              }
+              
+              vec4 flare(vec3 pos, float t) {
+                vec3 p = vec3(0., -1.5, 0.);
+                float tt = smoothstep(-1., .5, sin(t + hash(pos).x));  
+                tt = tt * tt;              
+                p.x += sin(t * 2.) * tt;
+                p.z += sin(t * 2.) * tt;
+                p.y += sin(t) * tt;
+                return vec4(mix(pos, p, tt), tt);
               }
             `),
           ],
           // Unroll 特效著色器邏輯
           statements: ({ inputs, outputs }: any) =>
             dyno.unindentLines(`
-            ${outputs.gsplat} = ${inputs.gsplat};
-            float t = ${inputs.t};
-            vec3 scales = ${inputs.gsplat}.scales;
-            vec3 localPos = ${inputs.gsplat}.center;
+              ${outputs.gsplat} = ${inputs.gsplat};
             
-            // Unroll 特效：旋轉螺旋與垂直揭示
-            localPos.xz *= rot((localPos.y*50.-20.)*exp(-t));
-            ${outputs.gsplat}.center = localPos * (1.-exp(-t)*2.);
-            ${outputs.gsplat}.scales = mix(vec3(0.002),scales,smoothstep(.3,.7,t+localPos.y-2.));
-            ${outputs.gsplat}.rgba = ${inputs.gsplat}.rgba*step(0.,t*.5+localPos.y-.5);
-          `),
+              vec3 localPos = ${inputs.gsplat}.center;
+              vec3 splatScales = ${inputs.gsplat}.scales;
+              
+              vec4 e = disintegrate(localPos, ${inputs.t}, ${inputs.intensity});
+              ${outputs.gsplat}.center = e.xyz;
+              ${outputs.gsplat}.scales = mix(vec3(.01, .01, .01), ${inputs.gsplat}.scales, e.w);
+            `),
         });
 
         gsplat = d.apply({
@@ -261,6 +339,19 @@
       animateT.value = baseTime;
 
       currentSplatMesh?.updateVersion();
+
+      cameraState = {
+        position: {
+          x: cameraStateTarget.position.x,
+          y: cameraStateTarget.position.y,
+          z: cameraStateTarget.position.z,
+        },
+        target: {
+          x: cameraStateTarget.target.x,
+          y: cameraStateTarget.target.y,
+          z: cameraStateTarget.target.z,
+        },
+      };
 
       controls?.update();
       if (camera) {

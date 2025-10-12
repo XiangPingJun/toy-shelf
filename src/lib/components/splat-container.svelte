@@ -3,7 +3,7 @@
   import { Spinner } from "$lib/components/ui/spinner/index.js";
   import { onMount } from "svelte";
 
-  let splatUrl = $state("/duck.spz");
+  let { url } = $props();
   let splatFile: ArrayBuffer | null = $state(null);
   let pov = $state({
     camPos: [0.055985, 0.040282, 0.300185],
@@ -13,7 +13,7 @@
   $effect(() => {
     (async () => {
       splatFile = null;
-      const response = await fetch(splatUrl);
+      const response = await fetch(url);
       splatFile = await response.arrayBuffer();
     })();
   });

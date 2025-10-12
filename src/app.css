@@ -123,4 +123,17 @@
 
 body {
   overflow: hidden;
+  font-family: iansui;
+}
+
+.uoqmunthenkhung {
+  font-family: "UoqMunThenKhung", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.iansui {
+  font-family: "Iansui", cursive;
+  font-weight: 400;
+  font-style: normal;
 }

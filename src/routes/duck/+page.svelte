@@ -11,7 +11,7 @@
     我以為帶回的是爆米花，原來裝著的是那天的空氣。
   </blockquote>
   藍色水手帽與飽滿的
-  <Link iconClass="las la-ribbon">大蝴蝶結</Link>
+  <Link>大蝴蝶結</Link>
   ，海軍帽上繫著樸素的黑色飾帶；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。背帶上的剪影像他的吐槽，直白寫著
   Disney Resort，兩側以那雙黃色腳丫做扣件，把歡笑牢牢扣住。
   <blockquote>最笨拙的零件，往往把快樂固定得最牢。f</blockquote>

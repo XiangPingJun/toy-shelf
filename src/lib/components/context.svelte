@@ -11,11 +11,11 @@
 
 {#if visible}
   <div
-    class="fixed bottom-3 px-2 flex justify-center w-full"
+    class="fixed bottom-3 px-2 flex justify-center w-full whitespace-pre-line"
     transition:fly={{ y: 20 }}
   >
     <p
-      class="notice max-w-2xl w-[calc(100vw - 4)] pointer-events-auto max-h-[15rem] backdrop-blur-4 overflow-y-auto"
+      class="notice max-w-2xl w-[calc(100vw - 4)] pointer-events-auto max-h-[12rem] backdrop-blur-4 overflow-y-auto"
     >
       {@render content?.()}
     </p>

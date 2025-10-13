@@ -33,7 +33,7 @@
       class="h-[12rem] bg-black/50 rounded-md border-white border-t-0 rounded-t-none box-content border-3"
     >
       <div
-        class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
+        class="context pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
         tabindex="-1"
         transition:fly={{ y: 30 }}
       >
@@ -42,3 +42,23 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .context::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  .context::-webkit-scrollbar:vertical {
+    width: 11px;
+  }
+
+  .context::-webkit-scrollbar:horizontal {
+    height: 11px;
+  }
+
+  .context::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+</style>

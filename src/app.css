@@ -31,8 +31,8 @@ body {
 
 @font-face {
   font-family: 'Cubic-11';
-  src: url('Cubic_11.woff2') format('woff2'),
-    url('Cubic_11.woff') format('woff');
+  src: url('/Cubic_11.woff2') format('woff2'),
+    url('/Cubic_11.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

@@ -15,7 +15,6 @@
       "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
-    transition:fly={{ y: 20 }}
   >
     <div
       class="backdrop-blur-xs h-[13rem]"
@@ -36,10 +35,9 @@
       <div
         class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
         tabindex="-1"
+        transition:fly={{ y: 30 }}
       >
-        <typewritten-text>
-          {@render content()}
-        </typewritten-text>
+        {@render content()}
       </div>
     </div>
   </div>

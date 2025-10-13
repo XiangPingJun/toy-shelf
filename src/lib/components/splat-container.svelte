@@ -1,6 +1,5 @@
 <script lang="ts">
   import SplatViewer from "./splat-viewer.svelte";
-  import { Spinner } from "$lib/components/ui/spinner/index.js";
   import { onMount } from "svelte";
 
   let { url } = $props();
@@ -27,10 +26,10 @@
   });
 </script>
 
-{#if splatFile}
+{#if !splatFile}
   <SplatViewer {splatFile} {pov} />
 {:else}
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <Spinner class="size-10" />
+    <i class="las la-spinner la-pulse text-6xl"></i>
   </div>
 {/if}

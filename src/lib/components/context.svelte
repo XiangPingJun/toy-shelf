@@ -1,11 +1,128 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
-  const { content, title } = $props();
+  const { content, title, typewriterSpeed = 50 } = $props();
 
   let visible = $state(false);
+  let contentElement: HTMLDivElement | undefined = $state();
+  let hiddenContentElement: HTMLDivElement | undefined = $state();
+  let displayedContent = $state("");
+  let isTyping = $state(false);
+
+  // 打字機效果函數
+  async function startTypewriterEffect() {
+    if (!hiddenContentElement || !contentElement) return;
+
+    isTyping = true;
+    const fullHTML = hiddenContentElement.innerHTML;
+
+    // 解析 HTML 並提取純文本
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = fullHTML;
+    const plainText = tempDiv.textContent || tempDiv.innerText || "";
+
+    // 重置顯示內容
+    displayedContent = "";
+    contentElement.innerHTML = "";
+
+    let currentIndex = 0;
+
+    const typeNextChar = () => {
+      if (currentIndex < plainText.length) {
+        // 獲取當前應該顯示的文字長度
+        const targetText = plainText.slice(0, currentIndex + 1);
+
+        // 遍歷原始HTML，構建對應長度的HTML片段
+        let htmlFragment = "";
+        let textCounter = 0;
+
+        const walkNodes = (node: Node): boolean => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const nodeText = node.textContent || "";
+            const remainingLength = targetText.length - textCounter;
+
+            if (remainingLength <= 0) return false;
+
+            if (nodeText.length <= remainingLength) {
+              htmlFragment += nodeText;
+              textCounter += nodeText.length;
+              return textCounter < targetText.length;
+            } else {
+              htmlFragment += nodeText.slice(0, remainingLength);
+              textCounter += remainingLength;
+              return false;
+            }
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as Element;
+            const elementText = element.textContent || "";
+            const remainingLength = targetText.length - textCounter;
+
+            if (remainingLength <= 0) return false;
+
+            if (elementText.length <= remainingLength) {
+              htmlFragment += element.outerHTML;
+              textCounter += elementText.length;
+              return textCounter < targetText.length;
+            } else {
+              // 部分顯示元素內容
+              const clonedElement = element.cloneNode(false) as Element;
+              htmlFragment += `<${clonedElement.tagName.toLowerCase()}`;
+
+              // 複製屬性
+              for (let i = 0; i < element.attributes.length; i++) {
+                const attr = element.attributes[i];
+                htmlFragment += ` ${attr.name}="${attr.value}"`;
+              }
+              htmlFragment += `>`;
+
+              // 遞歸處理子節點
+              for (const child of Array.from(element.childNodes)) {
+                if (!walkNodes(child)) break;
+              }
+
+              htmlFragment += `</${clonedElement.tagName.toLowerCase()}>`;
+              return false;
+            }
+          }
+          return true;
+        };
+
+        // 重新構建HTML片段
+        htmlFragment = "";
+        textCounter = 0;
+
+        for (const child of Array.from(tempDiv.childNodes)) {
+          if (!walkNodes(child)) break;
+        }
+
+        if (contentElement) {
+          contentElement.innerHTML =
+            htmlFragment + '<span class="animate-pulse text-white">|</span>';
+        }
+        currentIndex++;
+
+        setTimeout(typeNextChar, typewriterSpeed);
+      } else {
+        // 打字完成，顯示完整內容
+        if (contentElement) {
+          contentElement.innerHTML = fullHTML;
+        }
+        isTyping = false;
+      }
+    };
+
+    typeNextChar();
+  }
+
   onMount(() => {
     visible = true;
+  });
+
+  // 當內容渲染完成後啟動打字機效果
+  $effect(() => {
+    if (visible && hiddenContentElement && contentElement) {
+      setTimeout(startTypewriterEffect, 200);
+    }
   });
 </script>
 
@@ -32,12 +149,21 @@
     <div
       class="h-[12rem] bg-black/50 rounded-md border-white border-t-0 rounded-t-none box-content border-3"
     >
+      <!-- 隱藏的原始內容用於獲取HTML -->
       <div
+        bind:this={hiddenContentElement}
+        style="position: absolute; visibility: hidden; pointer-events: none;"
+      >
+        {@render content()}
+      </div>
+
+      <div
+        bind:this={contentElement}
         class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
         tabindex="-1"
         transition:fly={{ y: 30 }}
       >
-        {@render content()}
+        <!-- 打字機效果會在這裡動態插入內容 -->
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { fly } from "svelte/transition";
-  const { content, title, typewriterSpeed = 50 } = $props();
+  import { slide } from "svelte/transition";
+  const { content, title } = $props();
 
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
@@ -93,9 +93,9 @@
         if (contentElement) {
           contentElement.innerHTML = htmlFragment;
         }
-        currentIndex++;
+        currentIndex += 20;
 
-        setTimeout(typeNextChar, typewriterSpeed);
+        setTimeout(typeNextChar, 50);
       } else {
         // 打字完成，顯示完整內容
         if (contentElement) {
@@ -125,6 +125,7 @@
       "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
+    transition:slide
   >
     <div
       class="backdrop-blur-xs h-[13rem]"
@@ -154,7 +155,6 @@
         bind:this={contentElement}
         class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
         tabindex="-1"
-        transition:fly={{ y: 30 }}
       >
         <!-- 打字機效果會在這裡動態插入內容 -->
       </div>

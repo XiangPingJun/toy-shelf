@@ -1,8 +1,12 @@
 <script lang="ts">
-  import SplatContainer from "$lib/components/splat-container.svelte";
-  import Context from "$lib/components/context.svelte";
+  import Viewer from "$lib/components/viewer.svelte";
   import Link from "$lib/components/link.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
+
+  let pov = $state({
+    camPos: [0.055985, 0.040282, 0.300185],
+    ctrlTgt: [0.002496, 0.001228, -0.000562],
+  });
 </script>
 
 {#snippet title()}
@@ -23,5 +27,4 @@
   打開蓋子，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
 {/snippet}
 
-<SplatContainer url="/duck/duck.spz" />
-<Context {content} {title} />
+<Viewer splatUrl="/duck/duck.spz" {pov} {title} {content} />

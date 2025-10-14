@@ -27,7 +27,9 @@
 
   // 保存相機和控制器位置到 KV（只在有變化時）
   async function saveCameraState() {
-    if (!camera || !controls || !browser) return;
+    if (!camera || !controls || !browser || controls.autoRotate) {
+      return;
+    }
 
     const cameraStateToSave = {
       camPos: camera.position.toArray().map((v) => parseFloat(v.toFixed(6))),
@@ -121,6 +123,7 @@
     controls.minDistance = 0.3;
     controls.maxDistance = 20;
     controls.update();
+    controls.autoRotateSpeed = 0.2;
 
     function animate() {
       currentSplatMesh?.updateVersion();
@@ -148,6 +151,14 @@
     isInitialized = true;
 
     await updateMesh();
+
+    await new Promise((r) => setTimeout(r, 2000));
+    controls.autoRotate = true;
+    controls.addEventListener("end", () => {
+      if (controls) {
+        controls.autoRotate = false;
+      }
+    });
 
     saveInterval = setInterval(saveCameraState, 1000);
   });

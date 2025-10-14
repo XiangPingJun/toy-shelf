@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
   import Viewer from "$lib/components/viewer.svelte";
   import Link from "$lib/components/link.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
@@ -19,8 +20,18 @@
   <Blockquote>我以為帶回的是爆米花，原來裝著的是那天的空氣。</Blockquote>
   它像從時光機裡回來的孩子，帶著八〇年代玩具的憨直與亮光，把我拉回園區外細雨的午後與排隊時的笑聲。
   藍色水手帽與飽滿的
-  <Link>大蝴蝶結</Link>
-  ，海軍帽上繫著樸素的黑色飾帶；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。<br />
+  <Link onclick={() => console.log(1)}>大蝴蝶結</Link>
+  ，海軍帽上繫著樸素的
+  <Link
+    onclick={() => {
+      console.log("Change POV to 黑色飾帶");
+      pov = {
+        camPos: [-0.023534, 0.121173, -0.278146],
+        ctrlTgt: [0.015315, 0.035563, 0.006743],
+      };
+    }}>黑色飾帶</Link
+  >
+  ；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。<br />
   <Blockquote>最笨拙的零件，往往把快樂固定得最牢。</Blockquote>
   背帶上的剪影像他的吐槽，直白寫著Disney Resort，兩側以那雙黃色腳丫做扣件，把歡笑牢牢扣住。
   <div class="mt-3"></div>

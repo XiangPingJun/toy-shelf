@@ -132,14 +132,14 @@
         if (camera.position.distanceTo(camPos) < 0.01) {
           camPos = null;
         } else {
-          camera.position.lerp(camPos, 0.05);
+          camera.position.lerp(camPos, 0.1);
         }
       }
       if (controls && ctrlTgt) {
         if (controls.target.distanceTo(ctrlTgt) < 0.01) {
           ctrlTgt = null;
         } else {
-          controls.target.lerp(ctrlTgt, 0.05);
+          controls.target.lerp(ctrlTgt, 0.1);
         }
       }
       controls?.update();

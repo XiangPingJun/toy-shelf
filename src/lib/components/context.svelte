@@ -6,14 +6,11 @@
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
-  let displayedContent = $state("");
-  let isTyping = $state(false);
 
   // 打字機效果函數
   async function startTypewriterEffect() {
     if (!hiddenContentElement || !contentElement) return;
 
-    isTyping = true;
     const fullHTML = hiddenContentElement.innerHTML;
 
     // 解析 HTML 並提取純文本
@@ -21,8 +18,6 @@
     tempDiv.innerHTML = fullHTML;
     const plainText = tempDiv.textContent || tempDiv.innerText || "";
 
-    // 重置顯示內容
-    displayedContent = "";
     contentElement.innerHTML = "";
 
     let currentIndex = 0;
@@ -96,8 +91,7 @@
         }
 
         if (contentElement) {
-          contentElement.innerHTML =
-            htmlFragment + '<span class="animate-pulse text-white">|</span>';
+          contentElement.innerHTML = htmlFragment;
         }
         currentIndex++;
 
@@ -107,7 +101,6 @@
         if (contentElement) {
           contentElement.innerHTML = fullHTML;
         }
-        isTyping = false;
       }
     };
 

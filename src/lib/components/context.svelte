@@ -6,6 +6,7 @@
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
+  let completed = $state(false);
 
   // 打字機效果函數
   async function startTypewriterEffect() {
@@ -98,9 +99,7 @@
         setTimeout(typeNextChar, 50);
       } else {
         // 打字完成，顯示完整內容
-        if (contentElement) {
-          contentElement.innerHTML = fullHTML;
-        }
+        completed = true;
       }
     };
 
@@ -143,21 +142,23 @@
     <div
       class="h-[12rem] bg-black/50 rounded-md border-white border-t-0 rounded-t-none box-content border-3"
     >
-      <!-- 隱藏的原始內容用於獲取HTML -->
       <div
-        bind:this={hiddenContentElement}
-        style="position: absolute; visibility: hidden; pointer-events: none;"
-      >
-        {@render content()}
-      </div>
-
-      <div
-        bind:this={contentElement}
         class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
         tabindex="-1"
       >
-        <!-- 打字機效果會在這裡動態插入內容 -->
+        {#if completed}
+          {@render content()}
+        {:else}
+          <div bind:this={contentElement}>
+            <!-- 打字機效果會在這裡動態插入內容 -->
+          </div>
+        {/if}
       </div>
     </div>
   </div>
 {/if}
+
+<!-- 隱藏的原始內容用於獲取HTML -->
+<div bind:this={hiddenContentElement} class="hidden">
+  {@render content()}
+</div>

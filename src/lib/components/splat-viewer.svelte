@@ -9,9 +9,9 @@
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
-  let controls: OrbitControls | undefined = $state();
+  let controls = $state() as OrbitControls;
   let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera | undefined = $state();
+  let camera = $state() as THREE.PerspectiveCamera;
   let currentSplatMesh: any = null;
   let isInitialized = false;
   let baseTime = 0;
@@ -23,11 +23,14 @@
   $effect(() => {
     camPos = new THREE.Vector3(...pov.camPos);
     ctrlTgt = new THREE.Vector3(...pov.ctrlTgt);
+    if (controls) {
+      controls.autoRotate = false;
+    }
   });
 
   // 保存相機和控制器位置到 KV（只在有變化時）
   async function saveCameraState() {
-    if (!camera || !controls || !browser || controls.autoRotate) {
+    if (controls.autoRotate) {
       return;
     }
 
@@ -80,10 +83,8 @@
 
     // 創建新的 mesh
     const newMesh = await createSplatMesh();
-    if (newMesh) {
-      currentSplatMesh = newMesh;
-      scene.add(currentSplatMesh);
-    }
+    currentSplatMesh = newMesh;
+    scene.add(currentSplatMesh);
   }
 
   onMount(async () => {
@@ -114,9 +115,7 @@
     spark.blurAmount = 0;
 
     // 將 renderer.domElement 附加到 container
-    if (container) {
-      container.appendChild(renderer.domElement);
-    }
+    container.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
@@ -127,17 +126,15 @@
 
     function animate() {
       currentSplatMesh?.updateVersion();
-      if (camera) {
-        renderer.render(scene, camera);
-      }
-      if (camera && camPos) {
+      renderer.render(scene, camera);
+      if (camPos) {
         if (camera.position.distanceTo(camPos) < 0.01) {
           camPos = null;
         } else {
           camera.position.lerp(camPos, 0.1);
         }
       }
-      if (controls && ctrlTgt) {
+      if (ctrlTgt) {
         if (controls.target.distanceTo(ctrlTgt) < 0.01) {
           ctrlTgt = null;
         } else {
@@ -152,7 +149,7 @@
 
     await updateMesh();
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 1000));
     controls.autoRotate = true;
     controls.addEventListener("end", () => {
       if (controls) {
@@ -169,21 +166,16 @@
       saveInterval = null;
     }
 
-    if (renderer) {
-      renderer.setAnimationLoop(null);
-      if (
-        container &&
-        renderer.domElement &&
-        container.contains(renderer.domElement)
-      ) {
-        container.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
+    renderer.setAnimationLoop(null);
+    if (
+      container &&
+      renderer.domElement &&
+      container.contains(renderer.domElement)
+    ) {
+      container.removeChild(renderer.domElement);
     }
-
-    if (controls) {
-      controls.dispose();
-    }
+    renderer.dispose();
+    controls.dispose();
   });
 </script>
 

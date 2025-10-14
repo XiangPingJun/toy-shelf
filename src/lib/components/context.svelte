@@ -134,7 +134,7 @@
       <div
         class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
       ></div>
-      <div class="bg-black/50 -mt-2.5 px-2 font-bold">{@render title()}</div>
+      <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">{@render title()}</div>
       <div
         class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
       ></div>

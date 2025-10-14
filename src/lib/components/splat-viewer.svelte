@@ -16,13 +16,13 @@
   let isInitialized = false;
   let baseTime = 0;
   let saveInterval: number | null = null;
-  let camPos: THREE.Vector3 | null = $state(null);
-  let ctrlTgt: THREE.Vector3 | null = $state(null);
+  let cameraPosition: THREE.Vector3 | null = $state(null);
+  let controlTarget: THREE.Vector3 | null = $state(null);
   let lastSavedCameraState: string | undefined;
 
   $effect(() => {
-    camPos = new THREE.Vector3(...pov.camPos);
-    ctrlTgt = new THREE.Vector3(...pov.ctrlTgt);
+    cameraPosition = new THREE.Vector3(pov[0], pov[1], pov[2]);
+    controlTarget = new THREE.Vector3(pov[3], pov[4], pov[5]);
     if (controls) {
       controls.autoRotate = false;
     }
@@ -34,13 +34,13 @@
       return;
     }
 
-    const cameraStateToSave = {
-      camPos: camera.position.toArray().map((v) => parseFloat(v.toFixed(6))),
-      ctrlTgt: controls.target.toArray().map((v) => parseFloat(v.toFixed(6))),
-    };
+    const povToSave = [
+      ...camera.position.toArray().map((v) => parseFloat(v.toFixed(4))),
+      ...controls.target.toArray().map((v) => parseFloat(v.toFixed(4))),
+    ];
 
-    if (lastSavedCameraState !== JSON.stringify(cameraStateToSave)) {
-      lastSavedCameraState = JSON.stringify(cameraStateToSave);
+    if (lastSavedCameraState !== JSON.stringify(povToSave)) {
+      lastSavedCameraState = JSON.stringify(povToSave);
       await fetch("/api/kv", {
         method: "POST",
         headers: {
@@ -48,10 +48,10 @@
         },
         body: JSON.stringify({
           key: "splat-camera-state",
-          value: cameraStateToSave,
+          value: povToSave,
         }),
       });
-      console.log(JSON.stringify(cameraStateToSave));
+      console.log(JSON.stringify(povToSave));
     }
   }
 
@@ -127,18 +127,18 @@
     function animate() {
       currentSplatMesh?.updateVersion();
       renderer.render(scene, camera);
-      if (camPos) {
-        if (camera.position.distanceTo(camPos) < 0.01) {
-          camPos = null;
+      if (cameraPosition) {
+        if (camera.position.distanceTo(cameraPosition) < 0.01) {
+          cameraPosition = null;
         } else {
-          camera.position.lerp(camPos, 0.1);
+          camera.position.lerp(cameraPosition, 0.1);
         }
       }
-      if (ctrlTgt) {
-        if (controls.target.distanceTo(ctrlTgt) < 0.01) {
-          ctrlTgt = null;
+      if (controlTarget) {
+        if (controls.target.distanceTo(controlTarget) < 0.01) {
+          controlTarget = null;
         } else {
-          controls.target.lerp(ctrlTgt, 0.1);
+          controls.target.lerp(controlTarget, 0.1);
         }
       }
       controls?.update();

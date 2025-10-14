@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
   import Viewer from "$lib/components/viewer.svelte";
   import Link from "$lib/components/link.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
 
-  let pov = $state({
-    camPos: [0.055985, 0.040282, 0.300185],
-    ctrlTgt: [0.002496, 0.001228, -0.000562],
-  });
+  let pov = $state([
+    0.055985, 0.040282, 0.300185, 0.002496, 0.001228, -0.000562,
+  ]);
 </script>
 
 {#snippet title()}
@@ -20,14 +18,17 @@
   <Blockquote>我以為帶回的是爆米花，原來裝著的是那天的空氣。</Blockquote>
   它像從時光機裡回來的孩子，帶著八〇年代玩具的憨直與亮光，把我拉回園區外細雨的午後與排隊時的笑聲。
   藍色水手帽與飽滿的
-  <Link onclick={() => console.log(1)}>大蝴蝶結</Link>
+  <Link
+    onclick={() => {
+      pov = [0.042, 0.0221, 0.3044, 0.0066, 0.0058, 0.0067];
+    }}
+  >
+    大蝴蝶結
+  </Link>
   ，海軍帽上繫著樸素的
   <Link
     onclick={() => {
-      pov = {
-        camPos: [-0.023534, 0.121173, -0.278146],
-        ctrlTgt: [0.015315, 0.035563, 0.006743],
-      };
+      pov = [-0.0235, 0.1212, -0.2781, 0.0153, 0.0356, 0.0067];
     }}
   >
     黑色飾帶

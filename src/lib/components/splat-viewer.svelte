@@ -18,6 +18,7 @@
   let saveInterval: number | null = null;
   let camPos: THREE.Vector3 | null = $state(null);
   let ctrlTgt: THREE.Vector3 | null = $state(null);
+  let lastSavedCameraState: string | undefined;
 
   $effect(() => {
     camPos = new THREE.Vector3(...pov.camPos);
@@ -28,12 +29,13 @@
   async function saveCameraState() {
     if (!camera || !controls || !browser) return;
 
-    try {
-      const cameraStateToSave = {
-        camPos: camera.position.toArray().map((v) => parseFloat(v.toFixed(6))),
-        ctrlTgt: controls.target.toArray().map((v) => parseFloat(v.toFixed(6))),
-      };
+    const cameraStateToSave = {
+      camPos: camera.position.toArray().map((v) => parseFloat(v.toFixed(6))),
+      ctrlTgt: controls.target.toArray().map((v) => parseFloat(v.toFixed(6))),
+    };
 
+    if (lastSavedCameraState !== JSON.stringify(cameraStateToSave)) {
+      lastSavedCameraState = JSON.stringify(cameraStateToSave);
       await fetch("/api/kv", {
         method: "POST",
         headers: {
@@ -44,10 +46,7 @@
           value: cameraStateToSave,
         }),
       });
-
       console.log(JSON.stringify(cameraStateToSave));
-    } catch (error) {
-      console.error("Failed to save camera state:", error);
     }
   }
 

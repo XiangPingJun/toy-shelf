@@ -1,7 +1,6 @@
 <script lang="ts">
   import SplatViewer from "$lib/components/splat-viewer.svelte";
   import Context from "$lib/components/context.svelte";
-  import { slide } from "svelte/transition";
   import { onMount } from "svelte";
 
   let { splatUrl, pov, title, content } = $props();
@@ -31,14 +30,11 @@
   });
 </script>
 
-{#if !splatUrl && splatFile}
+{#if splatUrl && splatFile}
   <SplatViewer {splatFile} {pov} />
   <Context {content} {title} />
 {:else if inited}
-  <div
-    transition:slide
-    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl"
-  >
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
     <div>
       {loaderText}
     </div>

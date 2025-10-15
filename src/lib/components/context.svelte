@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
-  const { content, title } = $props();
+  const { content, heading } = $props();
 
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
@@ -134,7 +134,9 @@
       <div
         class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
       ></div>
-      <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">{@render title()}</div>
+      <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
+        {@render heading()}
+      </div>
       <div
         class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
       ></div>

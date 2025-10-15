@@ -3,20 +3,43 @@
   import Link from "$lib/components/link.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
 
+  const title = "唐老鴨爆米花🗄️祥平的玩具櫃";
+  const description =
+    "2015年在東京迪士尼買下的爆米花桶，帶著八〇年代玩具的憨直與亮光";
+  const ogImage = "/duck/og-image.jpg";
+
   let pov = $state([
     0.055985, 0.040282, 0.300185, 0.002496, 0.001228, -0.000562,
   ]);
 </script>
 
-{#snippet title()}
+<svelte:head>
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Open Graph Protocol -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="🗄️祥平的玩具櫃" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+</svelte:head>
+
+{#snippet heading()}
   唐老鴨
 {/snippet}
 
 {#snippet content()}
   2015年在東京迪士尼，我買下那只爆米花桶。<br />
   <div class="mt-2"></div>
-  <Blockquote>我以為帶回的是爆米花，原來裝著的是那天的空氣。</Blockquote>
   它像從時光機裡回來的孩子，帶著八〇年代玩具的憨直與亮光，把我拉回園區外細雨的午後與排隊時的笑聲。
+  <Blockquote>我以為帶回的是爆米花，原來裝著的是那天的空氣。</Blockquote>
   藍色水手帽與飽滿的
   <Link c={() => (pov = [0.042, 0.0221, 0.3044, 0.0066, 0.0058, 0.0067])}>
     大蝴蝶結
@@ -40,4 +63,4 @@
   打開蓋子，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
 {/snippet}
 
-<Viewer splatUrl="/duck/duck.spz" {pov} {title} {content} />
+<Viewer splatUrl="/duck/duck.spz" {pov} {heading} {content} />

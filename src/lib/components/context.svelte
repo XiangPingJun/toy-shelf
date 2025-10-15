@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
+  import { fly } from "svelte/transition";
   const { content, heading } = $props();
 
   let visible = $state(false);
@@ -124,7 +124,7 @@
       "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
-    transition:slide
+    transition:fly={{ y: "2rem" }}
   >
     <div
       class="backdrop-blur-xs h-[13rem]"

@@ -1,14 +1,15 @@
 <script lang="ts">
-  const { children, c } = $props();
+  const { text, onclick } = $props();
 </script>
 
 <span
-  class="text-blue-400 underline-offset-4 underline hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung]"
+  class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung]"
   role="button"
   tabindex="0"
-  onclick={c}
+  {onclick}
   onkeydown={() => {}}
 >
-  <i class="far fa-eye underline"></i>
-  {@render children()}
+  <i class="far fa-eye underline-offset-4 underline"></i><span
+    class="underline-offset-4 underline -mr-0.5">{" "}</span
+  ><span class="underline-offset-4 underline">{text}</span>
 </span>

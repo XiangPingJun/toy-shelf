@@ -16,13 +16,14 @@
   let isInitialized = false;
   let baseTime = 0;
   let saveInterval: number | null = null;
-  let cameraPosition: THREE.Vector3 | null = $state(null);
-  let controlTarget: THREE.Vector3 | null = $state(null);
+  let position: THREE.Vector3 | null = $state(null);
+  let target: THREE.Vector3 | null = $state(null);
   let lastSavedCameraState: string | undefined;
 
   $effect(() => {
-    cameraPosition = new THREE.Vector3(pov[0], pov[1], pov[2]);
-    controlTarget = new THREE.Vector3(pov[3], pov[4], pov[5]);
+    const p = JSON.parse(pov);
+    position = new THREE.Vector3(p[0], p[1], p[2]);
+    target = new THREE.Vector3(p[3], p[4], p[5]);
     if (controls) {
       controls.autoRotate = false;
     }
@@ -34,13 +35,13 @@
       return;
     }
 
-    const povToSave = [
+    const povToSave = JSON.stringify([
       ...camera.position.toArray().map((v) => parseFloat(v.toFixed(4))),
       ...controls.target.toArray().map((v) => parseFloat(v.toFixed(4))),
-    ];
+    ]);
 
-    if (lastSavedCameraState !== JSON.stringify(povToSave)) {
-      lastSavedCameraState = JSON.stringify(povToSave);
+    if (lastSavedCameraState !== povToSave) {
+      lastSavedCameraState = povToSave;
       await fetch("/api/kv", {
         method: "POST",
         headers: {
@@ -103,8 +104,6 @@
       1000,
     );
 
-    // 為 Unroll 特效設置初始相機位置
-    camera.position.set(0, 2, 2.5);
     camera.lookAt(0, 0, 0);
 
     renderer = new THREE.WebGLRenderer();
@@ -127,18 +126,19 @@
     function animate() {
       currentSplatMesh?.updateVersion();
       renderer.render(scene, camera);
-      if (cameraPosition) {
-        if (camera.position.distanceTo(cameraPosition) < 0.01) {
-          cameraPosition = null;
+      if (position !== null) {
+        if (camera.position.distanceTo(position) < 0.01) {
+          position = null;
         } else {
-          camera.position.lerp(cameraPosition, 0.1);
+          camera.position.lerp(position, 0.075);
         }
       }
-      if (controlTarget) {
-        if (controls.target.distanceTo(controlTarget) < 0.01) {
-          controlTarget = null;
+
+      if (target !== null) {
+        if (controls.target.distanceTo(target) < 0.01) {
+          target = null;
         } else {
-          controls.target.lerp(controlTarget, 0.1);
+          controls.target.lerp(target, 0.075);
         }
       }
       controls?.update();
@@ -154,6 +154,8 @@
     controls.addEventListener("end", () => {
       if (controls) {
         controls.autoRotate = false;
+        position = null;
+        target = null;
       }
     });
 

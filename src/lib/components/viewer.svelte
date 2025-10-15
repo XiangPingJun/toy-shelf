@@ -1,11 +1,17 @@
 <script lang="ts">
   import SplatViewer from "$lib/components/splat-viewer.svelte";
   import Context from "$lib/components/context.svelte";
-  import { onMount } from "svelte";
+  import Image from "$lib/components/image.svelte";
 
-  let { splatUrl, pov, heading, content } = $props();
+  let {
+    splatUrl = "",
+    pov,
+    heading,
+    content,
+    imgUrl = "",
+    onImgClose = () => {},
+  } = $props();
   let splatFile: ArrayBuffer | null = $state(null);
-  let inited = $state(false);
   let loaderText = $state("");
   let loaderStep = $state(1);
 
@@ -16,10 +22,6 @@
     loaderText = "Loading" + ".".repeat(loaderStep);
     loaderStep++;
   }, 500);
-
-  onMount(() => {
-    inited = true;
-  });
 
   $effect(() => {
     (async () => {
@@ -33,7 +35,10 @@
 {#if splatUrl && splatFile}
   <SplatViewer {splatFile} {pov} />
   <Context {content} {heading} />
-{:else if inited}
+  {#if imgUrl}
+    <Image src={imgUrl} onClose={onImgClose} />
+  {/if}
+{:else}
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
     <div>
       {loaderText}

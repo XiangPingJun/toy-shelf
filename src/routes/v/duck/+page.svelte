@@ -3,14 +3,14 @@
   import Link from "$lib/components/link.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
 
-  const title = "唐老鴨爆米花🗄️祥平的玩具櫃";
+  const title = "唐老鴨爆米花 @祥平的玩具櫃";
   const description =
     "2015年在東京迪士尼買下的爆米花桶，帶著八〇年代玩具的憨直與亮光";
   const ogImage = "/duck/og-image.jpg";
 
-  let pov = $state([
-    0.055985, 0.040282, 0.300185, 0.002496, 0.001228, -0.000562,
-  ]);
+  let pov = $state({ val: "[0.047,0.064,0.289,0,0,0]" });
+  const setPov = (val: string) => (pov = { val });
+  let imgUrl = $state("");
 </script>
 
 <svelte:head>
@@ -22,7 +22,7 @@
   <meta property="og:description" content={description} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="🗄️祥平的玩具櫃" />
+  <meta property="og:site_name" content="祥平的玩具櫃" />
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -32,7 +32,7 @@
 </svelte:head>
 
 {#snippet heading()}
-  唐老鴨
+  [ 唐老鴨 ]
 {/snippet}
 
 {#snippet content()}
@@ -41,26 +41,47 @@
   它像從時光機裡回來的孩子，帶著八〇年代玩具的憨直與亮光，把我拉回園區外細雨的午後與排隊時的笑聲。
   <Blockquote>我以為帶回的是爆米花，原來裝著的是那天的空氣。</Blockquote>
   藍色水手帽與飽滿的
-  <Link c={() => (pov = [0.042, 0.0221, 0.3044, 0.0066, 0.0058, 0.0067])}>
-    大蝴蝶結
-  </Link>
+  <Link
+    text="大蝴蝶結"
+    onclick={() => setPov("[0.04,0.044,0.299,0.006,-0.02,0.008]")}
+  />
   ，海軍帽上繫著樸素的
-  <Link c={() => (pov = [-0.0235, 0.1212, -0.2781, 0.0153, 0.0356, 0.0067])}>
-    黑色飾帶
-  </Link>
+  <Link
+    text="黑色飾帶"
+    onclick={() => setPov("[-0.03,0.174,-0.253,0.005,0.026,0.006]")}
+  />
   ；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。<br />
   <Blockquote>最笨拙的零件，往往把快樂固定得最牢。</Blockquote>
-  背帶上的剪影像他的吐槽，直白寫著
-  <Link c={() => (pov = [-0.0049, 0.2709, -0.1034, 0.0029, -0.0282, -0.0821])}>
-    Disney Resort
-  </Link>
+  背帶上的剪影直白寫著
+  <Link
+    text="Disney Resort"
+    onclick={() => {
+      setPov("[-0.01,0.198,-0.114,0.002,-0.099,-0.074]");
+      imgUrl = "/duck/og-image.jpg";
+    }}
+  />
   ，兩側以那
-  <Link c={() => (pov = [-0.2944, 0.0098, 0.0431, 0.0029, -0.0203, 0.0175])}>
-    雙黃色腳丫
-  </Link>
+  <Link
+    text="雙黃色腳丫"
+    onclick={() => setPov("[0.278,0.04,0.006,-0.012,-0.037,0.01]")}
+  />
   做扣件，把歡笑牢牢扣住。
   <div class="mt-3"></div>
-  打開蓋子，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
+  <Link
+    text="打開蓋子"
+    onclick={() => {
+      setPov("[0.0215,0.2525,0.1564,0.0076,-0.001,-0.0035]");
+      imgUrl = "/duck/duck-open.png";
+    }}
+  />
+  ，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
 {/snippet}
 
-<Viewer splatUrl="/duck/duck.spz" {pov} {heading} {content} />
+<Viewer
+  splatUrl="/duck/duck.spz"
+  pov={pov.val}
+  {heading}
+  {content}
+  {imgUrl}
+  onImgClose={() => (imgUrl = "")}
+/>

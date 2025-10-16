@@ -10,6 +10,8 @@
     content,
     imgUrl = "",
     onImgClose = () => {},
+    onNext = null,
+    onPrev = null,
   } = $props();
   let splatFile: ArrayBuffer | null = $state(null);
   let loaderText = $state("");

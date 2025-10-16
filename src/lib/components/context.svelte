@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
-  const { content, heading } = $props();
+  const { content, heading, onNext = null, onPrev = null } = $props();
 
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
@@ -135,17 +135,17 @@
         class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
       ></div>
       <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
-        {@render heading()}
+        [<span class="mx-1">{heading}</span>]
       </div>
       <div
         class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
       ></div>
     </div>
     <div
-      class="h-[12rem] bg-black/50 rounded-md border-white border-t-0 rounded-t-none box-content border-3"
+      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
     >
       <div
-        class="pl-4 pr-1 overflow-y-auto h-[11rem] whitespace-pre-line"
+        class="pl-4 pr-1 overflow-y-auto h-[10rem] whitespace-pre-line"
         tabindex="-1"
       >
         {#if completed}
@@ -156,6 +156,30 @@
           </div>
         {/if}
       </div>
+    </div>
+    <div class="flex">
+      <div
+        class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
+      ></div>
+      {#if onNext || onPrev}
+        <div class="bg-black/50 pt-1.5 px-0.5 font-bold flex items-center">
+          {#if onPrev}
+            [<button
+              class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+              onclick={onPrev}>←前</button
+            >]
+          {/if}
+          {#if onNext}
+            [<button
+              class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+              onclick={onNext}>次→</button
+            >]
+          {/if}
+        </div>
+      {/if}
+      <div
+        class="rounded-br-md border-b-3 border-r-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
+      ></div>
     </div>
   </div>
 {/if}

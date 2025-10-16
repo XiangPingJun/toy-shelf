@@ -31,10 +31,6 @@
   <meta name="twitter:image" content={ogImage} />
 </svelte:head>
 
-{#snippet heading()}
-  [ 唐老鴨 ]
-{/snippet}
-
 {#snippet content()}
   2015年在東京迪士尼，我買下那只爆米花桶。<br />
   <div class="mt-2"></div>
@@ -80,7 +76,7 @@
 <Viewer
   splatUrl="/duck/duck.spz"
   pov={pov.val}
-  {heading}
+  heading="唐老鴨"
   {content}
   {imgUrl}
   onImgClose={() => (imgUrl = "")}

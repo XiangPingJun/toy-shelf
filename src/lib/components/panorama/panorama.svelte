@@ -49,12 +49,8 @@
 
   $effect(() => {
     if (pov && cameraControls) {
-      // Apply POV if provided
-      try {
-        cameraControls.fromJSON(pov, true);
-      } catch (e) {
-        console.warn("Failed to apply POV:", e);
-      }
+      cameraControls.fromJSON(pov, true);
+      autoRotate = false;
     }
   });
 

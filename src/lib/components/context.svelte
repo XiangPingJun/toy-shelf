@@ -121,7 +121,7 @@
 {#if visible}
   <div
     class={[
-      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
+      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] backdrop-blur-[4px] mb-1",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
     transition:fly={{ y: "2rem" }}

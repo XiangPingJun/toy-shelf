@@ -24,6 +24,9 @@
     const p = JSON.parse(pov);
     position = new THREE.Vector3(p[0], p[1], p[2]);
     target = new THREE.Vector3(p[3], p[4], p[5]);
+    if (controls) {
+      controls.autoRotate = false;
+    }
   });
 
   // 保存相機和控制器位置到 KV（只在有變化時）

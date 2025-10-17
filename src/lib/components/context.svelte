@@ -127,7 +127,7 @@
     transition:fly={{ y: "2rem" }}
   >
     <div
-      class="backdrop-blur-xs h-[13rem]"
+      class="backdrop-blur-xs h-[12.3rem]"
       style="position: absolute; bottom: 0; z-index: -1;"
     ></div>
     <div class="flex">
@@ -142,11 +142,11 @@
       ></div>
     </div>
     <div
-      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
+      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3 pr-1"
     >
       <div
-        class="pl-4 pr-1 overflow-y-auto h-[10rem] whitespace-pre-line"
-        tabindex="-1"
+        class="pl-4 overflow-y-auto h-[10rem] whitespace-pre-line"
+        style="scrollbar-gutter: stable;"
       >
         {#if completed}
           {@render content()}

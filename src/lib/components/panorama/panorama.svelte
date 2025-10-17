@@ -6,11 +6,9 @@
   let {
     panTexture,
     pov,
-    mode = "panorama",
   }: {
     panTexture: any;
     pov: any;
-    mode?: "panorama" | "littlePlanet";
   } = $props();
 
   // State
@@ -32,31 +30,10 @@
   const clock = new THREE.Clock();
   const animationSpeed = 0.15;
 
-  const views = {
-    panorama: {
-      distanceFromCenter: 0.01,
-      horizontalAngle: 70,
-      verticalAngle: 100,
-      zoomFactor: 1,
-    },
-    littlePlanet: {
-      distanceFromCenter: -500,
-      horizontalAngle: 200,
-      verticalAngle: 0,
-      zoomFactor: 0.15,
-    },
-  };
-
   $effect(() => {
     if (pov && cameraControls) {
       cameraControls.fromJSON(pov, true);
       autoRotate = false;
-    }
-  });
-
-  $effect(() => {
-    if (mode && cameraControls) {
-      setView(views[mode]);
     }
   });
 
@@ -83,25 +60,6 @@
 
     startAnimation();
   }
-
-  function setView({
-    distanceFromCenter,
-    horizontalAngle,
-    verticalAngle,
-    zoomFactor,
-  }: typeof views.panorama) {
-    if (!cameraControls) return;
-    cameraControls.setPosition(0, 0, distanceFromCenter, true);
-    cameraControls.rotateTo(rad(horizontalAngle), rad(verticalAngle), true);
-    zoom = zoomFactor;
-    cameraControls.zoomTo(zoom, true);
-  }
-
-  $effect(() => {
-    if (mode) {
-      zoom = views[mode].zoomFactor;
-    }
-  });
 
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
@@ -159,7 +117,7 @@
     try {
       await createEnvironmentSphere();
       createScene();
-      setView(views[mode]);
+      cameraControls.fromJSON(pov, true);
       handleResize();
       // 延遲一小段時間再設為loaded，確保渲染已開始
       setTimeout(() => {

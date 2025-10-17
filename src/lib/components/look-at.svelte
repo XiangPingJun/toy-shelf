@@ -1,5 +1,12 @@
 <script lang="ts">
-  const { text, onclick } = $props();
+  import { splatPov, panPov, imgUrl } from "$lib/stores/store";
+  const { text, setSplatPov = "", setPanPov = "", setImgUrl = "" } = $props();
+
+  const onclick = async () => {
+    $imgUrl = setImgUrl;
+    $splatPov = setSplatPov;
+    $panPov = setPanPov;
+  };
 </script>
 
 <button

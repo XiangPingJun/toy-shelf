@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { fly } from "svelte/transition";
-  const { content, heading, onNext = null, onPrev = null } = $props();
+  import { slide } from "svelte/transition";
+  import Scroller from "$lib/components/scroller.svelte";
+  const { content, onNext = null, onPrev = null } = $props();
+  import { heading, imgUrl } from "$lib/stores/store";
 
   let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
@@ -121,48 +123,45 @@
 {#if visible}
   <div
     class={[
-      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] backdrop-blur-[4px] mb-1",
+      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
+      $imgUrl ? "bounce-slide-out pointer-events-none" : "bounce-slide-in",
     ]}
-    transition:fly={{ y: "2rem" }}
+    style="transition: all 0.25s ease-out;"
+    transition:slide
   >
     <div
-      class="backdrop-blur-xs h-[13rem]"
-      style="position: absolute; bottom: 0; z-index: -1;"
+      class="backdrop-blur-xs max-w-[40rem] w-[calc(100vw-1rem)] h-[12rem] top-[0.2rem] absolute bottom-0 -z-10"
     ></div>
     <div class="flex">
       <div
         class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
       ></div>
       <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
-        [<span class="mx-1">{heading}</span>]
+        [<span class="mx-1">{$heading}</span>]
       </div>
       <div
         class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
       ></div>
     </div>
-    <div
+    <Scroller
       class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
+      maxHeight="10rem"
     >
-      <div
-        class="pl-4 pr-1 overflow-y-auto h-[10rem] whitespace-pre-line"
-        tabindex="-1"
-      >
-        {#if completed}
-          {@render content()}
-        {:else}
-          <div bind:this={contentElement}>
-            <!-- 打字機效果會在這裡動態插入內容 -->
-          </div>
-        {/if}
-      </div>
-    </div>
+      {#if completed}
+        {@render content()}
+      {:else}
+        <div bind:this={contentElement}>
+          <!-- 打字機效果會在這裡動態插入內容 -->
+        </div>
+      {/if}
+    </Scroller>
     <div class="flex">
       <div
         class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
       ></div>
       {#if onNext || onPrev}
-        <div class="bg-black/50 pt-1.5 px-0.5 font-bold flex items-center">
+        <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
           {#if onPrev}
             [<button
               class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
@@ -188,3 +187,41 @@
 <div bind:this={hiddenContentElement} class="hidden">
   {@render content()}
 </div>
+
+<style>
+  .bounce-slide-in {
+    animation: bounceSlideIn 0.6s ease-out forwards;
+  }
+
+  .bounce-slide-out {
+    animation: bounceSlideOut 0.4s ease-in forwards;
+  }
+
+  @keyframes bounceSlideIn {
+    0% {
+      transform: translateY(-100%) scale(0.3);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(10%) scale(1.05);
+    }
+    70% {
+      transform: translateY(-5%) scale(0.98);
+    }
+    100% {
+      transform: translateY(0%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes bounceSlideOut {
+    0% {
+      transform: translateY(0%) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100%) scale(0.3);
+      opacity: 0;
+    }
+  }
+</style>

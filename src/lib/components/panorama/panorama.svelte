@@ -3,19 +3,12 @@
   import * as THREE from "three";
   import CameraControls from "camera-controls";
 
-  let {
-    panTexture,
-    pov,
-    mode = "panorama",
-  }: {
-    panTexture: any;
-    pov: any;
-    mode?: "panorama" | "littlePlanet";
-  } = $props();
+  import { panPov } from "$lib/stores/store";
+  let { panTexture } = $props();
 
   // State
   let canvasElement: HTMLCanvasElement;
-  let zoom = 0;
+  let zoom = 1;
   let width = $state(800);
   let height = $state(600);
   let loaded = $state(false);
@@ -32,31 +25,10 @@
   const clock = new THREE.Clock();
   const animationSpeed = 0.15;
 
-  const views = {
-    panorama: {
-      distanceFromCenter: 0.01,
-      horizontalAngle: 70,
-      verticalAngle: 100,
-      zoomFactor: 1,
-    },
-    littlePlanet: {
-      distanceFromCenter: -500,
-      horizontalAngle: 200,
-      verticalAngle: 0,
-      zoomFactor: 0.15,
-    },
-  };
-
   $effect(() => {
-    if (pov && cameraControls) {
-      cameraControls.fromJSON(pov, true);
+    if ($panPov && cameraControls) {
+      cameraControls.fromJSON($panPov, true);
       autoRotate = false;
-    }
-  });
-
-  $effect(() => {
-    if (mode && cameraControls) {
-      setView(views[mode]);
     }
   });
 
@@ -83,25 +55,6 @@
 
     startAnimation();
   }
-
-  function setView({
-    distanceFromCenter,
-    horizontalAngle,
-    verticalAngle,
-    zoomFactor,
-  }: typeof views.panorama) {
-    if (!cameraControls) return;
-    cameraControls.setPosition(0, 0, distanceFromCenter, true);
-    cameraControls.rotateTo(rad(horizontalAngle), rad(verticalAngle), true);
-    zoom = zoomFactor;
-    cameraControls.zoomTo(zoom, true);
-  }
-
-  $effect(() => {
-    if (mode) {
-      zoom = views[mode].zoomFactor;
-    }
-  });
 
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
@@ -159,7 +112,7 @@
     try {
       await createEnvironmentSphere();
       createScene();
-      setView(views[mode]);
+      cameraControls.fromJSON($panPov, true);
       handleResize();
       // 延遲一小段時間再設為loaded，確保渲染已開始
       setTimeout(() => {
@@ -205,7 +158,6 @@
           value: povToSave,
         }),
       });
-      console.log(JSON.stringify(povToSave));
     }
   }
 

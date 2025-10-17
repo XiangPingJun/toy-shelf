@@ -3,9 +3,8 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-  // Component props
-  let { splatFile, pov } = $props();
+  import { splatPov } from "$lib/stores/store";
+  let { splatFile } = $props();
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
@@ -15,15 +14,18 @@
   let currentSplatMesh: any = null;
   let isInitialized = false;
   let baseTime = 0;
-  let saveInterval: number | undefined;
+  let saveInterval: ReturnType<typeof setInterval>;
   let position: THREE.Vector3 | undefined = $state();
   let target: THREE.Vector3 | undefined = $state();
   let lastSavedPov: string | undefined;
 
   $effect(() => {
-    const p = JSON.parse(pov);
+    const p = JSON.parse($splatPov || "{}");
     position = new THREE.Vector3(p[0], p[1], p[2]);
     target = new THREE.Vector3(p[3], p[4], p[5]);
+    if (controls) {
+      controls.autoRotate = false;
+    }
   });
 
   // 保存相機和控制器位置到 KV（只在有變化時）
@@ -49,7 +51,6 @@
           value: povToSave,
         }),
       });
-      console.log(JSON.stringify(povToSave));
     }
   }
 
@@ -118,7 +119,7 @@
     controls.minDistance = 0.3;
     controls.maxDistance = 20;
     controls.update();
-    controls.autoRotateSpeed = 0.1;
+    controls.autoRotateSpeed = 0.15;
 
     function animate() {
       currentSplatMesh?.updateVersion();

@@ -1,14 +1,31 @@
 <script lang="ts">
 	import "../app.css";
-	import { ModeWatcher } from "mode-watcher";
 	import favicon from "$lib/assets/favicon.png";
+	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
 
 	let { children } = $props();
+
+	let resizing = $state(false);
+	let resizeTimeout: ReturnType<typeof setTimeout>;
+
+	onMount(() => {
+		if (!browser) return;
+
+		window?.addEventListener("resize", () => {
+			resizing = true;
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(() => {
+				resizing = false;
+			}, 750);
+		});
+	});
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<ModeWatcher />
-{@render children?.()}
+{#if !resizing}
+	{@render children?.()}
+{/if}

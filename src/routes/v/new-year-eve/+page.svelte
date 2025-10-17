@@ -1,16 +1,18 @@
 <script lang="ts">
-  import Viewer from "$lib/components/viewer.svelte";
-  import Link from "$lib/components/link.svelte";
-  import Blockquote from "$lib/components/blockquote.svelte";
-
-  const title = "唐老鴨爆米花 @祥平的玩具櫃";
+  const title = "煙火一瞬 金光萬丈";
   const description =
     "2015年在東京迪士尼買下的爆米花桶，帶著八〇年代玩具的憨直與亮光";
-  const ogImage = "/duck/og-image.jpg";
+  const ogImage = "og-image.jpg";
 
-  let pov = $state({ val: "[0.047,0.064,0.289,0,0,0]" });
-  const setPov = (val: string) => (pov = { val });
-  let imgUrl = $state("");
+  import Viewer from "$lib/components/viewer.svelte";
+  import LookAt from "$lib/components/look-at.svelte";
+  import Blockquote from "$lib/components/blockquote.svelte";
+  import { panUrl, panPov, heading } from "$lib/stores/store";
+
+  $panUrl = "new-year-eve/panorama.jpg";
+  $panPov =
+    '{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"target":[0,0,0],"position":[-78.15781136454892,60.394774826876066,-282.60450863078944],"zoom":1.06,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[-0.00017101007166280582,499.99999999975,-0.0004698463103928759],"zoom0":1,"focalOffset0":[0,0,0]}';
+  $heading = "煙火一瞬 金光萬丈";
 </script>
 
 <svelte:head>
@@ -33,21 +35,27 @@
 
 {#snippet content()}
   台北的過年，總帶著一種虛張聲勢的浪漫。
-  <Link
+  <LookAt
     text="忠孝東路"
-    onclick={() =>
-      setPov(
-        '{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[-1.1036037704493264,0.10761981090682979,1.3827322743115966],"zoom":0.4500000000000001,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}',
-      )}
+    setPanPov={'{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[-1.1036037704493264,0.10761981090682979,1.3827322743115966],"zoom":0.4500000000000001,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'}
   />
-  罕見地封了街，車水馬龍變成了人聲鼎沸。
+  罕見地封了街，車水馬龍變成了人聲鼎沸。<br />
+  大馬路兩旁的人席地而坐，有人拿著熱飲取暖，有人擠在一起自拍。四周充滿了新年的氣息。每個人都穿得整整齊齊。
+  當然，
+  <LookAt
+    text="我們也不例外"
+    setPanPov={'{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[2.231749593615048e-8,1.7148113644544194e-8,-2.9860510073607808e-9],"zoom":0.7100000000000003,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'}
+    setImgUrl="new-year-eve/street.jpg"
+  />
+  。
+  <Blockquote>在這一夜，城市把陌生人縫成同一條圍巾。</Blockquote>
+  101大樓的煙火像一把巨大的
+  <LookAt
+    text="雞毛撢子"
+    setPanPov={'{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[-0.000002760944043263725,-0.0000014029145679147614,-0.0000013933244172924066],"zoom":1.1100000000000005,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'}
+    setImgUrl="new-year-eve/taipei101.jpg"
+  />
+  ，在夜空中胡亂揮灑。
 {/snippet}
 
-<Viewer
-  panUrl="/new-year-eve/panorama.jpg"
-  pov={pov.val}
-  heading="煙火一瞬 金光萬丈"
-  {content}
-  {imgUrl}
-  onImgClose={() => (imgUrl = "")}
-/>
+<Viewer {content} />

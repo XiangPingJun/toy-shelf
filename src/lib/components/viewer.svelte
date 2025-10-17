@@ -1,21 +1,12 @@
 <script lang="ts">
   import SplatViewer from "$lib/components/splat-viewer.svelte";
   import Context from "$lib/components/context.svelte";
-  import Image from "$lib/components/image.svelte";
+  import Media from "$lib/components/media.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
   import * as THREE from "three";
+  import { splatUrl, panUrl, heading, imgUrl } from "$lib/stores/store";
 
-  let {
-    splatUrl = "",
-    panUrl = "",
-    pov,
-    heading,
-    content,
-    imgUrl = "",
-    onImgClose = () => {},
-    onNext = null,
-    onPrev = null,
-  } = $props();
+  let { content, onNext = null, onPrev = null } = $props();
   let splatFile: ArrayBuffer | null = $state(null);
   let panTexture: THREE.Texture | null = $state(null);
   let loaderText = $state("");
@@ -31,9 +22,9 @@
 
   $effect(() => {
     (async () => {
-      if (splatUrl) {
+      if ($splatUrl) {
         splatFile = null;
-        const response = await fetch(splatUrl);
+        const response = await fetch($splatUrl);
         splatFile = await response.arrayBuffer();
       }
     })();
@@ -41,15 +32,15 @@
 
   $effect(() => {
     (async () => {
-      if (panUrl) {
+      if ($panUrl) {
         panTexture = null;
-        panTexture = await new THREE.TextureLoader().loadAsync(panUrl);
+        panTexture = await new THREE.TextureLoader().loadAsync($panUrl);
       }
     })();
   });
 </script>
 
-{#if (splatUrl && !splatFile) || (panUrl && !panTexture)}
+{#if ($splatUrl && !splatFile) || ($panUrl && !panTexture)}
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
     <div>
       {loaderText}
@@ -58,12 +49,10 @@
   </div>
 {:else}
   {#if splatFile}
-    <SplatViewer {splatFile} {pov} />
+    <SplatViewer {splatFile} />
   {:else if panTexture}
-    <Panorama {panTexture} {pov} />
+    <Panorama {panTexture} />
   {/if}
-  <Context {content} {heading} />
-  {#if imgUrl}
-    <Image src={imgUrl} onClose={onImgClose} />
-  {/if}
+  <Media />
+  <Context {content} />
 {/if}

@@ -8,10 +8,9 @@
     src: string;
     pov?: any;
     mode?: "panorama" | "littlePlanet";
-    blur?: boolean;
   }
 
-  let { src, pov, mode = "littlePlanet", blur = false }: Props = $props();
+  let { src, pov, mode = "littlePlanet" }: Props = $props();
 
   // State
   let canvasElement: HTMLCanvasElement;
@@ -90,9 +89,6 @@
     cameraControls = new CameraControls(camera, canvasElement);
     cameraControls.smoothTime = 0.04;
     cameraControls.restThreshold = 1;
-    cameraControls.addEventListener("rest", () => {
-      cameraControls.enabled = true;
-    });
 
     startAnimation();
   }
@@ -104,19 +100,22 @@
     zoomFactor,
   }: typeof views.panorama) {
     if (!cameraControls) return;
-
-    cameraControls.enabled = false;
     cameraControls.setPosition(0, 0, distanceFromCenter, true);
     cameraControls.rotateTo(rad(horizontalAngle), rad(verticalAngle), true);
     zoom = zoomFactor;
     cameraControls.zoomTo(zoom, true);
   }
 
+  $effect(() => {
+    if (mode) {
+      zoom = views[mode].zoomFactor;
+    }
+  });
+
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
 
     event.preventDefault();
-    console.log(zoom);
     zoom += event.deltaY * -0.0002;
     cameraControls.zoomTo(zoom);
   }
@@ -263,21 +262,8 @@
     onwheel={onWheel}
     class="panorama-canvas"
     class:loaded
-    class:blur
     style:pointer-events="auto"
   ></canvas>
-
-  {#if loaded}
-    <button class="control-btn left" onclick={() => setViewMode("panorama")}>
-      Panorama
-    </button>
-    <button
-      class="control-btn right"
-      onclick={() => setViewMode("littlePlanet")}
-    >
-      Little Planet
-    </button>
-  {/if}
 
   {#if !loaded}
     <div class="loading">Loading panorama...</div>
@@ -306,36 +292,6 @@
 
   .panorama-canvas.loaded {
     opacity: 1;
-  }
-
-  .panorama-canvas.blur {
-    filter: blur(0.5rem);
-  }
-
-  .control-btn {
-    position: fixed;
-    top: 20px;
-    z-index: 99999;
-    pointer-events: all;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  .control-btn.left {
-    left: 20px;
-  }
-
-  .control-btn.right {
-    right: 20px;
-  }
-
-  .control-btn:hover {
-    background: rgba(0, 0, 0, 0.9);
   }
 
   .loading {

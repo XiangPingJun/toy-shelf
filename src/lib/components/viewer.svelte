@@ -57,9 +57,9 @@
     <div class="invisible">Loading...</div>
   </div>
 {:else}
-  {#if splatUrl}
+  {#if splatFile}
     <SplatViewer {splatFile} {pov} />
-  {:else if panUrl}
+  {:else if panTexture}
     <Panorama {panTexture} {pov} />
   {/if}
   <Context {content} {heading} />

@@ -15,18 +15,15 @@
   let currentSplatMesh: any = null;
   let isInitialized = false;
   let baseTime = 0;
-  let saveInterval: number | null = null;
-  let position: THREE.Vector3 | null = $state(null);
-  let target: THREE.Vector3 | null = $state(null);
-  let lastSavedCameraState: string | undefined;
+  let saveInterval: number | undefined;
+  let position: THREE.Vector3 | undefined = $state();
+  let target: THREE.Vector3 | undefined = $state();
+  let lastSavedPov: string | undefined;
 
   $effect(() => {
     const p = JSON.parse(pov);
     position = new THREE.Vector3(p[0], p[1], p[2]);
     target = new THREE.Vector3(p[3], p[4], p[5]);
-    if (controls) {
-      controls.autoRotate = false;
-    }
   });
 
   // 保存相機和控制器位置到 KV（只在有變化時）
@@ -40,8 +37,8 @@
       ...controls.target.toArray().map((v) => parseFloat(v.toFixed(4))),
     ]);
 
-    if (lastSavedCameraState !== povToSave) {
-      lastSavedCameraState = povToSave;
+    if (lastSavedPov !== povToSave) {
+      lastSavedPov = povToSave;
       await fetch("/api/kv", {
         method: "POST",
         headers: {
@@ -121,22 +118,22 @@
     controls.minDistance = 0.3;
     controls.maxDistance = 20;
     controls.update();
-    controls.autoRotateSpeed = 0.2;
+    controls.autoRotateSpeed = 0.1;
 
     function animate() {
       currentSplatMesh?.updateVersion();
       renderer.render(scene, camera);
-      if (position !== null) {
+      if (position) {
         if (camera.position.distanceTo(position) < 0.01) {
-          position = null;
+          position = undefined;
         } else {
           camera.position.lerp(position, 0.075);
         }
       }
 
-      if (target !== null) {
+      if (target) {
         if (controls.target.distanceTo(target) < 0.01) {
-          target = null;
+          target = undefined;
         } else {
           controls.target.lerp(target, 0.075);
         }
@@ -154,8 +151,8 @@
     controls.addEventListener("end", () => {
       if (controls) {
         controls.autoRotate = false;
-        position = null;
-        target = null;
+        position = undefined;
+        target = undefined;
       }
     });
 
@@ -163,10 +160,7 @@
   });
 
   onDestroy(() => {
-    if (saveInterval) {
-      clearInterval(saveInterval);
-      saveInterval = null;
-    }
+    clearInterval(saveInterval);
 
     renderer.setAnimationLoop(null);
     if (

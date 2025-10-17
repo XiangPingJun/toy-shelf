@@ -6,7 +6,7 @@
   let {
     panTexture,
     pov,
-    mode = "littlePlanet",
+    mode = "panorama",
   }: {
     panTexture: any;
     pov: any;
@@ -27,6 +27,7 @@
   let cameraControls: CameraControls;
   let environmentSphere: THREE.Mesh;
   let animationId: number;
+  let autoRotate = true;
 
   const clock = new THREE.Clock();
   const animationSpeed = 0.15;
@@ -45,13 +46,6 @@
       zoomFactor: 0.15,
     },
   };
-
-  // Reactive effects
-  $effect(() => {
-    if (canvasElement) {
-      loadPanorama();
-    }
-  });
 
   $effect(() => {
     if (pov && cameraControls) {
@@ -116,6 +110,7 @@
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
 
+    autoRotate = false;
     event.preventDefault();
     zoom += event.deltaY * -0.0002;
     cameraControls.zoomTo(zoom);
@@ -127,6 +122,10 @@
 
       const delta = clock.getDelta();
       const cameraChanged = cameraControls.update(delta * animationSpeed);
+
+      if (autoRotate) {
+        cameraControls.azimuthAngle += 0.5 * delta * THREE.MathUtils.DEG2RAD;
+      }
 
       if (cameraChanged) {
         renderer.render(scene, camera);
@@ -189,20 +188,32 @@
     renderer.setSize(width, height);
   }
 
-  // Export methods for external control
-  export function setViewMode(newMode: "panorama" | "littlePlanet") {
-    mode = newMode;
-  }
+  let lastSavedPov: string | undefined;
 
-  export function getCameraState() {
-    return cameraControls?.toJSON();
-  }
+  async function saveCameraState() {
+    if (autoRotate) {
+      return;
+    }
 
-  export function setCameraState(state: any) {
-    if (cameraControls) {
-      cameraControls.fromJSON(state, true);
+    const povToSave = cameraControls.toJSON();
+
+    if (lastSavedPov !== povToSave) {
+      lastSavedPov = povToSave;
+      await fetch("/api/kv", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          key: "pan-camera-state",
+          value: povToSave,
+        }),
+      });
+      console.log(JSON.stringify(povToSave));
     }
   }
+
+  let saveInterval: number | undefined;
 
   onMount(() => {
     // Set initial dimensions on client side
@@ -211,22 +222,9 @@
       height = window.innerHeight;
     }
 
-    // Force full screen dimensions and handle window resize
-    function onWindowResize() {
-      if (typeof window !== "undefined") {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        handleResize();
-      }
-    }
+    loadPanorama();
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", onWindowResize);
-
-      return () => {
-        window.removeEventListener("resize", onWindowResize);
-      };
-    }
+    saveInterval = setInterval(saveCameraState, 1000);
   });
 
   onDestroy(() => {
@@ -250,6 +248,8 @@
         environmentSphere.material.dispose();
       }
     }
+
+    clearInterval(saveInterval);
   });
 </script>
 
@@ -262,6 +262,8 @@
     {width}
     {height}
     onwheel={onWheel}
+    onmousedown={() => (autoRotate = false)}
+    ontouchstart={() => (autoRotate = false)}
     class="panorama-canvas w-full h-full"
   ></canvas>
 </div>

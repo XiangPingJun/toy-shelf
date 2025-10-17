@@ -9,21 +9,14 @@
     pov?: any;
     mode?: "panorama" | "littlePlanet";
     blur?: boolean;
-    dev?: boolean;
   }
 
-  let {
-    src,
-    pov,
-    mode = "littlePlanet",
-    blur = false,
-    dev = true,
-  }: Props = $props();
+  let { src, pov, mode = "littlePlanet", blur = false }: Props = $props();
 
   // State
   let canvasElement: HTMLCanvasElement;
   let loaded = $state(false);
-  let zoom = $state(0);
+  let zoom = 0;
   let width = $state(800);
   let height = $state(600);
 
@@ -120,9 +113,10 @@
   }
 
   function onWheel(event: WheelEvent) {
-    if (!cameraControls || !dev) return;
+    if (!cameraControls) return;
 
     event.preventDefault();
+    console.log(zoom);
     zoom += event.deltaY * -0.0002;
     cameraControls.zoomTo(zoom);
   }
@@ -273,7 +267,7 @@
     style:pointer-events="auto"
   ></canvas>
 
-  {#if dev && loaded}
+  {#if loaded}
     <button class="control-btn left" onclick={() => setViewMode("panorama")}>
       Panorama
     </button>
@@ -297,7 +291,6 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1;
   }
 
   .panorama-canvas {

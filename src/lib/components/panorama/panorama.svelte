@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import * as THREE from "three";
-  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import CameraControls from "camera-controls";
 
   // Props
   interface Props {
@@ -31,7 +31,7 @@
   let scene: THREE.Scene;
   let renderer: THREE.WebGLRenderer;
   let camera: THREE.PerspectiveCamera;
-  let controls: OrbitControls;
+  let cameraControls: CameraControls;
   let environmentSphere: THREE.Mesh;
   let animationId: number;
 
@@ -40,16 +40,16 @@
 
   const views = {
     panorama: {
-      distance: 1,
-      phi: Math.PI / 2,
-      theta: 0,
-      zoom: 1,
+      distanceFromCenter: 0.01,
+      horizontalAngle: 70,
+      verticalAngle: 100,
+      zoomFactor: 1,
     },
     littlePlanet: {
-      distance: 800,
-      phi: Math.PI / 6,
-      theta: 0,
-      zoom: 1,
+      distanceFromCenter: -500,
+      horizontalAngle: 200,
+      verticalAngle: 0,
+      zoomFactor: 0.15,
     },
   };
 
@@ -61,16 +61,10 @@
   });
 
   $effect(() => {
-    if (pov && controls && loaded) {
+    if (pov && cameraControls && loaded) {
       // Apply POV if provided
       try {
-        if (pov.target) {
-          controls.target.fromArray(pov.target);
-        }
-        if (pov.position) {
-          camera.position.fromArray(pov.position);
-        }
-        controls.update();
+        cameraControls.fromJSON(pov, true);
       } catch (e) {
         console.warn("Failed to apply POV:", e);
       }
@@ -78,7 +72,7 @@
   });
 
   $effect(() => {
-    if (mode && controls && loaded) {
+    if (mode && cameraControls && loaded) {
       setView(views[mode]);
     }
   });
@@ -99,68 +93,50 @@
 
     camera = new THREE.PerspectiveCamera(45, width / height, 0.2, 2000);
 
-    controls = new OrbitControls(camera, canvasElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 0.5;
-    controls.maxDistance = 2000;
-    controls.enablePan = false;
-    controls.enableZoom = true;
-    controls.enableRotate = true;
-    controls.rotateSpeed = 0.5;
-    controls.zoomSpeed = 1.0;
-    controls.minPolarAngle = 0;
-    controls.maxPolarAngle = Math.PI;
+    CameraControls.install({ THREE });
+    cameraControls = new CameraControls(camera, canvasElement);
+    cameraControls.smoothTime = 0.04;
+    cameraControls.restThreshold = 1;
+    cameraControls.addEventListener("rest", () => {
+      cameraControls.enabled = true;
+    });
 
     startAnimation();
   }
 
   function setView({
-    distance,
-    phi,
-    theta,
-    zoom: zoomLevel,
+    distanceFromCenter,
+    horizontalAngle,
+    verticalAngle,
+    zoomFactor,
   }: typeof views.panorama) {
-    if (!controls || !camera) return;
+    if (!cameraControls) return;
 
-    // Set camera position using spherical coordinates
-    const spherical = new THREE.Spherical(distance, phi, theta);
-    camera.position.setFromSpherical(spherical);
-
-    // Set target to center
-    controls.target.set(0, 0, 0);
-
-    // Update camera zoom
-    camera.zoom = zoomLevel;
-    camera.updateProjectionMatrix();
-
-    // Enable/disable controls based on mode
-    controls.enabled = true;
-    controls.enableZoom = true;
-    controls.enableRotate = true;
-    controls.enablePan = false;
-
-    // Update controls
-    controls.update();
-
-    zoom = zoomLevel;
+    cameraControls.enabled = false;
+    cameraControls.setPosition(0, 0, distanceFromCenter, true);
+    cameraControls.rotateTo(rad(horizontalAngle), rad(verticalAngle), true);
+    zoom = zoomFactor;
+    cameraControls.zoomTo(zoom, true);
   }
 
   function onWheel(event: WheelEvent) {
-    if (!controls || !dev) return;
+    if (!cameraControls || !dev) return;
 
     event.preventDefault();
     zoom += event.deltaY * -0.0002;
-    camera.zoom = Math.max(0.1, Math.min(2, zoom));
-    camera.updateProjectionMatrix();
+    cameraControls.zoomTo(zoom);
   }
 
   function startAnimation() {
     function onFrameRequest() {
-      if (!controls || !renderer || !scene || !camera) return;
+      if (!cameraControls || !renderer || !scene || !camera) return;
 
-      controls.update();
-      renderer.render(scene, camera);
+      const delta = clock.getDelta();
+      const cameraChanged = cameraControls.update(delta * animationSpeed);
+
+      if (cameraChanged) {
+        renderer.render(scene, camera);
+      }
 
       animationId = requestAnimationFrame(onFrameRequest);
     }
@@ -207,13 +183,18 @@
     }
   }
 
-  function handleResize() {
-    if (!controls || !camera || !renderer) return;
+  function rad(deg: number) {
+    return THREE.MathUtils.degToRad(deg);
+  }
 
+  function handleResize() {
+    if (!cameraControls || !camera || !renderer) return;
+
+    cameraControls.saveState();
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    cameraControls.reset(false);
     renderer.setSize(width, height);
-    controls.update();
   }
 
   // Export methods for external control
@@ -222,27 +203,12 @@
   }
 
   export function getCameraState() {
-    if (!controls || !camera) return null;
-    return {
-      position: camera.position.toArray(),
-      target: controls.target.toArray(),
-      zoom: camera.zoom,
-    };
+    return cameraControls?.toJSON();
   }
 
   export function setCameraState(state: any) {
-    if (controls && camera && loaded && state) {
-      if (state.position) {
-        camera.position.fromArray(state.position);
-      }
-      if (state.target) {
-        controls.target.fromArray(state.target);
-      }
-      if (state.zoom) {
-        camera.zoom = state.zoom;
-        camera.updateProjectionMatrix();
-      }
-      controls.update();
+    if (cameraControls && loaded) {
+      cameraControls.fromJSON(state, true);
     }
   }
 
@@ -281,8 +247,8 @@
       renderer.dispose();
     }
 
-    if (controls) {
-      controls.dispose();
+    if (cameraControls) {
+      cameraControls.dispose();
     }
 
     // Dispose geometries and materials

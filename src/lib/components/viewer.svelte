@@ -3,10 +3,11 @@
   import Context from "$lib/components/context.svelte";
   import Image from "$lib/components/image.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
+  import * as THREE from "three";
 
   let {
     splatUrl = "",
-    panoramaUrl = "",
+    panUrl = "",
     pov,
     heading,
     content,
@@ -16,6 +17,7 @@
     onPrev = null,
   } = $props();
   let splatFile: ArrayBuffer | null = $state(null);
+  let panTexture: THREE.Texture | null = $state(null);
   let loaderText = $state("");
   let loaderStep = $state(1);
 
@@ -29,14 +31,25 @@
 
   $effect(() => {
     (async () => {
-      splatFile = null;
-      const response = await fetch(splatUrl);
-      splatFile = await response.arrayBuffer();
+      if (splatUrl) {
+        splatFile = null;
+        const response = await fetch(splatUrl);
+        splatFile = await response.arrayBuffer();
+      }
+    })();
+  });
+
+  $effect(() => {
+    (async () => {
+      if (panUrl) {
+        panTexture = null;
+        panTexture = await new THREE.TextureLoader().loadAsync(panUrl);
+      }
     })();
   });
 </script>
 
-{#if splatUrl && !splatFile}
+{#if (splatUrl && !splatFile) || (panUrl && !panTexture)}
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
     <div>
       {loaderText}
@@ -46,8 +59,8 @@
 {:else}
   {#if splatUrl}
     <SplatViewer {splatFile} {pov} />
-  {:else if panoramaUrl}
-    <Panorama src={panoramaUrl} {pov} />
+  {:else if panUrl}
+    <Panorama {panTexture} {pov} />
   {/if}
   <Context {content} {heading} />
   {#if imgUrl}

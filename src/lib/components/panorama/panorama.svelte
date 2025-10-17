@@ -3,21 +3,22 @@
   import * as THREE from "three";
   import CameraControls from "camera-controls";
 
-  // Props
-  interface Props {
-    src: string;
-    pov?: any;
+  let {
+    panTexture,
+    pov,
+    mode = "littlePlanet",
+  }: {
+    panTexture: any;
+    pov: any;
     mode?: "panorama" | "littlePlanet";
-  }
-
-  let { src, pov, mode = "littlePlanet" }: Props = $props();
+  } = $props();
 
   // State
   let canvasElement: HTMLCanvasElement;
-  let loaded = $state(false);
   let zoom = 0;
   let width = $state(800);
   let height = $state(600);
+  let loaded = $state(false);
 
   // THREE.js objects
   let scene: THREE.Scene;
@@ -47,13 +48,13 @@
 
   // Reactive effects
   $effect(() => {
-    if (src && canvasElement) {
+    if (canvasElement) {
       loadPanorama();
     }
   });
 
   $effect(() => {
-    if (pov && cameraControls && loaded) {
+    if (pov && cameraControls) {
       // Apply POV if provided
       try {
         cameraControls.fromJSON(pov, true);
@@ -64,7 +65,7 @@
   });
 
   $effect(() => {
-    if (mode && cameraControls && loaded) {
+    if (mode && cameraControls) {
       setView(views[mode]);
     }
   });
@@ -137,21 +138,17 @@
     onFrameRequest();
   }
 
-  async function createEnvironmentSphere(imageUrl: string) {
+  async function createEnvironmentSphere() {
     try {
-      const environmentMap = await new THREE.TextureLoader().loadAsync(
-        imageUrl,
-      );
-
-      environmentMap.mapping = THREE.EquirectangularReflectionMapping;
-      environmentMap.colorSpace = THREE.SRGBColorSpace;
-      environmentMap.wrapS = THREE.RepeatWrapping;
-      environmentMap.repeat.x = -1;
+      panTexture.mapping = THREE.EquirectangularReflectionMapping;
+      panTexture.colorSpace = THREE.SRGBColorSpace;
+      panTexture.wrapS = THREE.RepeatWrapping;
+      panTexture.repeat.x = -1;
 
       environmentSphere = new THREE.Mesh(
         new THREE.SphereGeometry(500, 100, 50),
         new THREE.MeshBasicMaterial({
-          map: environmentMap,
+          map: panTexture,
           side: THREE.BackSide,
         }),
       );
@@ -162,15 +159,17 @@
   }
 
   async function loadPanorama() {
-    if (!src || !canvasElement) return;
+    if (!canvasElement) return;
 
     try {
-      loaded = false;
-      await createEnvironmentSphere(src);
+      await createEnvironmentSphere();
       createScene();
-      loaded = true;
       setView(views[mode]);
       handleResize();
+      // 延遲一小段時間再設為loaded，確保渲染已開始
+      setTimeout(() => {
+        loaded = true;
+      }, 100);
     } catch (error) {
       console.error("Failed to load panorama:", error);
     }
@@ -200,7 +199,7 @@
   }
 
   export function setCameraState(state: any) {
-    if (cameraControls && loaded) {
+    if (cameraControls) {
       cameraControls.fromJSON(state, true);
     }
   }
@@ -254,55 +253,26 @@
   });
 </script>
 
-<div class="panorama-container">
+<div
+  class="panorama-container w-100vw h-100dvh fixed z--1 cursor-grab"
+  class:loaded
+>
   <canvas
     bind:this={canvasElement}
     {width}
     {height}
     onwheel={onWheel}
-    class="panorama-canvas"
-    class:loaded
-    style:pointer-events="auto"
+    class="panorama-canvas w-full h-full"
   ></canvas>
-
-  {#if !loaded}
-    <div class="loading">Loading panorama...</div>
-  {/if}
 </div>
 
 <style>
   .panorama-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  .panorama-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
     opacity: 0;
-    transition:
-      opacity 1s ease-out,
-      filter 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
   }
 
-  .panorama-canvas.loaded {
+  .panorama-container.loaded {
     opacity: 1;
-  }
-
-  .loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 8px;
-    font-family: inherit;
   }
 </style>

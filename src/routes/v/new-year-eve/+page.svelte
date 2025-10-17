@@ -36,7 +36,7 @@
 {/snippet}
 
 <Viewer
-  panoramaUrl="/new-year-eve/panorama.jpg"
+  panUrl="/new-year-eve/panorama.jpg"
   pov={pov.val}
   heading="煙火一瞬 金光萬丈"
   {content}

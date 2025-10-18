@@ -121,13 +121,13 @@
 {#if visible}
   <div
     class={[
-      "fixed left-1/2 -translate-x-1/2 max-w-[40.3rem] w-[calc(100vw-1rem)] backdrop-blur-[4px] mb-1",
+      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
     transition:fly={{ y: "2rem" }}
   >
     <div
-      class="backdrop-blur-xs h-[12.3rem] absolute bottom-0 -z-10"
+      class="backdrop-blur-xs max-w-[40rem] w-[calc(100vw-1rem)] h-[12rem] top-[0.2rem] absolute bottom-0 -z-10"
     ></div>
     <div class="flex">
       <div
@@ -141,12 +141,9 @@
       ></div>
     </div>
     <div
-      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3 pr-1"
+      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
     >
-      <div
-        class="pl-4 overflow-y-auto h-[10rem] whitespace-pre-line"
-        style="scrollbar-gutter: stable;"
-      >
+      <div class="px-4 overflow-y-scroll h-[10rem] whitespace-pre-line">
         {#if completed}
           {@render content()}
         {:else}
@@ -187,3 +184,9 @@
 <div bind:this={hiddenContentElement} class="hidden">
   {@render content()}
 </div>
+
+<style>
+  .box-content {
+    box-sizing: content-box;
+  }
+</style>

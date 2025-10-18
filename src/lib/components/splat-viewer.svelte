@@ -121,7 +121,7 @@
     controls.minDistance = 0.3;
     controls.maxDistance = 20;
     controls.update();
-    controls.autoRotateSpeed = 0.1;
+    controls.autoRotateSpeed = 0.15;
 
     function animate() {
       currentSplatMesh?.updateVersion();

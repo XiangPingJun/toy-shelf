@@ -7,7 +7,7 @@
 <img class="hidden" alt="" {src} onload={() => (inited = true)} />
 {#if inited}
   <div
-    class="fixed top-0 left-0 w-full h-full backdrop-blur-sm cursor-pointer"
+    class="fixed top-0 left-0 w-full h-full backdrop-blur-sm"
     tabindex="-1"
     role="button"
     onmousedown={onClose}
@@ -16,7 +16,7 @@
   <!-- svelte-ignore a11y_unknown_role -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
     tabindex="-1"
     onmousedown={onClose}
     ontouchstart={onClose}
@@ -28,5 +28,14 @@
       style="mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmb3JlaWduT2JqZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxib2R5IGNsYXNzPSJ3cmFwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHN0eWxlPi53cmFwe2JveC1zaXppbmc6Ym9yZGVyLWJveDttYXJnaW46MDtoZWlnaHQ6MTAwJTtwYWRkaW5nOjNweH0uc2hhZG93e2hlaWdodDoxMDAlO2JhY2tncm91bmQ6IzAwMDtib3JkZXItcmFkaXVzOjNweDtib3gtc2hhZG93OjAgMCAzcHggIzAwMCwwIDAgNnB4ICMwMDAsMCAwIDlweCAjMDAwfTwvc3R5bGU+PGRpdiBjbGFzcz0ic2hhZG93Ii8+PC9ib2R5PjwvZm9yZWlnbk9iamVjdD48L3N2Zz4=);"
       alt=""
     />
+    <button
+      class="text-blue-400 hover:text-blue-300 cursor-pointer flex items-center gap-1"
+      onclick={onClose}
+    >
+      <span class="text-white">[</span>
+      <i class="far fa-window-close mt-[-1px]"></i>
+      關閉
+      <span class="text-white">]</span>
+    </button>
   </div>
 {/if}

@@ -121,14 +121,13 @@
 {#if visible}
   <div
     class={[
-      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] backdrop-blur-[4px] mb-1",
+      "fixed left-1/2 -translate-x-1/2 max-w-[40.3rem] w-[calc(100vw-1rem)] backdrop-blur-[4px] mb-1",
       window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
     ]}
     transition:fly={{ y: "2rem" }}
   >
     <div
-      class="backdrop-blur-xs h-[12.3rem]"
-      style="position: absolute; bottom: 0; z-index: -1;"
+      class="backdrop-blur-xs h-[12.3rem] absolute bottom-0 -z-10"
     ></div>
     <div class="flex">
       <div

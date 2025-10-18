@@ -15,7 +15,7 @@
   let currentSplatMesh: any = null;
   let isInitialized = false;
   let baseTime = 0;
-  let saveInterval: number | undefined;
+  let saveInterval: NodeJS.Timeout | undefined;
   let position: THREE.Vector3 | undefined = $state();
   let target: THREE.Vector3 | undefined = $state();
   let lastSavedPov: string | undefined;

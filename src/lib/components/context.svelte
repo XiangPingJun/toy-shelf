@@ -147,9 +147,7 @@
         class="px-4 overflow-y-scroll scrollbar h-[10rem] whitespace-pre-line"
       >
         {#if completed}
-          <div>
-            {@render content()}
-          </div>
+          {@render content()}
         {:else}
           <div bind:this={contentElement}>
             <!-- 打字機效果會在這裡動態插入內容 -->
@@ -190,24 +188,20 @@
 </div>
 
 <style>
-  .scrollbar {
-    -webkit-overflow-scrolling: auto;
+  *::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
   }
 
-  .scrollbar::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-    height: 3px;
+  *::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f5f5f5;
   }
 
-  .scrollbar::-webkit-scrollbar-track {
-    height: 5px !important;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb {
-    border-radius: 4px !important;
-    height: 3px;
-    background: #41617d !important;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5) !important;
+  *::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #d62929;
   }
 </style>

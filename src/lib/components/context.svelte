@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
   import Scroller from "$lib/components/scroller.svelte";
   const { content, onNext = null, onPrev = null } = $props();
   import { heading, imgUrl } from "$lib/stores/store";
 
-  let visible = $state(false);
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
   let completed = $state(false);
@@ -108,80 +105,73 @@
     typeNextChar();
   }
 
-  onMount(() => {
-    visible = true;
-  });
-
   // 當內容渲染完成後啟動打字機效果
   $effect(() => {
-    if (visible && hiddenContentElement && contentElement) {
+    if (hiddenContentElement && contentElement) {
       setTimeout(startTypewriterEffect, 200);
     }
   });
 </script>
 
-{#if visible}
+<div
+  class={[
+    "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
+    window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
+    $imgUrl ? "pointer-events-none out" : "in",
+  ]}
+  style="transition: all 0.25s ease-out;"
+>
   <div
-    class={[
-      "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
-      window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
-      $imgUrl ? "bounce-slide-out pointer-events-none" : "bounce-slide-in",
-    ]}
-    style="transition: all 0.25s ease-out;"
-    transition:slide
-  >
+    class="backdrop-blur-xs max-w-[40rem] w-[calc(100vw-1rem)] h-[12rem] top-[0.2rem] absolute bottom-0 -z-10"
+  ></div>
+  <div class="flex">
     <div
-      class="backdrop-blur-xs max-w-[40rem] w-[calc(100vw-1rem)] h-[12rem] top-[0.2rem] absolute bottom-0 -z-10"
+      class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>
-    <div class="flex">
-      <div
-        class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
-      ></div>
-      <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
-        [<span class="mx-1">{$heading}</span>]
-      </div>
-      <div
-        class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
-      ></div>
+    <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
+      [<span class="mx-1">{$heading}</span>]
     </div>
-    <Scroller
-      class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
-      maxHeight="10rem"
-    >
-      {#if completed}
-        {@render content()}
-      {:else}
-        <div bind:this={contentElement}>
-          <!-- 打字機效果會在這裡動態插入內容 -->
-        </div>
-      {/if}
-    </Scroller>
-    <div class="flex">
-      <div
-        class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
-      ></div>
-      {#if onNext || onPrev}
-        <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
-          {#if onPrev}
-            [<button
-              class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-              onclick={onPrev}>←前</button
-            >]
-          {/if}
-          {#if onNext}
-            [<button
-              class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-              onclick={onNext}>次→</button
-            >]
-          {/if}
-        </div>
-      {/if}
-      <div
-        class="rounded-br-md border-b-3 border-r-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
-      ></div>
-    </div>
+    <div
+      class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
+    ></div>
   </div>
-{/if}
+  <Scroller
+    class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
+    maxHeight="10rem"
+  >
+    {#if completed}
+      {@render content()}
+    {:else}
+      <div bind:this={contentElement}>
+        <!-- 打字機效果會在這裡動態插入內容 -->
+      </div>
+    {/if}
+  </Scroller>
+  <div class="flex">
+    <div
+      class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
+    ></div>
+    {#if onNext || onPrev}
+      <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
+        {#if onPrev}
+          [<button
+            class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+            onclick={onPrev}>←前</button
+          >]
+        {/if}
+        {#if onNext}
+          [<button
+            class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+            onclick={onNext}>次→</button
+          >]
+        {/if}
+      </div>
+    {/if}
+    <div
+      class="rounded-br-md border-b-3 border-r-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
+    ></div>
+  </div>
+</div>
 
 <!-- 隱藏的原始內容用於獲取HTML -->
 <div bind:this={hiddenContentElement} class="hidden">
@@ -189,39 +179,30 @@
 </div>
 
 <style>
-  .bounce-slide-in {
-    animation: bounceSlideIn 0.6s ease-out forwards;
+  .slide {
+    display: grid;
+    grid-template-rows: 0fr; /* 關閉時高度為 0 */
+    clip-path: inset(100% 0 0 0); /* 從上方遮住內容 */
+    transition:
+      grid-template-rows 5000ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      clip-path 5000ms cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  .bounce-slide-out {
-    animation: bounceSlideOut 0.4s ease-in forwards;
+  .slide.in {
+    grid-template-rows: 1fr; /* 開啟自動高度 */
+    clip-path: inset(-1rem 0 0 0); /* 解除遮罩 */
   }
 
-  @keyframes bounceSlideIn {
-    0% {
-      transform: translateY(-100%) scale(0.3);
-      opacity: 0;
-    }
-    50% {
-      transform: translateY(10%) scale(1.05);
-    }
-    70% {
-      transform: translateY(-5%) scale(0.98);
-    }
-    100% {
-      transform: translateY(0%) scale(1);
-      opacity: 1;
-    }
+  .slide.in {
+    transform: translateY(0);
+    transition-property: grid-template-rows, opacity, transform;
   }
 
-  @keyframes bounceSlideOut {
-    0% {
-      transform: translateY(0%) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(100%) scale(0.3);
-      opacity: 0;
+  /* 無動畫偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .slide {
+      transition: none;
+      clip-path: inset(0);
     }
   }
 </style>

@@ -6,7 +6,7 @@
 
 <img class="hidden" alt="" src={$imgUrl} onload={() => (imgLoaded = true)} />
 
-{#if $imgUrl}
+{#if $imgUrl && imgLoaded}
   <div
     class={[
       "fixed left-1/2 -translate-x-1/2",
@@ -33,7 +33,10 @@
         <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
           [<button
             class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex gap-1 items-center"
-            onclick={() => ($imgUrl = "")}
+            onclick={() => {
+              $imgUrl = "";
+              imgLoaded = false;
+            }}
             ><i class="far fa-window-close"></i>
             關閉</button
           >]

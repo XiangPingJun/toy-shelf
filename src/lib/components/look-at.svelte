@@ -1,11 +1,18 @@
 <script lang="ts">
-  import { splatPov, panPov, imgUrl } from "$lib/stores/store";
-  const { text, setSplatPov = "", setPanPov = "", setImgUrl = "" } = $props();
+  import { splatPov, panPov, imgUrl, videoUrl } from "$lib/stores/store";
+  const {
+    text,
+    setSplatPov = "",
+    setPanPov = "",
+    setImgUrl = "",
+    setVideoUrl = "",
+  } = $props();
 
   const onclick = async () => {
     $imgUrl = setImgUrl;
     $splatPov = setSplatPov;
     $panPov = setPanPov;
+    $videoUrl = setVideoUrl;
   };
 </script>
 

@@ -34,5 +34,13 @@ imgUrl.subscribe(async (val) => {
     imgBlobUrl.set(await load(val));
   }
 });
+export const videoUrl = writable('');
+export const videoBlobUrl = writable('');
+videoUrl.subscribe(async (val) => {
+  videoBlobUrl.set('');
+  if (val) {
+    videoBlobUrl.set(await load(val));
+  }
+});
 
 export const heading = writable('');

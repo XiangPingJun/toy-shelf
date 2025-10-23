@@ -56,6 +56,11 @@
     setImgUrl="new-year-eve/taipei101.jpg"
   />
   ，在夜空中胡亂揮灑。
+  <LookAt
+    text="qwq"
+    setPanPov={'{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[-0.000002760944043263725,-0.0000014029145679147614,-0.0000013933244172924066],"zoom":1.1100000000000005,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'}
+    setVideoUrl="new-year-eve/ants.mp4"
+  />
 {/snippet}
 
 <Viewer {content} />

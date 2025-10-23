@@ -1,8 +1,9 @@
 <script lang="ts">
   import Scroller from "$lib/components/scroller.svelte";
-  import { browser } from '$app/environment';
+  import { browser } from "$app/environment";
   const { content, onNext = null, onPrev = null } = $props();
-  import { heading, imgUrl } from "$lib/stores/store";
+  import { heading, imgBlobUrl, videoBlobUrl } from "$lib/stores/store";
+  import { onMount } from "svelte";
 
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
@@ -110,16 +111,16 @@
   // 監聽視窗大小變化
   $effect(() => {
     if (!browser) return;
-    
+
     const updateOrientation = () => {
       isMobile = window.innerWidth < window.innerHeight;
     };
-    
+
     updateOrientation();
-    window.addEventListener('resize', updateOrientation);
-    
+    window.addEventListener("resize", updateOrientation);
+
     return () => {
-      window.removeEventListener('resize', updateOrientation);
+      window.removeEventListener("resize", updateOrientation);
     };
   });
 
@@ -129,13 +130,18 @@
       setTimeout(startTypewriterEffect, 200);
     }
   });
+
+  let mounted = $state(false);
+  onMount(() => {
+    setTimeout(() => (mounted = true));
+  });
 </script>
 
 <div
   class={[
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
     isMobile ? "bottom-3" : "bottom-12",
-    $imgUrl ? "pointer-events-none out" : "in",
+    !mounted || $imgBlobUrl || $videoBlobUrl ? "pointer-events-none" : "in",
   ]}
   style="transition: all 0.25s ease-out;"
 >

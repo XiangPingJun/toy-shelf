@@ -1,11 +1,13 @@
 <script lang="ts">
   import Scroller from "$lib/components/scroller.svelte";
+  import { browser } from '$app/environment';
   const { content, onNext = null, onPrev = null } = $props();
   import { heading, imgUrl } from "$lib/stores/store";
 
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
   let completed = $state(false);
+  let isMobile = $state(false);
 
   // 打字機效果函數
   async function startTypewriterEffect() {
@@ -105,6 +107,22 @@
     typeNextChar();
   }
 
+  // 監聽視窗大小變化
+  $effect(() => {
+    if (!browser) return;
+    
+    const updateOrientation = () => {
+      isMobile = window.innerWidth < window.innerHeight;
+    };
+    
+    updateOrientation();
+    window.addEventListener('resize', updateOrientation);
+    
+    return () => {
+      window.removeEventListener('resize', updateOrientation);
+    };
+  });
+
   // 當內容渲染完成後啟動打字機效果
   $effect(() => {
     if (hiddenContentElement && contentElement) {
@@ -116,7 +134,7 @@
 <div
   class={[
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
-    window.innerWidth < window.innerHeight ? "bottom-3" : "bottom-12",
+    isMobile ? "bottom-3" : "bottom-12",
     $imgUrl ? "pointer-events-none out" : "in",
   ]}
   style="transition: all 0.25s ease-out;"

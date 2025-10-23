@@ -3,8 +3,7 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { splatPov } from "$lib/stores/store";
-  let { splatFile } = $props();
+  import { splatBlobUrl, splatPov } from "$lib/stores/store";
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
@@ -59,7 +58,7 @@
     const { SplatMesh, SplatFileType } = await import("@sparkjsdev/spark");
 
     const splatMesh = new SplatMesh({
-      fileBytes: splatFile,
+      url: $splatBlobUrl,
       fileType: SplatFileType.SPZ, // 使用 SPZ 格式
     });
     splatMesh.quaternion.set(1, 0, 0, 0);
@@ -142,7 +141,7 @@
       controls?.update();
     }
 
-    renderer.setAnimationLoop(animate);
+    renderer?.setAnimationLoop(animate);
     isInitialized = true;
 
     await updateMesh();
@@ -163,7 +162,7 @@
   onDestroy(() => {
     clearInterval(saveInterval);
 
-    renderer.setAnimationLoop(null);
+    renderer?.setAnimationLoop(null);
     if (
       container &&
       renderer.domElement &&
@@ -171,8 +170,8 @@
     ) {
       container.removeChild(renderer.domElement);
     }
-    renderer.dispose();
-    controls.dispose();
+    renderer?.dispose();
+    controls?.dispose();
   });
 </script>
 

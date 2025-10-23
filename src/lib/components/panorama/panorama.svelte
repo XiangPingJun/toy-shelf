@@ -3,8 +3,7 @@
   import * as THREE from "three";
   import CameraControls from "camera-controls";
 
-  import { panPov } from "$lib/stores/store";
-  let { panTexture } = $props();
+  import { panPov, panBlobUrl } from "$lib/stores/store";
 
   // State
   let canvasElement: HTMLCanvasElement;
@@ -88,6 +87,8 @@
 
   async function createEnvironmentSphere() {
     try {
+      const panTexture = await new THREE.TextureLoader().loadAsync($panBlobUrl);
+
       panTexture.mapping = THREE.EquirectangularReflectionMapping;
       panTexture.colorSpace = THREE.SRGBColorSpace;
       panTexture.wrapS = THREE.RepeatWrapping;

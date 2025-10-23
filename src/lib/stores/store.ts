@@ -1,8 +1,38 @@
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 
-export const splatUrl = writable('');
+const load = async (url: string) => {
+  if (!browser) return '';
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
+  return URL.createObjectURL(new Blob([buffer]));
+}
+
 export const splatPov = writable('');
-export const panUrl = writable('');
+export const splatUrl = writable('');
+export const splatBlobUrl = writable('');
+splatUrl.subscribe(async (val) => {
+  splatBlobUrl.set('');
+  if (val) {
+    splatBlobUrl.set(await load(val));
+  }
+});
 export const panPov = writable('');
-export const heading = writable('');
+export const panUrl = writable('');
+export const panBlobUrl = writable('');
+panUrl.subscribe(async (val) => {
+  panBlobUrl.set('');
+  if (val) {
+    panBlobUrl.set(await load(val));
+  }
+});
 export const imgUrl = writable('');
+export const imgBlobUrl = writable('');
+imgUrl.subscribe(async (val) => {
+  imgBlobUrl.set('');
+  if (val) {
+    imgBlobUrl.set(await load(val));
+  }
+});
+
+export const heading = writable('');

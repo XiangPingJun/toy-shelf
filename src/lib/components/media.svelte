@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { imgUrl } from "$lib/stores/store";
+  import { imgBlobUrl } from "$lib/stores/store";
   import { slide } from "svelte/transition";
-  let imgLoaded = $state(false);
 </script>
 
-<img class="hidden" alt="" src={$imgUrl} onload={() => (imgLoaded = true)} />
-
-{#if $imgUrl && imgLoaded}
+{#if $imgBlobUrl}
   <div
     class={[
       "fixed left-1/2 -translate-x-1/2",
@@ -20,7 +17,7 @@
         class="rounded-tl-md rounded-tr-md border-3 border-b-0 border-white box-content bg-black/50 p-2 pb-0"
       >
         <img
-          src={$imgUrl}
+          src={$imgBlobUrl}
           class="max-w-[min(1360px,calc(100vw-2rem))] max-h-[min(600px,calc(100dvh-2rem))] object-cover backdrop-blur-sm"
           style="mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmb3JlaWduT2JqZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxib2R5IGNsYXNzPSJ3cmFwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHN0eWxlPi53cmFwe2JveC1zaXppbmc6Ym9yZGVyLWJveDttYXJnaW46MDtoZWlnaHQ6MTAwJTtwYWRkaW5nOjNweH0uc2hhZG93e2hlaWdodDoxMDAlO2JhY2tncm91bmQ6IzAwMDtib3JkZXItcmFkaXVzOjNweDtib3gtc2hhZG93OjAgMCAzcHggIzAwMCwwIDAgNnB4ICMwMDAsMCAwIDlweCAjMDAwfTwvc3R5bGU+PGRpdiBjbGFzcz0ic2hhZG93Ii8+PC9ib2R5PjwvZm9yZWlnbk9iamVjdD48L3N2Zz4=);"
           alt=""
@@ -34,8 +31,7 @@
           [<button
             class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex gap-1 items-center"
             onclick={() => {
-              $imgUrl = "";
-              imgLoaded = false;
+              $imgBlobUrl = "";
             }}
             ><i class="far fa-window-close"></i>
             關閉</button

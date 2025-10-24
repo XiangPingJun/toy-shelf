@@ -7,12 +7,12 @@
   import Viewer from "$lib/components/viewer.svelte";
   import LookAt from "$lib/components/look-at.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
-  import { splatUrl, splatPov, headings, contents } from "$lib/stores/store";
+  import { splatUrls, splatPov, headings, contents } from "$lib/stores/store";
 
-  $splatUrl = "duck/duck.spz";
+  $splatUrls = ["duck/duck.spz"];
   $splatPov = "[0.047, 0.064, 0.289, 0, 0, 0]";
-  $headings = [heading1];
-  $contents = [content1];
+  $headings = [heading1, heading1];
+  $contents = [content1, content1];
 </script>
 
 <svelte:head>
@@ -50,8 +50,7 @@
     setSplatPov="[-0.03,0.174,-0.253,0.005,0.026,0.006]"
   />
   ；幾片塑膠拼出唐老鴨的輪廓，簡單卻準確。<br />
-  我特別喜歡這個省略唐老鴨頭部的設計，簡單又能一眼認出是他。<br />
-  <Blockquote>最笨拙的零件，往往把快樂固定得最牢。</Blockquote>
+  我特別喜歡這個省略唐老鴨頭部的設計，簡單又能一眼認出是他。<br /><br />
   背帶上的剪影直白寫著
   <LookAt
     text="Disney Resort"

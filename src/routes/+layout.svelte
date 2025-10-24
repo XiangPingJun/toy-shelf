@@ -3,6 +3,7 @@
 	import favicon from "$lib/assets/favicon.png";
 	import { onMount } from "svelte";
 	import { browser } from "$app/environment";
+	import { loader } from "$lib/stores/store";
 
 	let { children } = $props();
 
@@ -29,3 +30,4 @@
 {#if !resizing}
 	{@render children?.()}
 {/if}
+{#await $loader}{/await}

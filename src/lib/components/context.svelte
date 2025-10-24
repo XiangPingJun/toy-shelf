@@ -1,7 +1,6 @@
 <script lang="ts">
   import Scroller from "$lib/components/scroller.svelte";
   import { browser } from "$app/environment";
-  const { onNext = null, onPrev = null } = $props();
   import {
     headings,
     imgBlobUrl,
@@ -154,17 +153,15 @@
   <div
     class={[
       "backdrop-blur-xs absolute top-[0.2rem] w-full -z-10",
-      onNext || onPrev ? "h-[calc(100%-1rem)]" : "h-full",
+      $contents.length > 1 ? "h-[calc(100%-1rem)]" : "h-full",
     ]}
   ></div>
   <div class="flex">
     <div
       class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>
-    <div class="bg-black/50 -mt-2.75 px-0.5 font-bold">
-      [<span class="mx-1 inline-flex items-center"
-        >{@render $headings[$activeIndex]()}</span
-      >]
+    <div class="bg-black/50 -mt-2.75 px-0.5 font-bold flex items-center">
+      [{@render $headings[$activeIndex]()}]
     </div>
     <div
       class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
@@ -186,18 +183,18 @@
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
     ></div>
-    {#if onNext || onPrev}
+    {#if $contents.length > 1}
       <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
-        {#if onPrev}
+        {#if $activeIndex > 0}
           [<button
             class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-            onclick={onPrev}>←前</button
+            onclick={() => $activeIndex--}>←前</button
           >]
         {/if}
-        {#if onNext}
+        {#if $activeIndex < $contents.length - 1}
           [<button
             class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-            onclick={onNext}>次→</button
+            onclick={() => $activeIndex++}>次→</button
           >]
         {/if}
       </div>

@@ -50,6 +50,11 @@
     cameraControls.smoothTime = 0.04;
     cameraControls.restThreshold = 1;
 
+    cameraControls.setPosition(0, 0, -500, true);
+    cameraControls.rotateTo(rad(200), rad(0), true);
+    zoom = 0.15;
+    cameraControls.zoomTo(zoom, true);
+
     startAnimation();
   }
 
@@ -114,9 +119,7 @@
       cameraControls.fromJSON($panPov, true);
       handleResize();
       // 延遲一小段時間再設為loaded，確保渲染已開始
-      setTimeout(() => {
-        loaded = true;
-      }, 100);
+      setTimeout(() => (loaded = true), 100);
     } catch (error) {
       console.error("Failed to load panorama:", error);
     }

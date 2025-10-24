@@ -26,7 +26,6 @@
 
   $effect(() => {
     if (controls) {
-      console.log($autoRotate);
       controls.autoRotate = $autoRotate;
     }
   });
@@ -151,7 +150,6 @@
 
     await updateMesh();
 
-    await new Promise((r) => setTimeout(r, 1000));
     controls.addEventListener("end", () => {
       if (controls) {
         $autoRotate = false;

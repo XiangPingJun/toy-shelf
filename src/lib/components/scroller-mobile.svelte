@@ -34,26 +34,28 @@
   });
 </script>
 
-<div
-  bind:this={container}
-  class={["scrollbar-container", props.class]}
-  style="max-height: {maxHeight};"
-  onscroll={updateScrollbar}
->
-  <div bind:this={content} class="px-4 whitespace-pre-line">
-    {@render children()}
-  </div>
-
+<div class="relative">
   <div
-    bind:this={track}
-    class="scrollbar-track"
-    style="opacity: {showScroll ? 1 : 0}"
+    bind:this={container}
+    class={["scrollbar-container", props.class]}
+    style="max-height: {maxHeight};"
+    onscroll={updateScrollbar}
   >
+    <div bind:this={content} class="px-4 whitespace-pre-line">
+      {@render children()}
+    </div>
+
     <div
-      bind:this={thumb}
-      class="scrollbar-thumb"
-      style="height: {thumbHeight}px; top: {thumbTop}px;"
-    ></div>
+      bind:this={track}
+      class="scrollbar-track"
+      style="opacity: {showScroll ? 1 : 0}"
+    >
+      <div
+        bind:this={thumb}
+        class="scrollbar-thumb"
+        style="height: {thumbHeight}px; top: {thumbTop}px;"
+      ></div>
+    </div>
   </div>
 </div>
 
@@ -69,12 +71,12 @@
 
   .scrollbar-track {
     position: absolute;
-    top: 0.5rem;
+    top: 0;
     right: 0.5rem;
     border-radius: 0.5rem;
     background: #333;
     width: 0.5rem;
-    height: calc(100% - 1rem);
+    height: 100%;
   }
 
   .scrollbar-thumb {

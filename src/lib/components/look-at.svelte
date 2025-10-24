@@ -1,5 +1,14 @@
 <script lang="ts">
-  import { splatPov, panPov, imgUrl, videoUrl } from "$lib/stores/store";
+  import {
+    splatPov,
+    panPov,
+    imgUrl,
+    imgBlobUrl,
+    videoUrl,
+    videoBlobUrl,
+  } from "$lib/stores/store";
+  import Hourglass from "$lib/components/hourglass.svelte";
+
   const {
     text,
     setSplatPov = "",
@@ -17,10 +26,12 @@
 </script>
 
 <button
-  class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung]"
+  class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline"
   {onclick}
 >
-  <i class="far fa-eye underline-offset-4 underline"></i><span
-    class="underline-offset-4 underline -mr-0.5">{" "}</span
-  ><span class="underline-offset-4 underline">{text}</span>
+  {#if ($imgUrl && setImgUrl === $imgUrl && !$imgBlobUrl) || ($videoUrl && setVideoUrl === $videoUrl && !$videoBlobUrl)}
+    <Hourglass class="underline-offset-4 underline" />
+  {:else}
+    <i class="las la-cube underline-offset-4 underline"></i>
+  {/if}<!-- -->{text}
 </button>

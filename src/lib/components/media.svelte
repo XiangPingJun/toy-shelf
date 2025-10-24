@@ -54,7 +54,7 @@
               $videoUrl = "";
               $videoBlobUrl = "";
             }}
-            ><i class="far fa-window-close"></i>
+            ><i class="las la-window-close"></i>
             關閉</button
           >]
         </div>

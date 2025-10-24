@@ -7,11 +7,12 @@
   import Viewer from "$lib/components/viewer.svelte";
   import LookAt from "$lib/components/look-at.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
-  import { splatUrl, splatPov, heading } from "$lib/stores/store";
+  import { splatUrl, splatPov, headings, contents } from "$lib/stores/store";
 
   $splatUrl = "duck/duck.spz";
   $splatPov = "[0.047, 0.064, 0.289, 0, 0, 0]";
-  $heading = duck_heading;
+  $headings = [heading1];
+  $contents = [content1];
 </script>
 
 <svelte:head>
@@ -32,11 +33,11 @@
   <meta name="twitter:image" content={ogImage} />
 </svelte:head>
 
-{#snippet duck_heading()}
+{#snippet heading1()}
   老唐爆米花<i class="las la-feather-alt"></i>
 {/snippet}
 
-{#snippet content()}
+{#snippet content1()}
   2015年在東京迪士尼，我買下那只爆米花桶。<br />
   <div class="mt-2"></div>
   它像從時光機裡回來的孩子，帶著八〇年代玩具的憨直與亮光，把我拉回園區外細雨的午後與排隊時的笑聲。
@@ -72,4 +73,4 @@
   ，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
 {/snippet}
 
-<Viewer {content} />
+<Viewer />

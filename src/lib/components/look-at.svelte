@@ -6,6 +6,7 @@
     imgBlobUrl,
     videoUrl,
     videoBlobUrl,
+    autoRotate,
   } from "$lib/stores/store";
   import Hourglass from "$lib/components/hourglass.svelte";
 
@@ -22,6 +23,8 @@
     $splatPov = setSplatPov;
     $panPov = setPanPov;
     $videoUrl = setVideoUrl;
+    $autoRotate = false;
+    setTimeout(() => ($autoRotate = true), 4000);
   };
 </script>
 

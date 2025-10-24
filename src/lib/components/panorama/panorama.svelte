@@ -3,7 +3,7 @@
   import * as THREE from "three";
   import CameraControls from "camera-controls";
 
-  import { panPov, panBlobUrl } from "$lib/stores/store";
+  import { panPov, panBlobUrl, autoRotate } from "$lib/stores/store";
 
   // State
   let canvasElement: HTMLCanvasElement;
@@ -19,7 +19,6 @@
   let cameraControls: CameraControls;
   let environmentSphere: THREE.Mesh;
   let animationId: number;
-  let autoRotate = true;
 
   const clock = new THREE.Clock();
   const animationSpeed = 0.15;
@@ -27,7 +26,6 @@
   $effect(() => {
     if ($panPov && cameraControls) {
       cameraControls.fromJSON($panPov, true);
-      autoRotate = false;
     }
   });
 
@@ -58,7 +56,7 @@
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
 
-    autoRotate = false;
+    $autoRotate = false;
     event.preventDefault();
     zoom += event.deltaY * -0.0002;
     cameraControls.zoomTo(zoom);
@@ -71,7 +69,7 @@
       const delta = clock.getDelta();
       const cameraChanged = cameraControls.update(delta * animationSpeed);
 
-      if (autoRotate) {
+      if ($autoRotate) {
         cameraControls.azimuthAngle += 0.5 * delta * THREE.MathUtils.DEG2RAD;
       }
 
@@ -141,7 +139,7 @@
   let lastSavedPov: string | undefined;
 
   async function saveCameraState() {
-    if (autoRotate) {
+    if ($autoRotate) {
       return;
     }
 
@@ -212,8 +210,8 @@
     {width}
     {height}
     onwheel={onWheel}
-    onmousedown={() => (autoRotate = false)}
-    ontouchstart={() => (autoRotate = false)}
+    onmousedown={() => ($autoRotate = false)}
+    ontouchstart={() => ($autoRotate = false)}
     class="panorama-canvas w-full h-full"
   ></canvas>
 </div>

@@ -43,5 +43,7 @@ videoUrl.subscribe(async (val) => {
     videoBlobUrl.set(await load(val));
   }
 });
-export const heading = writable({} as Snippet);
-export const content = writable({} as Snippet);
+export const headings = writable([] as Snippet[]);
+export const contents = writable([] as Snippet[]);
+export const activeIndex = writable(0);
+export const autoRotate = writable(true);

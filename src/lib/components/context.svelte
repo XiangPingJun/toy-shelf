@@ -3,10 +3,11 @@
   import { browser } from "$app/environment";
   const { onNext = null, onPrev = null } = $props();
   import {
-    heading,
+    headings,
     imgBlobUrl,
     videoBlobUrl,
-    content,
+    contents,
+    activeIndex,
   } from "$lib/stores/store";
   import { onMount } from "svelte";
 
@@ -161,7 +162,9 @@
       class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>
     <div class="bg-black/50 -mt-2.75 px-0.5 font-bold">
-      [<span class="mx-1 inline-flex items-center">{@render $heading()}</span>]
+      [<span class="mx-1 inline-flex items-center"
+        >{@render $headings[$activeIndex]()}</span
+      >]
     </div>
     <div
       class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"
@@ -172,7 +175,7 @@
     maxHeight="10rem"
   >
     {#if completed}
-      {@render $content()}
+      {@render $contents[$activeIndex]()}
     {:else}
       <div bind:this={contentElement}>
         <!-- 打字機效果會在這裡動態插入內容 -->
@@ -207,7 +210,7 @@
 
 <!-- 隱藏的原始內容用於獲取HTML -->
 <div bind:this={hiddenContentElement} class="hidden">
-  {@render $content()}
+  {@render $contents[$activeIndex]()}
 </div>
 
 <style>

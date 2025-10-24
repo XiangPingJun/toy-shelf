@@ -3,7 +3,7 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { splatBlobUrl, splatPov } from "$lib/stores/store";
+  import { splatBlobUrl, splatPov, autoRotate } from "$lib/stores/store";
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
@@ -22,14 +22,18 @@
     const p = JSON.parse($splatPov || "{}");
     position = new THREE.Vector3(p[0], p[1], p[2]);
     target = new THREE.Vector3(p[3], p[4], p[5]);
+  });
+
+  $effect(() => {
     if (controls) {
-      controls.autoRotate = false;
+      console.log($autoRotate);
+      controls.autoRotate = $autoRotate;
     }
   });
 
   // 保存相機和控制器位置到 KV（只在有變化時）
   async function saveCameraState() {
-    if (controls.autoRotate) {
+    if ($autoRotate) {
       return;
     }
 
@@ -148,10 +152,9 @@
     await updateMesh();
 
     await new Promise((r) => setTimeout(r, 1000));
-    controls.autoRotate = true;
     controls.addEventListener("end", () => {
       if (controls) {
-        controls.autoRotate = false;
+        $autoRotate = false;
         position = undefined;
         target = undefined;
       }

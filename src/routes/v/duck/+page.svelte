@@ -11,7 +11,7 @@
 
   $splatUrl = "duck/duck.spz";
   $splatPov = "[0.047, 0.064, 0.289, 0, 0, 0]";
-  $heading = duck;
+  $heading = duck_heading;
 </script>
 
 <svelte:head>
@@ -32,7 +32,7 @@
   <meta name="twitter:image" content={ogImage} />
 </svelte:head>
 
-{#snippet duck()}
+{#snippet duck_heading()}
   老唐爆米花<i class="las la-feather-alt"></i>
 {/snippet}
 
@@ -57,8 +57,11 @@
     setSplatPov="[-0.01,0.198,-0.114,0.002,-0.099,-0.074]"
     setImgUrl="duck/og-image.jpg"
   />
-  ，兩側以那
-  <LookAt text="雙黃色腳丫" setSplatPov="[0.034,0.04,0.289,0.01,0.02,0.01]" />
+  ，兩側以那雙
+  <LookAt
+    text="黃色腳丫"
+    setSplatPov="[0.3222,0.0552,-0.0702,0.0408,-0.0009,0.0175]"
+  />
   做扣件，把歡笑牢牢扣住。
   <div class="mt-3"></div>
   <LookAt

@@ -43,5 +43,5 @@ videoUrl.subscribe(async (val) => {
     videoBlobUrl.set(await load(val));
   }
 });
-
 export const heading = writable({} as Snippet);
+export const content = writable({} as Snippet);

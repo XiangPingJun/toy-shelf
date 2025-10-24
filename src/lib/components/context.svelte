@@ -1,8 +1,13 @@
 <script lang="ts">
   import Scroller from "$lib/components/scroller.svelte";
   import { browser } from "$app/environment";
-  const { content, onNext = null, onPrev = null } = $props();
-  import { heading, imgBlobUrl, videoBlobUrl } from "$lib/stores/store";
+  const { onNext = null, onPrev = null } = $props();
+  import {
+    heading,
+    imgBlobUrl,
+    videoBlobUrl,
+    content,
+  } from "$lib/stores/store";
   import { onMount } from "svelte";
 
   let contentElement: HTMLDivElement | undefined = $state();
@@ -167,7 +172,7 @@
     maxHeight="10rem"
   >
     {#if completed}
-      {@render content()}
+      {@render $content()}
     {:else}
       <div bind:this={contentElement}>
         <!-- 打字機效果會在這裡動態插入內容 -->
@@ -202,7 +207,7 @@
 
 <!-- 隱藏的原始內容用於獲取HTML -->
 <div bind:this={hiddenContentElement} class="hidden">
-  {@render content()}
+  {@render $content()}
 </div>
 
 <style>

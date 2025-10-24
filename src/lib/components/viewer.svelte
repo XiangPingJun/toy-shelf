@@ -5,7 +5,7 @@
   import Panorama from "$lib/components/panorama/panorama.svelte";
   import Hourglass from "$lib/components/hourglass.svelte";
 
-  let { content, onNext = null, onPrev = null } = $props();
+  let { onNext = null, onPrev = null } = $props();
   import { splatBlobUrl, panBlobUrl } from "$lib/stores/store";
 </script>
 
@@ -22,5 +22,5 @@
     <Panorama />
   {/if}
   <Media />
-  <Context {content} {onNext} {onPrev} />
+  <Context {onNext} {onPrev} />
 {/if}

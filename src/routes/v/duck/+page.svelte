@@ -11,7 +11,7 @@
 
   $splatUrl = "duck/duck.spz";
   $splatPov = "[0.047, 0.064, 0.289, 0, 0, 0]";
-  $heading = "唐老鴨爆米花";
+  $heading = duck;
 </script>
 
 <svelte:head>
@@ -31,6 +31,10 @@
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
 </svelte:head>
+
+{#snippet duck()}
+  老唐爆米花<i class="las la-feather-alt"></i>
+{/snippet}
 
 {#snippet content()}
   2015年在東京迪士尼，我買下那只爆米花桶。<br />

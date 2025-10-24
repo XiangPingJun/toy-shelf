@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import type { Snippet } from 'svelte';
 
 const load = async (url: string) => {
   if (!browser) return '';
@@ -43,4 +44,4 @@ videoUrl.subscribe(async (val) => {
   }
 });
 
-export const heading = writable('');
+export const heading = writable({} as Snippet);

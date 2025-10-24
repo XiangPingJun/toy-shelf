@@ -146,14 +146,17 @@
   style="transition: all 0.25s ease-out;"
 >
   <div
-    class="backdrop-blur-xs max-w-[40rem] w-[calc(100vw-1rem)] h-[12rem] top-[0.2rem] absolute bottom-0 -z-10"
+    class={[
+      "backdrop-blur-xs absolute top-[0.2rem] w-full -z-10",
+      onNext || onPrev ? "h-[calc(100%-1rem)]" : "h-full",
+    ]}
   ></div>
   <div class="flex">
     <div
       class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>
-    <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
-      [<span class="mx-1">{$heading}</span>]
+    <div class="bg-black/50 -mt-2.75 px-0.5 font-bold">
+      [<span class="mx-1 inline-flex items-center">{@render $heading()}</span>]
     </div>
     <div
       class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"

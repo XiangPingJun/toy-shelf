@@ -5,7 +5,7 @@
     videoUrl,
     videoBlobUrl,
   } from "$lib/stores/store";
-  import { slide } from "svelte/transition";
+  import { fly } from "svelte/transition";
 </script>
 
 {#if $imgBlobUrl || $videoBlobUrl}
@@ -14,7 +14,7 @@
       "fixed left-1/2 -translate-x-1/2",
       window.innerWidth < window.innerHeight ? "top-3" : "top-12",
     ]}
-    transition:slide
+    transition:fly={{ y: "2rem" }}
   >
     <div
       class="backdrop-blur-xs absolute top-[0.2rem] w-full h-[calc(100%-1rem)] -z-10"

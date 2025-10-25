@@ -3,9 +3,8 @@
     splatPov,
     panPov,
     imgUrl,
-    imgBlobUrl,
     videoUrl,
-    videoBlobUrl,
+    resources,
     autoRotate,
   } from "$lib/stores/store";
   import Hourglass from "$lib/components/hourglass.svelte";
@@ -31,7 +30,7 @@
   class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline"
   {onclick}
 >
-  {#if ($imgUrl && setImgUrl === $imgUrl && !$imgBlobUrl) || ($videoUrl && setVideoUrl === $videoUrl && !$videoBlobUrl)}
+  {#if ($imgUrl && setImgUrl === $imgUrl && !$resources[$imgUrl]) || ($videoUrl && setVideoUrl === $videoUrl && !$resources[$videoUrl])}
     <Hourglass class="underline-offset-4 underline" />
   {:else}
     <i class="las la-cube underline-offset-4 underline"></i>

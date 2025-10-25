@@ -1,14 +1,9 @@
 <script lang="ts">
-  import {
-    imgUrl,
-    imgBlobUrl,
-    videoUrl,
-    videoBlobUrl,
-  } from "$lib/stores/store";
+  import { imgUrl, videoUrl, resources } from "$lib/stores/store";
   import { fly } from "svelte/transition";
 </script>
 
-{#if $imgBlobUrl || $videoBlobUrl}
+{#if ($imgUrl && $resources[$imgUrl]) || ($videoUrl && $resources[$videoUrl])}
   <div
     class={[
       "fixed left-1/2 -translate-x-1/2",
@@ -22,16 +17,16 @@
     <div
       class="rounded-tl-md rounded-tr-md border-3 border-b-0 border-white box-content bg-black/50 p-2 pb-0"
     >
-      {#if $imgBlobUrl}
+      {#if $resources[$imgUrl]}
         <img
-          src={$imgBlobUrl}
+          src={$resources[$imgUrl]}
           class="max-w-[min(1360px,calc(100vw-2rem))] max-h-[min(600px,calc(100dvh-2rem))] object-cover backdrop-blur-sm"
           style="mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmb3JlaWduT2JqZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxib2R5IGNsYXNzPSJ3cmFwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHN0eWxlPi53cmFwe2JveC1zaXppbmc6Ym9yZGVyLWJveDttYXJnaW46MDtoZWlnaHQ6MTAwJTtwYWRkaW5nOjNweH0uc2hhZG93e2hlaWdodDoxMDAlO2JhY2tncm91bmQ6IzAwMDtib3JkZXItcmFkaXVzOjNweDtib3gtc2hhZG93OjAgMCAzcHggIzAwMCwwIDAgNnB4ICMwMDAsMCAwIDlweCAjMDAwfTwvc3R5bGU+PGRpdiBjbGFzcz0ic2hhZG93Ii8+PC9ib2R5PjwvZm9yZWlnbk9iamVjdD48L3N2Zz4=);"
           alt=""
         />
-      {:else if $videoBlobUrl}
+      {:else if $resources[$videoUrl]}
         <video
-          src={$videoBlobUrl}
+          src={$resources[$videoUrl]}
           class="max-w-[min(1360px,calc(100vw-2rem))] max-h-[min(600px,calc(100dvh-2rem))] object-cover backdrop-blur-sm"
           style="mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmb3JlaWduT2JqZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxib2R5IGNsYXNzPSJ3cmFwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHN0eWxlPi53cmFwe2JveC1zaXppbmc6Ym9yZGVyLWJveDttYXJnaW46MDtoZWlnaHQ6MTAwJTtwYWRkaW5nOjNweH0uc2hhZG93e2hlaWdodDoxMDAlO2JhY2tncm91bmQ6IzAwMDtib3JkZXItcmFkaXVzOjNweDtib3gtc2hhZG93OjAgMCAzcHggIzAwMCwwIDAgNnB4ICMwMDAsMCAwIDlweCAjMDAwfTwvc3R5bGU+PGRpdiBjbGFzcz0ic2hhZG93Ii8+PC9ib2R5PjwvZm9yZWlnbk9iamVjdD48L3N2Zz4=);"
           autoplay
@@ -52,9 +47,7 @@
           class="text-blue-400 hover:text-blue-300 cursor-pointer flex gap-1 items-center"
           onclick={() => {
             $imgUrl = "";
-            $imgBlobUrl = "";
             $videoUrl = "";
-            $videoBlobUrl = "";
           }}><i class="las la-window-close"></i>關閉</button
         >]
       </div>

@@ -3,7 +3,12 @@
   import { browser } from "$app/environment";
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { splatBlobUrl, splatPov, autoRotate } from "$lib/stores/store";
+  import {
+    activePage,
+    splatPov,
+    autoRotate,
+    resources,
+  } from "$lib/stores/store";
 
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
@@ -62,7 +67,7 @@
     const { SplatMesh, SplatFileType } = await import("@sparkjsdev/spark");
 
     const splatMesh = new SplatMesh({
-      url: $splatBlobUrl,
+      url: $resources[$activePage.url],
       fileType: SplatFileType.SPZ, // 使用 SPZ 格式
     });
     splatMesh.quaternion.set(1, 0, 0, 0);

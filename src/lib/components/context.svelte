@@ -2,11 +2,12 @@
   import Scroller from "$lib/components/scroller.svelte";
   import { browser } from "$app/environment";
   import {
-    headings,
-    imgBlobUrl,
-    videoBlobUrl,
-    contents,
+    pages,
+    activePage,
+    resources,
     activeIndex,
+    imgUrl,
+    videoUrl,
   } from "$lib/stores/store";
   import { onMount } from "svelte";
 
@@ -136,14 +137,14 @@
   class={[
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
     isMobile ? "bottom-3" : "bottom-12",
-    $imgBlobUrl || $videoBlobUrl ? "pointer-events-none" : "in",
+    $resources[$imgUrl] || $resources[$videoUrl] ? "pointer-events-none" : "in",
     mounted ? "" : "invisible",
   ]}
 >
   <div
     class={[
       "backdrop-blur-xs absolute top-[0.2rem] w-full -z-10",
-      $contents.length > 1 ? "h-[calc(100%-1rem)]" : "h-full",
+      $pages.length > 1 ? "h-[calc(100%-1rem)]" : "h-full",
     ]}
   ></div>
   <div class="flex">
@@ -152,7 +153,7 @@
     ></div>
     <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
       <div class="flex items-center">
-        [{@render $headings[$activeIndex]()}]
+        [{@render $activePage?.heading()}]
       </div>
     </div>
     <div
@@ -164,7 +165,7 @@
     maxHeight="10rem"
   >
     {#if completed}
-      {@render $contents[$activeIndex]()}
+      {@render $activePage?.content()}
     {:else}
       <div bind:this={contentElement}>
         <!-- 打字機效果會在這裡動態插入內容 -->
@@ -175,7 +176,7 @@
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
     ></div>
-    {#if $contents.length > 1}
+    {#if $pages.length > 1}
       <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
         {#if $activeIndex > 0}
           [<button
@@ -183,7 +184,7 @@
             onclick={() => $activeIndex--}>←前</button
           >]
         {/if}
-        {#if $activeIndex < $contents.length - 1}
+        {#if $activeIndex < $pages.length - 1}
           [<button
             class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
             onclick={() => $activeIndex++}>次→</button
@@ -199,7 +200,7 @@
 
 <!-- 隱藏的原始內容用於獲取HTML -->
 <div bind:this={hiddenContentElement} class="hidden">
-  {@render $contents[$activeIndex]()}
+  {@render $activePage?.content()}
 </div>
 
 <style>

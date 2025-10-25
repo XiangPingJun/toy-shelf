@@ -7,12 +7,24 @@
   import Viewer from "$lib/components/viewer.svelte";
   import LookAt from "$lib/components/look-at.svelte";
   import Blockquote from "$lib/components/blockquote.svelte";
-  import { splatUrls, splatPov, headings, contents } from "$lib/stores/store";
+  import { pages } from "$lib/stores/store";
 
-  $splatUrls = ["duck/duck.spz"];
-  $splatPov = "[0.047, 0.064, 0.289, 0, 0, 0]";
-  $headings = [heading1, heading1];
-  $contents = [content1, content1];
+  $pages = [
+    {
+      type: "splat",
+      url: "duck/duck.spz",
+      firstPov: "[0.047, 0.064, 0.289, 0, 0, 0]",
+      heading: heading1,
+      content: content1,
+    },
+    {
+      type: "splat",
+      url: "duck/alice.spz",
+      firstPov: "[-0.2961,0.9998,1.4685,0.051,0.4926,-0.1336]",
+      heading: heading2,
+      content: content1,
+    },
+  ];
 </script>
 
 <svelte:head>
@@ -35,6 +47,10 @@
 
 {#snippet heading1()}
   老唐爆米花<i class="las la-feather-alt"></i>
+{/snippet}
+
+{#snippet heading2()}
+  2
 {/snippet}
 
 {#snippet content1()}

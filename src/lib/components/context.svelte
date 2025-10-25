@@ -135,18 +135,13 @@
       setTimeout(startTypewriterEffect, 200);
     }
   });
-
-  let mounted = $state(false);
-  onMount(() => {
-    setTimeout(() => (mounted = true));
-  });
 </script>
 
 <div
   class={[
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
     isMobile ? "bottom-3" : "bottom-12",
-    !mounted || $imgBlobUrl || $videoBlobUrl ? "pointer-events-none" : "in",
+    $imgBlobUrl || $videoBlobUrl ? "pointer-events-none" : "in",
   ]}
   style="transition: all 0.25s ease-out;"
 >
@@ -160,8 +155,10 @@
     <div
       class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>
-    <div class="bg-black/50 -mt-2.75 px-0.5 font-bold flex items-center">
-      [{@render $headings[$activeIndex]()}]
+    <div class="bg-black/50 -mt-2.5 px-0.5 font-bold">
+      <div class="flex items-center">
+        [{@render $headings[$activeIndex]()}]
+      </div>
     </div>
     <div
       class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/50 flex-grow"

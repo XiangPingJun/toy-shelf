@@ -1,15 +1,16 @@
 <script lang="ts">
-  const modules = import.meta.glob("./v/**/v/+page.svelte", { eager: true });
+  const modules = import.meta.glob("./v/**/v/+page.svelte", {
+    eager: true,
+  });
 
   import Scroller from "$lib/components/scroller/scroller.svelte";
-  import Blockquote from "$lib/components/blockquote.svelte";
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =
     "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
   const ogImage = "og-image.jpg";
 
-  console.log(modules);
+  console.log(modules["./v/donald-pop/v/+page.svelte"].title);
 </script>
 
 <svelte:head>
@@ -46,8 +47,8 @@
           <div
             class="w-full text-nowrap overflow-hidden text-ellipsis backdrop-blur-sm blur-bg"
           >
+            {JSON.stringify(mod)}
             ❝❞
-            {mod.title}
           </div>
         </div>
       </div>

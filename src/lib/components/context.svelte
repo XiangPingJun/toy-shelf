@@ -205,28 +205,11 @@
 <style>
   .slide {
     display: grid;
-    grid-template-rows: 0fr; /* 關閉時高度為 0 */
     clip-path: inset(100% 0 0 0); /* 從上方遮住內容 */
-    transition:
-      grid-template-rows 5000ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      clip-path 5000ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: all 0.25s ease-out;
   }
 
   .slide.in {
-    grid-template-rows: 1fr; /* 開啟自動高度 */
     clip-path: inset(-1rem 0 0 0); /* 解除遮罩 */
-  }
-
-  .slide.in {
-    transform: translateY(0);
-    transition-property: grid-template-rows, opacity, transform;
-  }
-
-  /* 無動畫偏好 */
-  @media (prefers-reduced-motion: reduce) {
-    .slide {
-      transition: none;
-      clip-path: inset(0);
-    }
   }
 </style>

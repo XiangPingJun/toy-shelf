@@ -4,21 +4,21 @@
   import Media from "$lib/components/media.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
   import Hourglass from "$lib/components/hourglass.svelte";
-  import { splatBlobUrl, panBlobUrl } from "$lib/stores/store";
+  import { activeIndex, splatBlobUrl, panBlobUrl } from "$lib/stores/store";
 </script>
 
-{#if !$splatBlobUrl && !$panBlobUrl}
+{#if $splatBlobUrl}
+  <SplatViewer />
+{:else if $panBlobUrl}
+  <Panorama />
+{:else}
   <div
     class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl"
   >
     <div class="flex items-center gap-1"><Hourglass />Loading...</div>
   </div>
-{:else}
-  {#if $splatBlobUrl}
-    <SplatViewer />
-  {:else if $panBlobUrl}
-    <Panorama />
-  {/if}
-  <Media />
-  <Context />
 {/if}
+<Media />
+{#key $activeIndex}
+  <Context />
+{/key}

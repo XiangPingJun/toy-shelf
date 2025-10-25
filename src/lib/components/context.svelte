@@ -12,13 +12,15 @@
 
   let contentElement: HTMLDivElement | undefined = $state();
   let hiddenContentElement: HTMLDivElement | undefined = $state();
+  let mounted = $state(false);
   let completed = $state(false);
   let isMobile = $state(false);
 
   // 打字機效果函數
-  async function startTypewriterEffect() {
+  onMount(() => {
     if (!hiddenContentElement || !contentElement) return;
 
+    mounted = true;
     const fullHTML = hiddenContentElement.innerHTML;
 
     // 解析 HTML 並提取純文本
@@ -26,7 +28,7 @@
     tempDiv.innerHTML = fullHTML;
     const plainText = tempDiv.textContent || tempDiv.innerText || "";
 
-    contentElement.innerHTML = "";
+    contentElement.innerHTML = "...";
 
     let currentIndex = 0;
 
@@ -111,7 +113,7 @@
     };
 
     typeNextChar();
-  }
+  });
 
   // 監聽視窗大小變化
   $effect(() => {
@@ -128,13 +130,6 @@
       window.removeEventListener("resize", updateOrientation);
     };
   });
-
-  // 當內容渲染完成後啟動打字機效果
-  $effect(() => {
-    if (hiddenContentElement && contentElement) {
-      setTimeout(startTypewriterEffect, 200);
-    }
-  });
 </script>
 
 <div
@@ -142,8 +137,8 @@
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
     isMobile ? "bottom-3" : "bottom-12",
     $imgBlobUrl || $videoBlobUrl ? "pointer-events-none" : "in",
+    mounted ? "" : "invisible",
   ]}
-  style="transition: all 0.25s ease-out;"
 >
   <div
     class={[
@@ -165,7 +160,7 @@
     ></div>
   </div>
   <Scroller
-    class="h-[10rem] bg-black/50 border-white box-content border-l-3 border-r-3"
+    class="bg-black/50 border-white box-content border-l-3 border-r-3"
     maxHeight="10rem"
   >
     {#if completed}

@@ -91,7 +91,7 @@
   async function createEnvironmentSphere() {
     try {
       const panTexture = await new THREE.TextureLoader().loadAsync(
-        $activePage?.blobUrl,
+        $activePage.url,
       );
 
       panTexture.mapping = THREE.EquirectangularReflectionMapping;

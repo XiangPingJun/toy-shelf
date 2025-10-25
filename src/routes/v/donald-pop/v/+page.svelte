@@ -1,8 +1,8 @@
 <script lang="ts">
-  const title = "唐老鴨爆米花 @祥平的玩具櫃";
+  export const title = "老唐爆米花";
   const description =
     "2015年在東京迪士尼買下的爆米花桶，帶著八〇年代玩具的憨直與亮光";
-  const ogImage = "duck/og-image.jpg";
+  const ogImage = "og-image.jpg";
 
   import Viewer from "$lib/components/viewer.svelte";
   import LookAt from "$lib/components/look-at.svelte";
@@ -12,14 +12,14 @@
   $pages = [
     {
       type: "splat",
-      url: "duck/duck.spz",
+      url: "donald-pop.spz",
       firstPov: "[0.047, 0.064, 0.289, 0, 0, 0]",
       heading: heading1,
       content: content1,
     },
     {
       type: "splat",
-      url: "duck/alice.spz",
+      url: "alice.spz",
       firstPov: "[-0.2961,0.9998,1.4685,0.051,0.4926,-0.1336]",
       heading: heading2,
       content: content1,
@@ -32,7 +32,7 @@
   <meta name="description" content={description} />
 
   <!-- Open Graph Protocol -->
-  <meta property="og:title" content={title} />
+  <meta property="og:title" content={`${title}(^ω^)祥平的玩具櫃`} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:type" content="website" />
@@ -71,7 +71,7 @@
   <LookAt
     text="Disney Resort"
     setSplatPov="[-0.01,0.198,-0.114,0.002,-0.099,-0.074]"
-    setImgUrl="duck/og-image.jpg"
+    setImgUrl="og-image.jpg"
   />
   ，兩側以那雙
   <LookAt
@@ -83,7 +83,7 @@
   <LookAt
     text="打開蓋子"
     setSplatPov="[0.0215,0.2525,0.1564,0.0076,-0.001,-0.0035]"
-    setImgUrl="duck/duck-open.png"
+    setImgUrl="donald-pop-open.png"
   />
   ，裡頭只剩一個乾淨的空洞。咖哩味的爆米花早已散去，留下塑膠的清冷與指尖餘溫。它輕聲提醒我：熱鬧退場後，平凡也是一種保存，像一段未曾雕琢的日子，被妥帖收起。
 {/snippet}

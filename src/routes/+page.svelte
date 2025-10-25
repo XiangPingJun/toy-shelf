@@ -1,22 +1,63 @@
 <script lang="ts">
   const modules = import.meta.glob("./v/**/v/+page.svelte", { eager: true });
-  import Scroller from "$lib/components/scroller.svelte";
+
+  import Scroller from "$lib/components/scroller/scroller.svelte";
+  import Blockquote from "$lib/components/blockquote.svelte";
+
+  export const title = "(^ω^)祥平的玩具櫃";
+  const description =
+    "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
+  const ogImage = "og-image.jpg";
+
   console.log(modules);
 </script>
 
-<div
-  class="fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] max-h-[100dvh-2rem]"
->
-  <Scroller maxHeight="100dvh">
+<svelte:head>
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Open Graph Protocol -->
+  <meta property="og:title" content="(^ω^)祥平的玩具櫃" />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="(^ω^)祥平的玩具櫃" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+</svelte:head>
+
+<div class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+  <Scroller class="max-w-[40rem] w-[100vw]" maxHeight="calc(100dvh - 2rem)">
     {#each [...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules)] as [path, mod]}
-      <img
-        src={`${/(\/v\/.*)\/v\//.exec(path)?.[1]}/og-image.jpg`}
-        style="mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmb3JlaWduT2JqZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxib2R5IGNsYXNzPSJ3cmFwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHN0eWxlPi53cmFwe2JveC1zaXppbmc6Ym9yZGVyLWJveDttYXJnaW46MDtoZWlnaHQ6MTAwJTtwYWRkaW5nOjNweH0uc2hhZG93e2hlaWdodDoxMDAlO2JhY2tncm91bmQ6IzAwMDtib3JkZXItcmFkaXVzOjNweDtib3gtc2hhZG93OjAgMCAzcHggIzAwMCwwIDAgNnB4ICMwMDAsMCAwIDlweCAjMDAwfTwvc3R5bGU+PGRpdiBjbGFzcz0ic2hhZG93Ii8+PC9ib2R5PjwvZm9yZWlnbk9iamVjdD48L3N2Zz4=);"
-        alt=""
-      />
+      <div class="relative inline-block cursor-pointer">
+        <img
+          src={`${/(\/v\/.*)\/v\//.exec(path)?.[1]}/og-image.jpg`}
+          class="max-w-[18rem] w-[calc(50vw-2rem)] m-1 inline rounded-md"
+          alt=""
+        />
+        <div
+          class="font-[uoqmunthenkhung] absolute bottom-[4px] left-[4px] text-sm w-[calc(100%-8px)] caption"
+          style="background: linear-gradient(#0000 0%, #0009 25%, #000A 50%, #0009 100%); padding: 1rem .5rem .25rem 1rem;"
+        >
+          <div
+            class="w-full text-nowrap overflow-hidden text-ellipsis backdrop-blur-sm blur-bg"
+          >
+            ❝❞
+            {mod.title}
+          </div>
+        </div>
+      </div>
     {/each}
   </Scroller>
 </div>
 
-<style scoped>
+<style>
+  .caption::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
 </style>

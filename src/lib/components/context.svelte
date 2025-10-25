@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Scroller from "$lib/components/scroller.svelte";
+  import Scroller from "$lib/components/scroller/scroller.svelte";
   import { browser } from "$app/environment";
   import {
     pages,

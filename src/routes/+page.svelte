@@ -1,16 +1,37 @@
 <script lang="ts">
-  const modules = import.meta.glob("./v/**/v/+page.svelte", {
+  const modules = import.meta.glob("./v/**/v/description.ts", {
     eager: true,
   });
-
   import Scroller from "$lib/components/scroller/scroller.svelte";
+  import { blur } from "svelte/transition";
+  import { onMount } from "svelte";
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =
     "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
   const ogImage = "og-image.jpg";
 
-  console.log(modules["./v/donald-pop/v/+page.svelte"].title);
+  let data = $state([] as Record<string, string>[]);
+  onMount(() => {
+    data = [
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+      ...Object.entries(modules),
+    ].map(([path, mod]) => ({
+      path,
+      caption: (mod as { default: string }).default,
+    }));
+  });
 </script>
 
 <svelte:head>
@@ -33,8 +54,11 @@
 
 <div class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
   <Scroller class="max-w-[40rem] w-[100vw]" maxHeight="calc(100dvh - 2rem)">
-    {#each [...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules), ...Object.entries(modules)] as [path, mod]}
-      <div class="relative inline-block cursor-pointer">
+    {#each data as { path, caption }, i}
+      <div
+        class="relative inline-block cursor-pointer"
+        transition:blur={{ delay: i * 30 }}
+      >
         <img
           src={`${/(\/v\/.*)\/v\//.exec(path)?.[1]}/og-image.jpg`}
           class="max-w-[18rem] w-[calc(50vw-2rem)] m-1 inline rounded-md"
@@ -47,8 +71,7 @@
           <div
             class="w-full text-nowrap overflow-hidden text-ellipsis backdrop-blur-sm blur-bg"
           >
-            {JSON.stringify(mod)}
-            ❝❞
+            ❝{caption}❞
           </div>
         </div>
       </div>

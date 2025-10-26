@@ -1,7 +1,6 @@
 <script lang="ts">
-  export const title = "老唐爆米花";
-  const description =
-    "2015年在東京迪士尼買下的爆米花桶，帶著八〇年代玩具的憨直與亮光";
+  import description from "./description";
+  const title = "老唐爆米花";
   const ogImage = "og-image.jpg";
 
   import Viewer from "$lib/components/viewer.svelte";

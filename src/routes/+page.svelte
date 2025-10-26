@@ -1,19 +1,20 @@
 <script lang="ts">
-  const modules = import.meta.glob("./v/**/v/description.ts", {
-    eager: true,
-  });
+  import { goto } from "$app/navigation";
   import Scroller from "$lib/components/scroller/scroller.svelte";
   import { blur } from "svelte/transition";
   import { onMount } from "svelte";
+  const modules = import.meta.glob("./v/**/v/description.ts", {
+    eager: true,
+  });
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =
     "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
   const ogImage = "og-image.jpg";
 
-  let data = $state([] as Record<string, string>[]);
-  onMount(() => {
-    data = [
+  let data = $state([] as { path: string; caption: string }[]);
+  onMount(async () => {
+    let allData = [
       ...Object.entries(modules),
       ...Object.entries(modules),
       ...Object.entries(modules),
@@ -28,9 +29,13 @@
       ...Object.entries(modules),
       ...Object.entries(modules),
     ].map(([path, mod]) => ({
-      path,
+      path: /(\/v\/.*)\/v\//.exec(path)?.[1],
       caption: (mod as { default: string }).default,
     }));
+    while (allData.length) {
+      data.push(allData.shift() as { path: string; caption: string });
+      await new Promise((r) => setTimeout(r, 50));
+    }
   });
 </script>
 
@@ -57,10 +62,14 @@
     {#each data as { path, caption }, i}
       <div
         class="relative inline-block cursor-pointer"
-        transition:blur={{ delay: i * 30 }}
+        onclick={() => goto(`${path}/v`)}
+        onkeydown={() => {}}
+        role="button"
+        tabindex={i}
+        transition:blur
       >
         <img
-          src={`${/(\/v\/.*)\/v\//.exec(path)?.[1]}/og-image.jpg`}
+          src={`${path}/og-image.jpg`}
           class="max-w-[18rem] w-[calc(50vw-2rem)] m-1 inline rounded-md"
           alt=""
         />

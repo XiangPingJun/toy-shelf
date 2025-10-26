@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import Scroller from "$lib/components/scroller/scroller.svelte";
   import { browser } from "$app/environment";
   import {
@@ -176,22 +177,30 @@
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/50 flex-grow"
     ></div>
-    {#if $pages.length > 1}
-      <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
-        {#if $activeIndex > 0}
-          [<button
-            class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-            onclick={() => $activeIndex--}>←前</button
-          >]
-        {/if}
-        {#if $activeIndex < $pages.length - 1}
-          [<button
-            class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-            onclick={() => $activeIndex++}>次→</button
-          >]
-        {/if}
-      </div>
-    {/if}
+    <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
+      {#if $activeIndex === 0}
+        [<button
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+          onclick={() => goto("/")}>←全</button
+        >]
+      {:else if $activeIndex > 0}
+        [<button
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+          onclick={() => $activeIndex--}>←前</button
+        >]
+      {/if}
+      {#if $activeIndex < $pages.length - 1}
+        [<button
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+          onclick={() => $activeIndex++}>次→</button
+        >]
+      {:else if $activeIndex === $pages.length - 1}
+        [<button
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
+          onclick={() => goto("/")}>←全</button
+        >]
+      {/if}
+    </div>
     <div
       class="rounded-br-md border-b-3 border-r-3 border-white box-content h-[1em] bg-black/50 w-[2rem]"
     ></div>

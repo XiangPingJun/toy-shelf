@@ -14,21 +14,7 @@
 
   let data = $state([] as { path: string; caption: string }[]);
   onMount(async () => {
-    let allData = [
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-      ...Object.entries(modules),
-    ].map(([path, mod]) => ({
+    let allData = Object.entries(modules).map(([path, mod]) => ({
       path: /(\/v\/.*)\/v\//.exec(path)?.[1],
       caption: (mod as { default: string }).default,
     }));
@@ -61,7 +47,7 @@
   <Scroller class="max-w-[40rem] w-[100vw]" maxHeight="calc(100dvh - 2rem)">
     {#each data as { path, caption }, i}
       <div
-        class="relative inline-block cursor-pointer"
+        class="relative inline-block cursor-pointer hover:text-gray-300"
         onclick={() => goto(`${path}/v`)}
         onkeydown={() => {}}
         role="button"

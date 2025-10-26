@@ -66,7 +66,7 @@
         onkeydown={() => {}}
         role="button"
         tabindex={i}
-        transition:blur
+        transition:blur={{ amount: "1rem" }}
       >
         <img
           src={`${path}/og-image.jpg`}

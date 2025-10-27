@@ -203,7 +203,7 @@
           次
           <i class="las la-arrow-right"></i>
         </button>]
-      {:else if $activeIndex === $pages.length - 1}
+      {:else if $pages.length > 1 && $activeIndex === $pages.length - 1}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
           onclick={() => goto("/")}

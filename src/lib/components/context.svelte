@@ -180,19 +180,19 @@
     <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
       {#if $activeIndex === 0}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center gap-0.5"
           onclick={() => goto("/")}
         >
           <i class="las la-list"></i>
-          全
+          All
         </button>]
       {:else if $activeIndex > 0}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
           onclick={() => $activeIndex--}
         >
-          <i class="las la-arrow-left"></i>
-          前
+          <i class="las la-caret-left"></i>
+          Back
         </button>]
       {/if}
       {#if $activeIndex < $pages.length - 1}
@@ -200,16 +200,16 @@
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
           onclick={() => $activeIndex++}
         >
-          次
-          <i class="las la-arrow-right"></i>
+          Next
+          <i class="las la-caret-right"></i>
         </button>]
       {:else if $pages.length > 1 && $activeIndex === $pages.length - 1}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center gap-0.5"
           onclick={() => goto("/")}
         >
           <i class="las la-list"></i>
-          全
+          All
         </button>]
       {/if}
     </div>

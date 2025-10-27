@@ -4,7 +4,9 @@
   import Media from "$lib/components/media.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
   import Hourglass from "$lib/components/hourglass.svelte";
-  import { activePage, resources } from "$lib/stores/store";
+  import { activePage, activeIndex, resources } from "$lib/stores/store";
+
+  $activeIndex = 0;
 </script>
 
 {#key $activePage}

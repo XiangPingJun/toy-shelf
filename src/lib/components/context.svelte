@@ -180,25 +180,37 @@
     <div class="bg-black/50 pt-1.25 px-0.5 font-bold flex items-center">
       {#if $activeIndex === 0}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-          onclick={() => goto("/")}>←全</button
-        >]
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          onclick={() => goto("/")}
+        >
+          <i class="las la-list"></i>
+          全
+        </button>]
       {:else if $activeIndex > 0}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-          onclick={() => $activeIndex--}>←前</button
-        >]
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          onclick={() => $activeIndex--}
+        >
+          <i class="las la-arrow-left"></i>
+          前
+        </button>]
       {/if}
       {#if $activeIndex < $pages.length - 1}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-          onclick={() => $activeIndex++}>次→</button
-        >]
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          onclick={() => $activeIndex++}
+        >
+          次
+          <i class="las la-arrow-right"></i>
+        </button>]
       {:else if $activeIndex === $pages.length - 1}
         [<button
-          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1"
-          onclick={() => goto("/")}>←全</button
-        >]
+          class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
+          onclick={() => goto("/")}
+        >
+          <i class="las la-list"></i>
+          全
+        </button>]
       {/if}
     </div>
     <div

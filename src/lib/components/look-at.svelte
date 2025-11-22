@@ -33,6 +33,6 @@
   {#if ($imgUrl && setImgUrl === $imgUrl && !$resources[$imgUrl]) || ($videoUrl && setVideoUrl === $videoUrl && !$resources[$videoUrl])}
     <Hourglass class="underline-offset-4 underline" />
   {:else}
-    <i class="las la-cube underline-offset-4 underline"></i>
+    <i class="las la-mouse-pointer underline-offset-4 underline"></i>
   {/if}<!-- -->{text}
 </button>

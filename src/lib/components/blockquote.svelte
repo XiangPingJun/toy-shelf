@@ -5,7 +5,7 @@
 
 <div
   class={[
-    "my-4 first:mt-0 last:mb-0 italic font-[uoqmunthenkhung] text-lg text-gray-300",
+    "my-3 first:mt-0 last:mb-0 italic font-[uoqmunthenkhung] text-lg text-gray-300",
     props.class,
   ]}
 >

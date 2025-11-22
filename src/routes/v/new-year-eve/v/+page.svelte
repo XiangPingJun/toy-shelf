@@ -39,7 +39,7 @@
 </svelte:head>
 
 {#snippet heading1()}
-  煙火一瞬 金光萬丈<i class="las la-rocket"></i>
+  <i class="las la-rocket mr-0.5"></i>煙火一瞬 金光萬丈
 {/snippet}
 
 {#snippet content1()}

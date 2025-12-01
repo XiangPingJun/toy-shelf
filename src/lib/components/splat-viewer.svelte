@@ -13,11 +13,9 @@
   let container: HTMLDivElement;
   let renderer: THREE.WebGLRenderer;
   let controls = $state() as OrbitControls;
-  let scene: THREE.Scene;
   let camera = $state() as THREE.PerspectiveCamera;
-  let currentSplatMesh: any = null;
+  let viewer: any = null;
   let isInitialized = false;
-  let baseTime = 0;
   let saveInterval: ReturnType<typeof setInterval>;
   let position: THREE.Vector3 | undefined = $state();
   let target: THREE.Vector3 | undefined = $state();
@@ -62,76 +60,110 @@
     }
   }
 
-  // 創建新的 Splat Mesh
-  async function createSplatMesh() {
-    const { SplatMesh, SplatFileType } = await import("@sparkjsdev/spark");
+  // 載入場景
+  async function loadScene() {
+    if (!viewer || !isInitialized) return;
 
-    const splatMesh = new SplatMesh({
-      url: $resources[$activePage.url],
-      fileType: SplatFileType.SPZ, // 使用 SPZ 格式
-    });
-    splatMesh.quaternion.set(1, 0, 0, 0);
-    splatMesh.scale.set(1.5, 1.5, 1.5);
+    try {
+      const url = $resources[$activePage.url];
+      if (!url) {
+        console.error("No URL found for splat scene");
+        return;
+      }
 
-    baseTime = 0;
+      const isSPZ = url.toLowerCase().endsWith(".spz");
 
-    return splatMesh;
-  }
+      if (isSPZ) {
+        // SPZ files are gzipped PLY files, need to decompress first
+        const { gunzipSync } = await import("fflate");
 
-  // 更新 mesh
-  async function updateMesh() {
-    if (!scene || !isInitialized) return;
+        // Fetch the .spz file
+        const response = await fetch(url);
+        const buffer = await response.arrayBuffer();
 
-    // 移除舊的 mesh
-    if (currentSplatMesh) {
-      scene.remove(currentSplatMesh);
-      currentSplatMesh = null;
+        // Decompress the gzipped PLY data
+        const decompressed = gunzipSync(new Uint8Array(buffer));
+
+        // Create a blob URL for the decompressed PLY data
+        const blob = new Blob([decompressed], {
+          type: "application/octet-stream",
+        });
+        const plyUrl = URL.createObjectURL(blob);
+
+        // Load the decompressed PLY data
+        await viewer.addSplatScene(plyUrl, {
+          position: [0, 0, 0],
+          rotation: [0, 0, 0, 1],
+          scale: [1.5, 1.5, 1.5],
+          splatAlphaRemovalThreshold: 5,
+        });
+
+        // Clean up the blob URL after loading
+        URL.revokeObjectURL(plyUrl);
+      } else {
+        // Direct loading for PLY, SPLAT, KSPLAT files
+        await viewer.addSplatScene(url, {
+          position: [0, 0, 0],
+          rotation: [0, 0, 0, 1],
+          scale: [1.5, 1.5, 1.5],
+          splatAlphaRemovalThreshold: 5,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load splat scene:", error);
     }
-
-    // 創建新的 mesh
-    const newMesh = await createSplatMesh();
-    currentSplatMesh = newMesh;
-    scene.add(currentSplatMesh);
   }
 
   onMount(async () => {
     // 確保只在客戶端執行
     if (!browser) return;
 
-    const { SparkRenderer, dyno: dynoImport } = await import(
-      "@sparkjsdev/spark"
-    );
+    const GaussianSplats3D = await import("@mkkellogg/gaussian-splats-3d");
 
-    scene = new THREE.Scene();
+    // 初始化 Three.js renderer 和 camera
     camera = new THREE.PerspectiveCamera(
       60,
       window.innerWidth / window.innerHeight,
       0.1,
       1000,
     );
-
+    camera.position.set(-1, -4, 6);
+    camera.up.set(0, -1, -0.6).normalize();
     camera.lookAt(0, 0, 0);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(new THREE.Color(0), 0);
-    const spark = new SparkRenderer({ renderer });
-    spark.preBlurAmount = 0;
-    spark.blurAmount = 0;
 
     // 將 renderer.domElement 附加到 container
     container.appendChild(renderer.domElement);
 
+    // 初始化 OrbitControls
     controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
     controls.minDistance = 0.3;
     controls.maxDistance = 20;
-    controls.update();
     controls.autoRotateSpeed = 0.15;
+    controls.update();
 
+    // 初始化 GaussianSplats3D Viewer
+    viewer = new GaussianSplats3D.Viewer({
+      selfDrivenMode: false,
+      renderer: renderer,
+      camera: camera,
+      useBuiltInControls: false,
+      gpuAcceleratedSort: true,
+      enableSIMDInSort: true,
+      sharedMemoryForWorkers: true,
+      integerBasedSort: true,
+      halfPrecisionCovariancesOnGPU: true,
+      renderMode: GaussianSplats3D.RenderMode.Always,
+      sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
+    });
+
+    // 動畫循環
     function animate() {
-      currentSplatMesh?.updateVersion();
-      renderer.render(scene, camera);
+      // 相機位置平滑過渡
       if (position) {
         if (camera.position.distanceTo(position) < 0.01) {
           position = undefined;
@@ -140,6 +172,7 @@
         }
       }
 
+      // 相機目標平滑過渡
       if (target) {
         if (controls.target.distanceTo(target) < 0.01) {
           target = undefined;
@@ -147,14 +180,19 @@
           controls.target.lerp(target, 0.075);
         }
       }
+
       controls?.update();
+      viewer?.update();
+      viewer?.render();
     }
 
     renderer?.setAnimationLoop(animate);
     isInitialized = true;
 
-    await updateMesh();
+    // 載入場景
+    await loadScene();
 
+    // 當用戶手動控制時，停止自動旋轉和過渡
     controls.addEventListener("end", () => {
       if (controls) {
         $autoRotate = false;
@@ -163,16 +201,32 @@
       }
     });
 
+    // 定期保存相機狀態
     saveInterval = setInterval(saveCameraState, 1000);
+
+    // 處理窗口大小變化
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener("resize", handleResize);
+
+    // 清理窗口事件監聽器
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   });
 
   onDestroy(() => {
     clearInterval(saveInterval);
 
     renderer?.setAnimationLoop(null);
+    viewer?.dispose();
+
     if (
       container &&
-      renderer.domElement &&
+      renderer?.domElement &&
       container.contains(renderer.domElement)
     ) {
       container.removeChild(renderer.domElement);

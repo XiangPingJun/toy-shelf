@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SplatViewer from "$lib/components/splat-viewer.svelte";
+  import GsViewer from "$lib/components/gs-viewer/gs-viewer.svelte";
   import Context from "$lib/components/context.svelte";
   import Media from "$lib/components/media.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
@@ -17,7 +17,7 @@
       <div class="flex items-center gap-1"><Hourglass />載入中...</div>
     </div>
   {:else if $activePage?.type === "splat"}
-    <SplatViewer />
+    <GsViewer url="/v/gs.compressed.ply" />
   {:else if $activePage?.type === "pan"}
     <Panorama />
   {/if}

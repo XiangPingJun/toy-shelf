@@ -12,6 +12,7 @@
     !isActive && "text-gray-400",
   ]}
   style:min-height={isLast && maxHeight}
+  style="scroll-snap-stop: always;"
 >
   {text}
   {#if isLast && isActive && $activePageIndex < $pages.length - 1}

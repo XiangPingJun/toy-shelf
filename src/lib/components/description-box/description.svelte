@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Scroller from "$lib/components/scroller/scroller.svelte";
   import { activePage, activeLineIndex } from "$lib/stores/store";
   import Line from "$lib/components/description-box/line.svelte";
@@ -7,9 +7,10 @@
   const props = $props();
   const lineRefs: HTMLDivElement[] = [];
   const intersectingLineIndexes: boolean[] = [];
+  let intersectionObserver: IntersectionObserver;
 
   onMount(() => {
-    const intersectionObserver = new IntersectionObserver(
+    intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((it) => {
           const index = Number(it.target.getAttribute("data-index"));
@@ -30,6 +31,10 @@
       },
     );
     lineRefs.forEach((it) => intersectionObserver.observe(it));
+  });
+
+  onDestroy(() => {
+    intersectionObserver.disconnect();
   });
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Scroller from "$lib/components/scroller.old/scroller.svelte";
+  import Scroller from "$lib/components/scroller/scroller.svelte";
   import { blur } from "svelte/transition";
   import articles from "$lib/articles";
 

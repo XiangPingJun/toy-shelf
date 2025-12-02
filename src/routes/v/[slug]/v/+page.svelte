@@ -4,8 +4,14 @@
 	import { onMount, onDestroy } from "svelte";
 	import { browser } from "$app/environment";
 	import { page } from "$app/state";
-	import { pages, resources, imgUrl, videoUrl } from "$lib/stores/store";
-	import articles from "$lib/articles/articles.js";
+	import {
+		pages,
+		resources,
+		imgUrl,
+		videoUrl,
+		activePage,
+	} from "$lib/stores/store";
+	import articles from "$lib/articles";
 	import Viewer from "$lib/components/viewer.svelte";
 
 	const article = (articles as any)[page.params.slug ?? ""] ?? {};
@@ -97,6 +103,8 @@
 	<meta name="twitter:image" content="og-image.jpg" />
 </svelte:head>
 
-{#if !resizing}
-	<Viewer />
+{#if !resizing && $activePage}
+	{#key $activePage}
+		<Viewer />
+	{/key}
 {/if}

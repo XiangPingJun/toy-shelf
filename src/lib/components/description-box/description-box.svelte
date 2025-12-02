@@ -54,7 +54,7 @@
     <div
       class="rounded-tl-md border-t-3 border-l-3 border-white box-content h-[1em] bg-black/75 w-[2rem]"
     ></div>
-    <div class="bg-black/75 -mt-2.5 px-0.5 font-bold">
+    <div class="bg-black/75 -mt-2.5 px-0.5">
       <div class="flex items-center">
         [{$activePage?.title}]
       </div>
@@ -85,7 +85,7 @@
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/75 flex-grow"
     ></div>
-    <div class="bg-black/75 pt-1.25 px-0.5 font-bold flex items-center">
+    <div class="bg-black/75 pt-1.25 px-0.5 flex items-center">
       {#if $activePageIndex === 0}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center gap-0.5"

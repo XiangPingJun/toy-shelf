@@ -63,13 +63,3 @@ window.setCameraState = (json) => {
   const data = JSON.parse(json)
   camera.script.cameraControls._controller.attach(new Pose(...data))
 };
-
-// setInterval(() => {
-//   console.log(window.getCameraState())
-// }, 2000);
-
-// window.setCameraState('[{"x":4.166005800880602,"y":48.281585120573226,"z":-9.417080578315431},{"x":-77.96042605609706,"y":156.1359645196111,"z":0},49.36748396167881]')
-
-// setTimeout(() => {
-//   window.setCameraState('[{"x":14.75550979157104,"y":33.14927528704221,"z":15.10374562178117},{"x":-19.824745069629362,"y":44.536925750136575,"z":0},38.3129444675897]')
-// }, 4000)

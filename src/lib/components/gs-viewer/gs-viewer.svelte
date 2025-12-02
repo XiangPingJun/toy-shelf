@@ -41,7 +41,6 @@
   };
 
   export const setCameraState = (data: any[]) => {
-    console.log("setCameraState", data);
     camera?.script?.cameraControls?._controller.attach(
       new pc.Pose(
         new pc.Vec3(...data.slice(0, 3)),

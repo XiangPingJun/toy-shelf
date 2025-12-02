@@ -1,22 +1,44 @@
-<script>
+<script lang="ts">
+  import { onMount } from "svelte";
+
   const props = $props();
-  const { children, maxHeight } = props;
+  const { children } = props;
+  let container: HTMLDivElement;
+
+  onMount(() => {
+    container.addEventListener(
+      "wheel",
+      (event) => {
+        event.preventDefault();
+
+        const direction = Math.sign(event.deltaY);
+        const scrollAmount = direction * 24;
+
+        container.scrollBy({
+          top: scrollAmount,
+        });
+      },
+      { passive: false },
+    );
+  });
 </script>
 
 <div class={props.class}>
   <div
-    class="scrollbar-container w-[calc(100%-0.5rem)]"
-    style="max-height: {maxHeight};"
+    class="scrollbar-container pl-4 pr-2 mr-2"
+    style:max-height={props.maxHeight}
+    bind:this={container}
+    onscroll={props.onScroll}
   >
-    <div class="pl-4 pr-1 whitespace-pre-line">
-      {@render children()}
-    </div>
+    {@render children()}
   </div>
 </div>
 
 <style>
   .scrollbar-container {
     overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
   }
 
   .scrollbar-container::-webkit-scrollbar {

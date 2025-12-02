@@ -7,7 +7,11 @@
 </script>
 
 {#if isMobile}
-  <ScrollerMobile {...props} />
+  <ScrollerMobile {...props}>
+    {@render props.children()}
+  </ScrollerMobile>
 {:else}
-  <ScrollerDesktop {...props} />
+  <ScrollerDesktop {...props}>
+    {@render props.children()}
+  </ScrollerDesktop>
 {/if}

@@ -1,10 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Scroller from "$lib/components/scroller/scroller.svelte";
+  import Scroller from "$lib/components/scroller.old/scroller.svelte";
   import { blur } from "svelte/transition";
   import articles from "$lib/articles";
-
-  console.log({ articles });
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =

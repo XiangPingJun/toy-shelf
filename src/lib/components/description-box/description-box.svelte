@@ -1,25 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Content from "./content.svelte";
+  import Description from "$lib/components/description-box/description.svelte";
   import { browser } from "$app/environment";
-  import {
-    pages,
-    activePage,
-    resources,
-    activePageIndex,
-    imgUrl,
-    videoUrl,
-  } from "$lib/stores/store";
-  import { onMount } from "svelte";
+  import { pages, activePage, activePageIndex } from "$lib/stores/store";
 
-  let mounted = $state(false);
   let isPortrait = $state(false);
 
-  onMount(() => {
-    mounted = true;
-  });
-
-  // 監聽視窗大小變化
   $effect(() => {
     if (!browser) return;
 
@@ -38,10 +24,8 @@
 
 <div
   class={[
-    "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)] slide",
+    "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
     isPortrait ? "bottom-3" : "bottom-12",
-    $resources[$imgUrl] || $resources[$videoUrl] ? "pointer-events-none" : "in",
-    mounted ? "" : "invisible",
   ]}
 >
   <div
@@ -63,24 +47,10 @@
       class="rounded-tr-md border-t-3 border-r-3 border-white box-content h-[1em] bg-black/75 flex-grow"
     ></div>
   </div>
-  <Content
-    class="bg-black/75 border-white box-content border-l-3 border-r-3 whitespace-pre-line max-h-10rem"
+  <Description
+    class="bg-black/75 border-white box-content border-l-3 border-r-3 whitespace-pre-line"
+    maxHeight="10rem"
   />
-  <!-- {#if $activePageIndex < $pages.length - 1}
-    <button
-      class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
-      onclick={() => $activePageIndex++}
-    >
-      <i class="las la-arrow-right underline-offset-4 underline"></i>下頁繼續...
-    </button>
-  {:else if $pages.length === 1 || $activePageIndex === $pages.length - 1}
-    <button
-      class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
-      onclick={() => goto("/")}
-    >
-      <i class="las la-list underline-offset-4 underline"></i> 回到總覽
-    </button>
-  {/if} -->
   <div class="flex">
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/75 flex-grow"
@@ -126,15 +96,3 @@
     ></div>
   </div>
 </div>
-
-<style>
-  .slide {
-    display: grid;
-    clip-path: inset(100% 0 0 0); /* 從上方遮住內容 */
-    transition: all 0.25s ease-out;
-  }
-
-  .slide.in {
-    clip-path: inset(-1rem 0 0 0); /* 解除遮罩 */
-  }
-</style>

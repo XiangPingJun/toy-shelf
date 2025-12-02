@@ -17,7 +17,7 @@
       <div class="flex items-center gap-1"><Hourglass />載入中...</div>
     </div>
   {:else if $activePage?.type === "splat"}
-    <GsViewer url="/v/gs.compressed.ply" />
+    <GsViewer />
   {:else if $activePage?.type === "pan"}
     <Panorama />
   {/if}

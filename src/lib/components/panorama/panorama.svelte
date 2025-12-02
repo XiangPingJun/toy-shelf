@@ -2,7 +2,6 @@
   import { onMount, onDestroy } from "svelte";
   import * as THREE from "three";
   import CameraControls from "camera-controls";
-
   import { panPov, activePage, autoRotate } from "$lib/stores/store";
 
   // State

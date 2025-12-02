@@ -6,6 +6,7 @@
 	import { pages, resources, imgUrl, videoUrl } from "$lib/stores/store";
 
 	let { children } = $props();
+	let lastPages: typeof $pages = $pages;
 
 	const load = async (url: string) => {
 		if (!browser) return "";
@@ -15,38 +16,53 @@
 	};
 
 	$effect(() => {
+		if ($pages === lastPages || !$pages.length) {
+			return;
+		}
+		if (!lastPages.length) {
+			lastPages = $pages;
+			return;
+		}
+		// $pages.forEach((page) => URL.revokeObjectURL($resources[page.url] ?? ""));
+		lastPages = $pages;
+	});
+
+	$effect(() => {
+		if (!$pages.length) {
+			return;
+		}
 		(async () => {
-			if ($pages[0]) {
-				if ($resources[$pages[0].url]) {
-					for (let i = 1; i < $pages.length; i++) {
-						if ($resources[$pages[i].url] === undefined) {
-							$resources[$pages[i].url] = null;
-							$resources[$pages[i].url] = await load($pages[i].url);
-						}
+			if ($resources[$pages[0].url]) {
+				for (let i = 1; i < $pages.length; i++) {
+					if ($resources[$pages[i].url] === undefined) {
+						$resources[$pages[i].url] = null;
+						$resources[$pages[i].url] = await load($pages[i].url);
 					}
-				} else if ($resources[$pages[0].url] === undefined) {
-					$resources[$pages[0].url] = null;
-					$resources[$pages[0].url] = await load($pages[0].url);
 				}
+			} else if ($resources[$pages[0].url] === undefined) {
+				$resources[$pages[0].url] = null;
+				$resources[$pages[0].url] = await load($pages[0].url);
 			}
 		})();
 	});
 
 	$effect(() => {
+		if (!$imgUrl || $resources[$imgUrl] !== undefined) {
+			return;
+		}
 		(async () => {
-			if ($imgUrl && $resources[$imgUrl] === undefined) {
-				$resources[$imgUrl] = null;
-				$resources[$imgUrl] = await load($imgUrl);
-			}
+			$resources[$imgUrl] = null;
+			$resources[$imgUrl] = await load($imgUrl);
 		})();
 	});
 
 	$effect(() => {
+		if (!$videoUrl || $resources[$videoUrl] !== undefined) {
+			return;
+		}
 		(async () => {
-			if ($videoUrl && $resources[$videoUrl] === undefined) {
-				$resources[$videoUrl] = null;
-				$resources[$videoUrl] = await load($videoUrl);
-			}
+			$resources[$videoUrl] = null;
+			$resources[$videoUrl] = await load($videoUrl);
 		})();
 	});
 

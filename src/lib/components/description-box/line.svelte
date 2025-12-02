@@ -2,8 +2,22 @@
   import { pages, activePageIndex } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { fly } from "svelte/transition";
+  import {
+    splatPov,
+    panPov,
+    imgUrl,
+    videoUrl,
+    resources,
+    autoRotate,
+  } from "$lib/stores/store";
 
-  const { text, isLast, isActive, maxHeight } = $props();
+  const { text, isLast, isActive, maxHeight, panPov } = $props();
+
+  $effect(() => {
+    if (isActive) {
+      $activeLineIndex = $activePageIndex * 100 + $activeLineIndex;
+    }
+  });
 </script>
 
 <div

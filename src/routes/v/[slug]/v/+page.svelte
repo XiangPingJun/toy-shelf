@@ -5,14 +5,12 @@
 	import { browser } from "$app/environment";
 	import { page } from "$app/state";
 	import { pages, resources, imgUrl, videoUrl } from "$lib/stores/store";
-	import slugs from "./slugs.js";
+	import articles from "$lib/articles/articles.js";
 	import Viewer from "$lib/components/viewer.svelte";
 
-	const slug = (slugs as any)[page.params.slug ?? ""] ?? {};
-	const { title, description } = slug;
-	$pages = slug.pages ?? [];
-
-	let lastPages: typeof $pages = $pages;
+	const article = (articles as any)[page.params.slug ?? ""] ?? {};
+	const { title, description } = article;
+	$pages = article.pages ?? [];
 
 	const load = async (url: string) => {
 		if (!browser) return "";
@@ -20,18 +18,6 @@
 		const buffer = await response.arrayBuffer();
 		return URL.createObjectURL(new Blob([buffer]));
 	};
-
-	$effect(() => {
-		if ($pages === lastPages || !$pages.length) {
-			return;
-		}
-		if (!lastPages.length) {
-			lastPages = $pages;
-			return;
-		}
-		$pages.forEach((page) => URL.revokeObjectURL($resources[page.url] ?? ""));
-		lastPages = $pages;
-	});
 
 	$effect(() => {
 		if (!$pages.length) {
@@ -53,7 +39,7 @@
 	});
 
 	onDestroy(() => {
-		// cleanup();
+		$pages.forEach((page) => URL.revokeObjectURL($resources[page.url] ?? ""));
 	});
 
 	$effect(() => {

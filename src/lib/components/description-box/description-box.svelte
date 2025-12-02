@@ -6,7 +6,7 @@
     pages,
     activePage,
     resources,
-    activeIndex,
+    activePageIndex,
     imgUrl,
     videoUrl,
   } from "$lib/stores/store";
@@ -56,7 +56,7 @@
     ></div>
     <div class="bg-black/75 -mt-2.5 px-0.5 font-bold">
       <div class="flex items-center">
-        [{@render $activePage?.heading()}]
+        [{$activePage?.title}]
       </div>
     </div>
     <div
@@ -65,31 +65,28 @@
   </div>
   <Content
     class="bg-black/75 border-white box-content border-l-3 border-r-3 whitespace-pre-line max-h-10rem"
-  >
-    {@render $activePage?.content()}
-    {#if $activeIndex < $pages.length - 1}
-      <button
-        class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
-        onclick={() => $activeIndex++}
-      >
-        <i class="las la-arrow-right underline-offset-4 underline"
-        ></i>下頁繼續...
-      </button>
-    {:else if $pages.length === 1 || $activeIndex === $pages.length - 1}
-      <button
-        class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
-        onclick={() => goto("/")}
-      >
-        <i class="las la-list underline-offset-4 underline"></i> 回到總覽
-      </button>
-    {/if}
-  </Content>
+  />
+  <!-- {#if $activePageIndex < $pages.length - 1}
+    <button
+      class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
+      onclick={() => $activePageIndex++}
+    >
+      <i class="las la-arrow-right underline-offset-4 underline"></i>下頁繼續...
+    </button>
+  {:else if $pages.length === 1 || $activePageIndex === $pages.length - 1}
+    <button
+      class="text-blue-400 hover:text-blue-300 cursor-pointer font-[uoqmunthenkhung] underline-offset-4 underline block my-2"
+      onclick={() => goto("/")}
+    >
+      <i class="las la-list underline-offset-4 underline"></i> 回到總覽
+    </button>
+  {/if} -->
   <div class="flex">
     <div
       class="rounded-bl-md border-b-3 border-l-3 border-white box-content h-[1em] bg-black/75 flex-grow"
     ></div>
     <div class="bg-black/75 pt-1.25 px-0.5 font-bold flex items-center">
-      {#if $activeIndex === 0}
+      {#if $activePageIndex === 0}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center gap-0.5"
           onclick={() => goto("/")}
@@ -97,24 +94,24 @@
           <i class="las la-list"></i>
           總覽
         </button>]
-      {:else if $activeIndex > 0}
+      {:else if $activePageIndex > 0}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
-          onclick={() => $activeIndex--}
+          onclick={() => $activePageIndex--}
         >
           <i class="las la-arrow-left"></i>
           上頁
         </button>]
       {/if}
-      {#if $activeIndex < $pages.length - 1}
+      {#if $activePageIndex < $pages.length - 1}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center"
-          onclick={() => $activeIndex++}
+          onclick={() => $activePageIndex++}
         >
           下頁
           <i class="las la-arrow-right"></i>
         </button>]
-      {:else if $pages.length > 1 && $activeIndex === $pages.length - 1}
+      {:else if $pages.length > 1 && $activePageIndex === $pages.length - 1}
         [<button
           class="text-blue-400 hover:text-blue-300 cursor-pointer mx-1 flex items-center gap-0.5"
           onclick={() => goto("/")}

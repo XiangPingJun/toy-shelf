@@ -2,27 +2,17 @@
   import { goto } from "$app/navigation";
   import Scroller from "$lib/components/scroller/scroller.svelte";
   import { blur } from "svelte/transition";
-  import { onMount } from "svelte";
-  const modules = import.meta.glob("./v/**/v/description.ts", {
-    eager: true,
-  });
+  import articles from "$lib/articles/articles.js";
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =
     "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
   const ogImage = "og-image.jpg";
 
-  let data = $state([] as { path: string; caption: string }[]);
-  onMount(async () => {
-    let allData = Object.entries(modules).map(([path, mod]) => ({
-      path: /(\/v\/.*)\/v\//.exec(path)?.[1],
-      caption: (mod as { default: string }).default,
-    }));
-    while (allData.length) {
-      data.push(allData.shift() as { path: string; caption: string });
-      await new Promise((r) => setTimeout(r, 50));
-    }
-  });
+  const data = Object.entries(articles).map(([path, article]) => ({
+    path,
+    caption: article.title,
+  }));
 </script>
 
 <svelte:head>
@@ -48,14 +38,14 @@
     {#each data as { path, caption }, i}
       <div
         class="relative inline-block cursor-pointer hover:text-gray-300"
-        onclick={() => goto(`${path}/v`)}
+        onclick={() => goto(`/v/${path}/v`)}
         onkeydown={() => {}}
         role="button"
         tabindex={i}
         transition:blur={{ amount: "1rem" }}
       >
         <img
-          src={`${path}/og-image.jpg`}
+          src={`/v/${path}/og-image.jpg`}
           class="max-w-[18rem] w-[calc(50vw-2rem)] m-1 inline rounded-md"
           alt=""
         />

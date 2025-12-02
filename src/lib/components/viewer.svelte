@@ -1,12 +1,12 @@
 <script lang="ts">
   import GsViewer from "$lib/components/gs-viewer/gs-viewer.svelte";
-  import Context from "$lib/components/context.svelte";
+  import Content from "$lib/components/description-box/content.svelte";
   import Media from "$lib/components/media.svelte";
   import Panorama from "$lib/components/panorama/panorama.svelte";
   import Hourglass from "$lib/components/hourglass.svelte";
-  import { activePage, activeIndex, resources } from "$lib/stores/store";
+  import { activePage, activePageIndex, resources } from "$lib/stores/store";
 
-  $activeIndex = 0;
+  $activePageIndex = 0;
 </script>
 
 {#key $activePage}
@@ -22,5 +22,5 @@
     <!-- <Panorama /> -->
   {/if}
   <Media />
-  <Context />
+  <Content />
 {/key}

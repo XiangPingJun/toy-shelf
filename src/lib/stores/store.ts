@@ -1,21 +1,25 @@
 import { writable, derived } from 'svelte/store';
-import type { Snippet } from 'svelte';
 
 export const splatPov = writable('');
 export const panPov = writable('');
 
 export const resources = writable({} as Record<string, string | null>);
 export const pages = writable([] as {
+  title?: string,
   type: 'splat' | 'pan',
   url: string,
   firstPov: string,
-  heading: Snippet,
-  content: Snippet,
+  lines: {
+    text: string,
+    pov: string,
+    imgurl?: string,
+    videourl?: string,
+  }[],
 }[]);
 
-export const activeIndex = writable(0);
-export const activePage = derived([pages, activeIndex], ([$pages, $activeIndex]) => {
-  const p = $pages[$activeIndex];
+export const activePageIndex = writable(0);
+export const activePage = derived([pages, activePageIndex], ([$pages, $activePageIndex]) => {
+  const p = $pages[$activePageIndex];
   if (p.type === 'splat') {
     splatPov.set(p.firstPov);
   } else if (p.type === 'pan') {
@@ -23,6 +27,11 @@ export const activePage = derived([pages, activeIndex], ([$pages, $activeIndex])
   }
   return p;
 });
+
+export const activeLineIndex = writable(0);
+export const activeLine = derived([activePage, activeLineIndex], ([$activePage, $activeLineIndex]) => (
+  $activePage.lines[$activeLineIndex]
+));
 
 export const imgUrl = writable('');
 export const videoUrl = writable('');

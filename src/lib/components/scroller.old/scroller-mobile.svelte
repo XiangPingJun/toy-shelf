@@ -30,7 +30,7 @@
   });
 
   onDestroy(() => {
-    resizeObserver.disconnect();
+    resizeObserver?.disconnect();
   });
 </script>
 

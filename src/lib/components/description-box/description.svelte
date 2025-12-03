@@ -34,7 +34,7 @@
   });
 
   onDestroy(() => {
-    intersectionObserver.disconnect();
+    intersectionObserver?.disconnect();
   });
 </script>
 

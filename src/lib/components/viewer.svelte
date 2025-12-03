@@ -18,7 +18,7 @@
 {:else if $activePage?.type === "splat"}
   <GsViewer />
 {:else if $activePage?.type === "pan"}
-  <!-- <Panorama /> -->
+  <Panorama />
 {/if}
 <Media />
 <DescriptionBox />

@@ -29,7 +29,7 @@
   });
 
   onDestroy(() => {
-    resizeObserver.disconnect();
+    resizeObserver?.disconnect();
   });
 
   onMount(() => {

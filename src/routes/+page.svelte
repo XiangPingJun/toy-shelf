@@ -3,16 +3,25 @@
   import Scroller from "$lib/components/scroller/scroller.svelte";
   import { blur } from "svelte/transition";
   import articles from "$lib/articles";
+  import { onMount } from "svelte";
 
   export const title = "(^ω^)祥平的玩具櫃";
   const description =
     "從迪士尼到寶塚大劇場、從台北跨年到渋谷清真寺。從看不到的角落，撿回日常裡被磨掉的心動。";
   const ogImage = "og-image.jpg";
 
-  const data = Object.entries(articles).map(([path, article]) => ({
-    path,
-    caption: article.title,
-  }));
+  const data = $state<{ path: string; caption: string }[]>([]);
+
+  onMount(async () => {
+    const allData = Object.entries(articles).map(([path, article]) => ({
+      path,
+      caption: article.title,
+    }));
+    while (allData.length) {
+      data.push(allData.shift() as { path: string; caption: string });
+      await new Promise((r) => setTimeout(r, 50));
+    }
+  });
 </script>
 
 <svelte:head>

@@ -9,11 +9,16 @@
   const lineRefs: HTMLDivElement[] = [];
   const intersectingLineIndexes: boolean[] = [];
   let intersectionObserver: IntersectionObserver;
-  let initStep = $state(0);
-  let initIntevalId: number;
+  let lines = $state<any[]>([]);
   let inited = $state(false);
 
-  const onInited = () => {
+  onMount(async () => {
+    const allLines = $activePage.lines;
+    while (allLines.length) {
+      lines.push(allLines.shift());
+      await new Promise((r) => setTimeout(r, 50));
+    }
+
     intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((it) => {
@@ -36,26 +41,15 @@
     );
     lineRefs.forEach((it) => intersectionObserver.observe(it));
     inited = true;
-  };
-
-  onMount(() => {
-    initIntevalId = setInterval(() => {
-      if (initStep > $activePage.lines.length) {
-        onInited();
-        clearInterval(initIntevalId);
-      }
-      initStep++;
-    }, 100);
   });
 
   onDestroy(() => {
     intersectionObserver?.disconnect();
-    clearInterval(initIntevalId);
   });
 </script>
 
 <Scroller {...props}>
-  {#each $activePage.lines.slice(0, initStep) as line, i}
+  {#each lines as line, i}
     <div bind:this={lineRefs[i]} data-index={i} transition:fly={{ y: 24 }}>
       <Line
         {...line}
@@ -66,7 +60,7 @@
       />
     </div>
   {/each}
-  {#if !initStep}
+  {#if !inited}
     <Line text="..." />
   {/if}
 </Scroller>

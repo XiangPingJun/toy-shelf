@@ -35,9 +35,13 @@
 
 <div class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
   <Scroller class="max-w-[40rem] w-[100vw]" maxHeight="calc(100dvh - 2rem)">
+    <div class="flex justify-center items-center gap-1 text-2xl mb-2">
+      <i class="las la-list"></i>
+      總覽
+    </div>
     {#each data as { path, caption }, i}
       <div
-        class="relative inline-block cursor-pointer hover:text-gray-300"
+        class="relative inline-block cursor-pointer transition-all duration-500 hover:-translate-y-0.5 hover:text-gray-300"
         onclick={() => goto(`/v/${path}/v`)}
         onkeydown={() => {}}
         role="button"

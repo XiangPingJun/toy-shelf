@@ -16,7 +16,13 @@
     autoRotate,
   } from "$lib/stores/store";
 
-  const { text, isLast, isActive, maxHeight, pov } = $props();
+  const {
+    text,
+    isLast = false,
+    isActive = false,
+    maxHeight = undefined,
+    pov = "",
+  } = $props();
 
   $effect(() => {
     if (!isActive) {
@@ -49,7 +55,7 @@
     "font-[uoqmunthenkhung] snap-start mb-2 transition-all duration-500",
     !isActive && "text-gray-400",
   ]}
-  style:min-height={isLast && maxHeight}
+  style:min-height={isLast ? maxHeight : undefined}
   style="scroll-snap-stop: always;"
 >
   {text}

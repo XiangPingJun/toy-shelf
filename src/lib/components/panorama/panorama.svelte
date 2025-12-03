@@ -117,7 +117,9 @@
     try {
       await createEnvironmentSphere();
       createScene();
-      cameraControls.fromJSON($panPov, true);
+      if ($panPov) {
+        cameraControls.fromJSON($panPov, true);
+      }
       handleResize();
       // 延遲一小段時間再設為loaded，確保渲染已開始
       setTimeout(() => (loaded = true), 100);

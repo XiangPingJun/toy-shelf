@@ -60,7 +60,7 @@
       />
     </div>
   {/each}
-  {#if !inited}
+  {#if !lines.length}
     <Line text="..." />
   {/if}
 </Scroller>

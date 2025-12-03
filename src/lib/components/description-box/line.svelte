@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { pages, activePageIndex } from "$lib/stores/store";
+  import {
+    pages,
+    activePageIndex,
+    activeLineIndex,
+    activePage,
+  } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { fly } from "svelte/transition";
   import {
@@ -11,11 +16,19 @@
     autoRotate,
   } from "$lib/stores/store";
 
-  const { text, isLast, isActive, maxHeight, panPov } = $props();
+  const { text, isLast, isActive, maxHeight, pov } = $props();
 
   $effect(() => {
-    if (isActive) {
-      $activeLineIndex = $activePageIndex * 100 + $activeLineIndex;
+    if (!isActive) {
+      return;
+    }
+    if (!pov) {
+      return;
+    }
+    if ($activePage.type === "splat") {
+      $splatPov = pov;
+    } else if ($activePage.type === "pan") {
+      $panPov = pov;
     }
   });
 </script>

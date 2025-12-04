@@ -13,7 +13,6 @@
     imgUrl,
     videoUrl,
     resources,
-    autoRotate,
   } from "$lib/stores/store";
 
   const {
@@ -58,6 +57,9 @@
   style:min-height={isLast ? maxHeight : undefined}
   style="scroll-snap-stop: always;"
 >
+  {#if isActive}
+    <i class="las la-paper-plane"></i>
+  {/if}
   {text}
   {#if isLast}
     <div></div>

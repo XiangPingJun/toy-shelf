@@ -118,7 +118,6 @@
     if (!$splatPov) {
       return;
     }
-    console.log($splatPov);
     setCameraState(JSON.parse($splatPov));
   });
 

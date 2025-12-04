@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import * as THREE from "three";
   import CameraControls from "camera-controls";
-  import { panPov, activePage, autoRotate } from "$lib/stores/store";
+  import { panPov, activePage } from "$lib/stores/store";
 
   // State
   let canvasElement: HTMLCanvasElement;
@@ -60,7 +60,6 @@
   function onWheel(event: WheelEvent) {
     if (!cameraControls) return;
 
-    $autoRotate = false;
     event.preventDefault();
     zoom += event.deltaY * -0.0002;
     cameraControls.zoomTo(zoom);
@@ -72,10 +71,6 @@
 
       const delta = clock.getDelta();
       const cameraChanged = cameraControls.update(delta * animationSpeed);
-
-      if ($autoRotate) {
-        cameraControls.azimuthAngle += 0.5 * delta * THREE.MathUtils.DEG2RAD;
-      }
 
       if (cameraChanged) {
         renderer.render(scene, camera);
@@ -145,10 +140,6 @@
   let lastSavedPov: string | undefined;
 
   async function saveCameraState() {
-    if ($autoRotate) {
-      return;
-    }
-
     const povToSave = cameraControls.toJSON();
 
     if (lastSavedPov !== povToSave) {
@@ -216,8 +207,6 @@
     {width}
     {height}
     onwheel={onWheel}
-    onmousedown={() => ($autoRotate = false)}
-    ontouchstart={() => ($autoRotate = false)}
     class="panorama-canvas w-full h-full"
   ></canvas>
 </div>

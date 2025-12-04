@@ -29,10 +29,11 @@ export default {
       },
       {
         text: '我們在散場的人潮中漫步，你忽然問：「新年新希望是什麼？」\n我沉思了一下，答道：「我從不許新年新希望，因為它總是會被延到下一年，然後變成明年的新年新希望。再過幾年，可能還是一樣的答案。」',
+        pov: '{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"verticalDragToForward":false,"target":[0,0,0],"position":[-1.1036037704493262,0.10761981090682976,1.3827322743115962],"zoom":0.18999999999999997,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'
       },
       {
         text: '明年見吧，那些還未完成的「新希望」。',
-        pov: '{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"target":[0.0000032662384866169134,0.00021116427022806436,-0.00001347582156768358],"position":[-0.0005469099102072069,0.00013773849801895175,0.0005729246949292086],"zoom":0.35999999999999943,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[24.056042195026553,499.41928876495376,-1.2964734547150627],"zoom0":0.15000000000000002,"focalOffset0":[0,0,0]}'
+        pov: '{"enabled":true,"minDistance":2.220446049250313e-16,"maxDistance":1.7976931348623157e+308,"minZoom":0.01,"maxZoom":1.7976931348623157e+308,"minPolarAngle":0,"maxPolarAngle":3.141592653589793,"minAzimuthAngle":-1.7976931348623157e+308,"maxAzimuthAngle":1.7976931348623157e+308,"smoothTime":0.04,"draggingSmoothTime":0.125,"dollySpeed":1,"truckSpeed":2,"dollyToCursor":false,"target":[0,0,0],"position":[39.040379189376985,209.04962829732415,0.8110392458364363],"zoom":0.18999999999999997,"focalOffset":[0,0,0],"target0":[0,0,0],"position0":[-78.15781136454892,60.394774826876066,-282.60450863078944],"zoom0":1,"focalOffset0":[0,0,0]}'
       }
     ],
   }],

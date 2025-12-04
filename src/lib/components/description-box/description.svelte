@@ -13,12 +13,11 @@
   let inited = $state(false);
 
   onMount(async () => {
-    const allLines = $activePage.lines;
+    const allLines = [...$activePage.lines];
     while (allLines.length) {
       lines.push(allLines.shift());
       await new Promise((r) => setTimeout(r, 50));
     }
-
     intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((it) => {
@@ -55,7 +54,7 @@
         {...line}
         text={line.text}
         isLast={inited && i === $activePage.lines.length - 1}
-        isActive={i === $activeLineIndex}
+        isActive={inited && i === $activeLineIndex}
         maxHeight={props.maxHeight}
       />
     </div>

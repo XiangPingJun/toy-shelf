@@ -43,7 +43,7 @@
 </svelte:head>
 
 <div class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-  <Scroller class="max-w-[40rem] w-[100vw]" maxHeight="calc(100dvh - 2rem)">
+  <Scroller class="max-w-[40rem] w-[100vw]" height="calc(100dvh - 2rem)">
     <div class="flex justify-center items-center gap-1 text-2xl mb-2">
       <i class="las la-list"></i>
       總覽

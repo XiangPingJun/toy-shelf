@@ -53,7 +53,7 @@
   <div
     bind:this={container}
     class={["scrollbar-container pl-2 pr-4", props.class]}
-    style:max-height={props.maxHeight}
+    style:max-height={props.height}
     onscroll={updateScrollbar}
   >
     {@render props.children()}

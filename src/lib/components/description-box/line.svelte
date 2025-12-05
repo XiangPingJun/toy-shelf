@@ -57,7 +57,7 @@
     "font-[uoqmunthenkhung] snap-start mb-2 transition-all duration-500",
     !props.isActive && "text-gray-400",
   ]}
-  style:min-height={props.isLast ? props.maxHeight : undefined}
+  style:min-height={props.isLast ? props.height : undefined}
   style="scroll-snap-stop: always;"
 >
   {#if props.isActive}

@@ -35,8 +35,8 @@
     ></div>
   </div>
   <Description
-    class="bg-black/75 border-white box-content border-l-3 border-r-3 whitespace-pre-line"
-    maxHeight="10rem"
+    class="bg-black/75 border-white box-content border-l-3 border-r-3 whitespace-pre-line h-[10rem]"
+    height="10rem"
   />
   <div class="flex">
     <div

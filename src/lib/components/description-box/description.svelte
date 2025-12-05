@@ -8,7 +8,7 @@
   const props = $props();
   const lineRefs: HTMLDivElement[] = [];
   const intersectingLineIndexes = $state<boolean[]>([]);
-  let lines = $state<any[]>([]);
+  let lines = $state<any[]>([{ text: "..." }]);
   let inited = $state(false);
   const firstLineIndex = $derived.by(() =>
     inited ? intersectingLineIndexes.findIndex((it) => it) : null,
@@ -16,17 +16,21 @@
   let intersectionObserver: IntersectionObserver;
 
   onMount(async () => {
-    await new Promise((r) => setTimeout(r, 50));
-    lines[0] = { ...lines[0], text: "" };
+    const textCount = $activePage.lines
+      .map((it) => it.text.length)
+      .reduce((a, b) => a + b, 0);
+    const speed = Math.ceil(textCount / 15);
+
+    lines[0] = { text: "" };
     const allLines = [...$activePage.lines];
     while (allLines.length) {
       while (allLines[0].text.length) {
         lines[lines.length - 1] = {
-          ...lines[lines.length - 1],
+          ...allLines[0],
           text:
-            lines[lines.length - 1].text + allLines[0].text.substring(0, 20),
+            lines[lines.length - 1].text + allLines[0].text.substring(0, speed),
         };
-        allLines[0].text = allLines[0].text.substring(20);
+        allLines[0].text = allLines[0].text.substring(speed);
         await new Promise((r) => setTimeout(r, 50));
       }
       lines.push(allLines.shift());
@@ -64,7 +68,7 @@
         text={line.text}
         isLast={inited && i === $activePage.lines.length - 1}
         isActive={inited && firstLineIndex === i}
-        maxHeight={props.maxHeight}
+        height={props.height}
       />
     </div>
   {/each}

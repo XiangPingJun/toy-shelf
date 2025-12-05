@@ -19,10 +19,10 @@
     const textCount = $activePage.lines
       .map((it) => it.text.length)
       .reduce((a, b) => a + b, 0);
-    const speed = Math.ceil(textCount / 15);
+    const speed = Math.ceil(textCount / 25);
 
     lines[0] = { text: "" };
-    const allLines = [...$activePage.lines];
+    const allLines = JSON.parse(JSON.stringify($activePage.lines));
     while (allLines.length) {
       while (allLines[0].text.length) {
         lines[lines.length - 1] = {

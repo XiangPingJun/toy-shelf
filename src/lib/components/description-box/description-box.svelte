@@ -1,25 +1,12 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Description from "$lib/components/description-box/description.svelte";
-  import { browser } from "$app/environment";
-  import { pages, activePage, activePageIndex } from "$lib/stores/store";
-
-  let isPortrait = $state(false);
-
-  $effect(() => {
-    if (!browser) return;
-
-    const updateOrientation = () => {
-      isPortrait = window.innerWidth < window.innerHeight;
-    };
-
-    updateOrientation();
-    window.addEventListener("resize", updateOrientation);
-
-    return () => {
-      window.removeEventListener("resize", updateOrientation);
-    };
-  });
+  import {
+    pages,
+    activePage,
+    activePageIndex,
+    isPortrait,
+  } from "$lib/stores/store";
 </script>
 
 <div

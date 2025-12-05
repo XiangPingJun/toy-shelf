@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
 
   const props = $props();
-  const { children } = props;
   let container: HTMLDivElement;
 
   onMount(() => {
@@ -30,7 +29,7 @@
     bind:this={container}
     onscroll={props.onScroll}
   >
-    {@render children()}
+    {@render props.children()}
   </div>
 </div>
 

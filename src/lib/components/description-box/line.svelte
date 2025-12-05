@@ -1,10 +1,5 @@
 <script lang="ts">
-  import {
-    pages,
-    activePageIndex,
-    activeLineIndex,
-    activePage,
-  } from "$lib/stores/store";
+  import { pages, activePageIndex, activePage } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { fly } from "svelte/transition";
   import {
@@ -14,27 +9,34 @@
     videoUrl,
     resources,
   } from "$lib/stores/store";
+  import Hourglass from "$lib/components/hourglass.svelte";
 
-  const {
-    text,
-    isLast = false,
-    isActive = false,
-    maxHeight = undefined,
-    pov = "",
-  } = $props();
+  let props = $props();
+  let loading = $state(false);
 
   $effect(() => {
-    if (!isActive) {
+    if (!props.isActive) {
       return;
     }
-    if (!pov) {
-      return;
+    if (props.pov) {
+      switch ($activePage.type) {
+        case "splat":
+          $splatPov = props.pov;
+          break;
+        case "pan":
+          $panPov = props.pov;
+          break;
+      }
     }
-    if ($activePage.type === "splat") {
-      $splatPov = pov;
-    } else if ($activePage.type === "pan") {
-      $panPov = pov;
-    }
+
+    $imgUrl = props.imgUrl ?? "";
+    $videoUrl = props.videoUrl ?? "";
+  });
+
+  $effect(() => {
+    loading =
+      (props.imgUrl && !$resources[props.imgUrl]) ||
+      (props.videoUrl && !$resources[props.videoUrl]);
   });
 </script>
 
@@ -45,6 +47,7 @@
     {onclick}
   >
     <i class={[iconClass, "underline-offset-4 underline"]}></i>
+    <Hourglass />
     {text}
   </button>
 {/snippet}
@@ -52,18 +55,18 @@
 <div
   class={[
     "font-[uoqmunthenkhung] snap-start mb-2 transition-all duration-500",
-    !isActive && "text-gray-400",
+    !props.isActive && "text-gray-400",
   ]}
-  style:min-height={isLast ? maxHeight : undefined}
+  style:min-height={props.isLast ? props.maxHeight : undefined}
   style="scroll-snap-stop: always;"
 >
-  {#if isActive}
+  {#if props.isActive}
     <i class="las la-paper-plane"></i>
   {/if}
-  {text}
-  {#if isLast}
+  {props.text}
+  {#if props.isLast}
     <div></div>
-    {#if isActive}
+    {#if props.isActive}
       {#if $activePageIndex < $pages.length - 1}
         {@render navigateButton(
           "下頁繼續...",

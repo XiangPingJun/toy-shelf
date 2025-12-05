@@ -28,11 +28,6 @@ export const activePage = derived([pages, activePageIndex], ([$pages, $activePag
   return p;
 });
 
-export const activeLineIndex = writable(0);
-export const activeLine = derived([activePage, activeLineIndex], ([$activePage, $activeLineIndex]) => (
-  $activePage.lines[$activeLineIndex]
-));
-
 export const imgUrl = writable('');
 export const videoUrl = writable('');
 
@@ -46,3 +41,6 @@ autoRotate.subscribe((val) => {
     }, 4000);
   }
 });
+
+export const isMobile = writable(false);
+export const isPortrait = writable(false);

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  const isMobile = browser && window?.matchMedia("(pointer: coarse)").matches;
+  import { isMobile } from "$lib/stores/store";
   import ScrollerMobile from "./scroller-mobile.svelte";
   import ScrollerDesktop from "./scroller-desktop.svelte";
   const props = $props();
 </script>
 
-{#if isMobile}
+{#if $isMobile}
   <ScrollerMobile {...props}>
     {@render props.children()}
   </ScrollerMobile>

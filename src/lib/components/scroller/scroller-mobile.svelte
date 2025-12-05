@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   const props = $props();
-  const { children, maxHeight } = props;
 
   let track: HTMLDivElement = $state() as HTMLDivElement;
   let thumb: HTMLDivElement = $state() as HTMLDivElement;
@@ -54,10 +53,10 @@
   <div
     bind:this={container}
     class={["scrollbar-container pl-2 pr-4", props.class]}
-    style:max-height={maxHeight}
+    style:max-height={props.maxHeight}
     onscroll={updateScrollbar}
   >
-    {@render children()}
+    {@render props.children()}
 
     <div
       bind:this={track}

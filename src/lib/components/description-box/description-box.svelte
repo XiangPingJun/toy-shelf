@@ -12,7 +12,7 @@
 <div
   class={[
     "fixed left-1/2 -translate-x-1/2 max-w-[40rem] w-[calc(100vw-1rem)]",
-    isPortrait ? "bottom-3" : "bottom-12",
+    $isPortrait ? "bottom-3" : "bottom-12",
   ]}
 >
   <div

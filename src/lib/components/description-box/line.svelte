@@ -47,7 +47,6 @@
     {onclick}
   >
     <i class={[iconClass, "underline-offset-4 underline"]}></i>
-    <Hourglass />
     {text}
   </button>
 {/snippet}
@@ -61,7 +60,11 @@
   style="scroll-snap-stop: always;"
 >
   {#if props.isActive}
-    <i class="las la-paper-plane"></i>
+    {#if loading}
+      <Hourglass />
+    {:else}
+      <i class="las la-paper-plane"></i>
+    {/if}
   {/if}
   {props.text}
   {#if props.isLast}

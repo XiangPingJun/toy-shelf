@@ -1,16 +1,12 @@
 <script lang="ts">
   import { imgUrl, videoUrl, resources } from "$lib/stores/store";
   import { fly } from "svelte/transition";
+  import { isPortrait } from "$lib/stores/store";
 </script>
 
+<!-- transition:fly={{ y: "2rem" }} -->
 {#if ($imgUrl && $resources[$imgUrl]) || ($videoUrl && $resources[$videoUrl])}
-  <div
-    class={[
-      "fixed left-1/2 -translate-x-1/2",
-      window.innerWidth < window.innerHeight ? "top-3" : "top-12",
-    ]}
-    transition:fly={{ y: "2rem" }}
-  >
+  <div class="fixed left-1/2 -translate-x-1/2 top-3">
     <div
       class="backdrop-blur-xs absolute top-[0.2rem] w-full h-[calc(100%-1rem)] -z-10"
     ></div>
@@ -20,13 +16,23 @@
       {#if $resources[$imgUrl]}
         <img
           src={$resources[$imgUrl]}
-          class="max-w-[min(1360px,calc(100vw-2rem))] max-h-[calc(100dvh-2rem)] object-cover backdrop-blur-sm blur-bg"
+          class={[
+            "max-w-[min(1360px,calc(100vw-2rem))] object-cover backdrop-blur-sm blur-bg",
+            $isPortrait
+              ? "max-h-[calc(100dvh-20rem)]"
+              : "max-h-[calc(100dvh-22rem)]",
+          ]}
           alt=""
         />
       {:else if $resources[$videoUrl]}
         <video
           src={$resources[$videoUrl]}
-          class="max-w-[min(1360px,calc(100vw-2rem))] max-h-[min(600px,calc(100dvh-2rem))] object-cover backdrop-blur-sm blur-bg"
+          class={[
+            "max-w-[min(1360px,calc(100vw-2rem))] object-cover backdrop-blur-sm blur-bg",
+            $isPortrait
+              ? "max-h-[calc(100dvh-20rem)]"
+              : "max-h-[calc(100dvh-22rem)]",
+          ]}
           autoplay
           muted
           playsinline

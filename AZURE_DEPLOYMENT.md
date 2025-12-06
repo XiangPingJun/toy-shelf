@@ -46,6 +46,8 @@ pnpm install
 
 ### 4. 在 GitHub 中設定 Secret
 
+**⚠️ 這是必須完成的步驟，否則部署會失敗！**
+
 **必須正確設定才能部署成功！**
 
 1. 前往 GitHub 存放庫：`https://github.com/XiangPingJun/toy-shelf`
@@ -53,13 +55,20 @@ pnpm install
 3. 在左側選單中選擇 **Secrets and variables** > **Actions**
 4. 點擊 **New repository secret** 按鈕
 5. 填寫以下資訊：
-   - Name: `AZURE_STATIC_WEB_APPS_API_TOKEN` （必須完全一致）
-   - Secret: 貼上步驟 3 複製的部署權杖
+   - Name: `AZURE_STATIC_WEB_APPS_API_TOKEN` （必須完全一致，區分大小寫）
+   - Secret: 貼上步驟 3 複製的部署權杖（**不要有空格或換行**）
 6. 點擊 **Add secret** 按鈕
 
 **驗證設定：**
 - 在 Secrets 列表中應該能看到 `AZURE_STATIC_WEB_APPS_API_TOKEN`
 - 值會顯示為 `***`（已加密）
+- **確認名稱完全正確**：`AZURE_STATIC_WEB_APPS_API_TOKEN`
+
+**⚠️ 常見錯誤：**
+- Secret 名稱拼寫錯誤
+- Token 值包含額外的空格或換行符
+- 複製 Token 時沒有完整複製
+- Token 已過期（重新產生即可）
 
 ### 5. 觸發部署
 

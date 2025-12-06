@@ -6,9 +6,3 @@ compatibility_flags = ["nodejs_compat"]
 [build]
 command = "npm run build"
 cwd = "."
-
-# KV 命名空間配置
-[[kv_namespaces]]
-binding = "TOY_SHELF_KV"
-id = "eafaae6a858e4c8aa82db347dcd594cf"
-preview_id = "eafaae6a858e4c8aa82db347dcd594cf"

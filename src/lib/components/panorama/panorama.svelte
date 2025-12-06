@@ -144,16 +144,6 @@
 
     if (lastSavedPov !== povToSave) {
       lastSavedPov = povToSave;
-      await fetch("/api/kv", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          key: "pan-camera-state",
-          value: povToSave,
-        }),
-      });
       console.info(povToSave);
     }
   }

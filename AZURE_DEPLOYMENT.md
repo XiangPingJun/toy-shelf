@@ -53,7 +53,7 @@ git push origin master
 ## 本地開發
 ```bash
 # 開發模式
-pnpm dev
+pnpm dev 
 
 # 建置
 pnpm build

@@ -30,25 +30,57 @@ pnpm install
      - 輸出位置：build
 
 ### 3. 取得部署權杖
+
+**重要：這是最關鍵的步驟！**
+
 建立 Static Web App 後：
-1. 前往該資源
-2. 在左側選單中點擊「管理部署權杖」
-3. 複製部署權杖
+1. 在 Azure Portal 中找到您剛創建的 Static Web App 資源
+2. 在左側選單中點擊「概觀」
+3. 點擊頂部的「管理部署權杖」按鈕
+4. 複製顯示的部署權杖（這是一串很長的字串）
+
+**注意：** 
+- 部署權杖只會顯示一次，請妥善保存
+- 如果遺失，可以重新產生新的權杖
+- 每個 Static Web App 都有唯一的部署權杖
 
 ### 4. 在 GitHub 中設定 Secret
-1. 前往 GitHub 存放庫的 Settings > Secrets and variables > Actions
-2. 點擊「New repository secret」
-3. 名稱：`AZURE_STATIC_WEB_APPS_API_TOKEN`
-4. 值：貼上剛才複製的部署權杖
-5. 點擊「Add secret」
+
+**必須正確設定才能部署成功！**
+
+1. 前往 GitHub 存放庫：`https://github.com/XiangPingJun/toy-shelf`
+2. 點擊上方的 **Settings** 標籤
+3. 在左側選單中選擇 **Secrets and variables** > **Actions**
+4. 點擊 **New repository secret** 按鈕
+5. 填寫以下資訊：
+   - Name: `AZURE_STATIC_WEB_APPS_API_TOKEN` （必須完全一致）
+   - Secret: 貼上步驟 3 複製的部署權杖
+6. 點擊 **Add secret** 按鈕
+
+**驗證設定：**
+- 在 Secrets 列表中應該能看到 `AZURE_STATIC_WEB_APPS_API_TOKEN`
+- 值會顯示為 `***`（已加密）
 
 ### 5. 觸發部署
-推送代碼到 master 分支即可觸發自動部署：
+
+設定完成後，推送代碼到 master 分支即可觸發自動部署：
 ```bash
 git add .
 git commit -m "Deploy to Azure Static Web Apps"
 git push origin master
 ```
+
+**檢查部署狀態：**
+1. 前往 GitHub 存放庫的 **Actions** 標籤
+2. 查看最新的 workflow run
+3. 如果看到綠色勾勾 ✓，表示部署成功
+4. 如果看到紅色叉叉 ✗，點進去查看錯誤訊息
+
+**常見錯誤排查：**
+- `BadRequest: No matching Static Web App was found or the api key was invalid`
+  → 檢查 GitHub Secret 是否正確設定
+  → 確認部署權杖是否有效
+  → 確認 Secret 名稱是否為 `AZURE_STATIC_WEB_APPS_API_TOKEN`
 
 ## 本地開發
 ```bash
